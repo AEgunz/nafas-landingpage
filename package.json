@@ -1,12 +1,28 @@
 {
   "name": "nasal-landing",
   "version": "1.0.0",
-  "description": "",
+  "description": "تطبيق لوحة التحكم المباشرة لموقع نَفَس براحة",
   "main": "main.js",
   "scripts": {
     "start": "node server.js",
     "app": "electron .",
+    "dist": "electron-builder",
+    "build:win": "electron-builder --win --x64",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.nafas.landing.app",
+    "productName": "نَفَس - لوحة التحكم",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "dir"
+    },
+    "files": [
+      "**/*",
+      "!dist/*"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -19,11 +35,13 @@
     "@neondatabase/serverless": "^1.2.0",
     "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
-    "electron": "^45.0.0",
-    "electron-builder": "^26.18.0",
     "express": "^5.3.0",
     "node-notifier": "^11.0.0",
     "pg": "^8.23.1",
     "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.18.0"
   }
 }
