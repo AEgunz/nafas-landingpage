@@ -435,29 +435,19 @@ app.patch('/api/admin/stock', authenticateAdmin, async (req, res) => {
     const newAuto = auto_decrement !== undefined ? (auto_decrement ? 1 : 0) : (current.auto_decrement ? 1 : 0);
     const newThreshold = Number.isNaN(parseInt(low_stock_threshold, 10)) ? current.low_stock_threshold : parseInt(low_stock_threshold, 10);
 
-    if (pgPool) {
-      await dbRun(`
-        INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
-        VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET
-          total_stock = EXCLUDED.total_stock,
-          remaining_stock = EXCLUDED.remaining_stock,
-          auto_decrement = EXCLUDED.auto_decrement,
-          low_stock_threshold = EXCLUDED.low_stock_threshold,
-          updated_at = CURRENT_TIMESTAMP
-      `, [newTotal, newRemaining, newAuto, newThreshold]);
-    } else {
-      await dbRun(`
-        INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
-        VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ON CONFLICT(id) DO UPDATE SET
-          total_stock = excluded.total_stock,
-          remaining_stock = excluded.remaining_stock,
-          auto_decrement = excluded.auto_decrement,
-          low_stock_threshold = excluded.low_stock_threshold,
-          updated_at = CURRENT_TIMESTAMP
-      `, [newTotal, newRemaining, newAuto, newThreshold]);
-    }
+    const isPostgres = Boolean(neonSql);
+    const excludedKeyword = isPostgres ? 'EXCLUDED' : 'excluded';
+
+    await dbRun(`
+      INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
+      VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(id) DO UPDATE SET
+        total_stock = ${excludedKeyword}.total_stock,
+        remaining_stock = ${excludedKeyword}.remaining_stock,
+        auto_decrement = ${excludedKeyword}.auto_decrement,
+        low_stock_threshold = ${excludedKeyword}.low_stock_threshold,
+        updated_at = CURRENT_TIMESTAMP
+    `, [newTotal, newRemaining, newAuto, newThreshold]);
 
     const updatedStock = await getStockInfo();
     broadcastStockUpdate(updatedStock);
