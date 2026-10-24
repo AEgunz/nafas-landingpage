@@ -47,19 +47,27 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static(__dirname));
 
-// Determine SQLite DB path (Vercel Serverless read-only filesystem workaround)
-const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD);
-let dbPath = path.join(__dirname, 'database.db');
-
-if (isVercel) {
+// Determine SQLite DB path safely (Vercel Serverless read-only filesystem workaround)
+function initDatabase() {
+  const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD || process.env.AWS_LAMBDA_FUNCTION_NAME);
+  const localDbPath = path.join(__dirname, 'database.db');
   const tmpDbPath = path.join('/tmp', 'database.db');
-  if (!fs.existsSync(tmpDbPath) && fs.existsSync(dbPath)) {
-    try { fs.copyFileSync(dbPath, tmpDbPath); } catch(e) {}
+
+  if (isVercel) {
+    if (!fs.existsSync(tmpDbPath) && fs.existsSync(localDbPath)) {
+      try { fs.copyFileSync(localDbPath, tmpDbPath); } catch (e) {}
+    }
+    return new DatabaseSync(tmpDbPath);
   }
-  dbPath = tmpDbPath;
+
+  try {
+    return new DatabaseSync(localDbPath);
+  } catch (err) {
+    return new DatabaseSync(tmpDbPath);
+  }
 }
 
-const db = new DatabaseSync(dbPath);
+const db = initDatabase();
 
 // Helper function to hash password
 function hashPassword(password) {
