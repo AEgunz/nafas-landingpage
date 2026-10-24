@@ -426,10 +426,65 @@
       opacity: 1;
     }
 
+    .form-grid-4 {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     @media (max-width: 768px) {
       .navbar { flex-direction: column; gap: 12px; align-items: stretch; text-align: center; }
-      .nav-actions { justify-content: center; flex-wrap: wrap; }
-      .card-header { flex-direction: column; align-items: stretch; }
+      .nav-actions { justify-content: center; flex-wrap: wrap; gap: 8px; }
+      .nav-actions .btn { flex: 1 1 calc(50% - 8px); text-align: center; justify-content: center; font-size: 12px; padding: 8px 10px; }
+      .card-header { flex-direction: column; align-items: stretch; gap: 10px; }
+
+      .form-grid-4, .form-grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+
+      .modal {
+        max-height: 92vh !important;
+        border-radius: 16px !important;
+        margin: 8px !important;
+        width: calc(100% - 16px) !important;
+      }
+      .modal-header {
+        padding: 14px 18px !important;
+      }
+      .modal-header h3 {
+        font-size: 16px !important;
+      }
+      .modal-body {
+        padding: 16px !important;
+      }
+      .modal-footer {
+        padding: 12px 16px !important;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+      }
+      .stat-card {
+        padding: 12px !important;
+      }
+      .stat-info h3 {
+        font-size: 20px !important;
+      }
+      .table-responsive {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+      }
+      .table th, .table td {
+        padding: 10px 8px !important;
+        font-size: 12px !important;
+        white-space: nowrap;
+      }
     }
   </style>
 </head>
@@ -616,7 +671,7 @@
           <h4 style="margin: 0 0 14px; color: var(--navy);" id="packFormTitle">➕ إضافة عرض/باقة جديدة</h4>
           <form id="packForm" onsubmit="handleSavePack(event)">
             <input type="hidden" id="packId">
-            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px;">
+            <div class="form-grid-4">
               <div class="form-group">
                 <label>اسم العرض *</label>
                 <input type="text" id="packName" class="form-control" placeholder="مثال: 1 Starter Kit" required>
@@ -634,7 +689,7 @@
                 <input type="number" id="packPrice" class="form-control" placeholder="199" required>
               </div>
             </div>
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+            <div class="form-grid-2">
               <div class="form-group">
                 <label>شارة مميزة (اختياري)</label>
                 <input type="text" id="packBadge" class="form-control" placeholder="مثال: 🔥 الأكثر طلباً (توفير 50 درهم)">
@@ -700,7 +755,7 @@
             <label>المدينة *</label>
             <input type="text" id="addCity" class="form-control" placeholder="مثال: الرباط" required>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2">
             <div class="form-group">
               <label>الكمية والعرض</label>
               <select id="addQuantity" class="form-control" onchange="autoFillPriceFromPack('addQuantity', 'addPrice')">
@@ -751,7 +806,7 @@
             <label>المدينة</label>
             <input type="text" id="editCity" class="form-control" required>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-grid-2">
             <div class="form-group">
               <label>الكمية</label>
               <input type="number" id="editQuantity" class="form-control" min="1" required>
