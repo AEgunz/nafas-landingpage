@@ -1,7 +1,9 @@
 const { app, BrowserWindow, Tray, Menu, Notification, nativeImage, shell } = require('electron');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 const http = require('http');
+const https = require('https');
+const WebSocket = require('ws');
 
 let mainWindow = null;
 let tray = null;
@@ -38,6 +40,72 @@ function startServerIfNeeded() {
   });
 }
 
+function playNativeWindowsSound() {
+  try {
+    // Play system notification chime via PowerShell
+    exec('powershell -c "[System.Media.SystemSounds]::Asterisk.Play(); [System.Media.SystemSounds]::Hand.Play()"');
+  } catch (e) {
+    console.error('Error playing native sound:', e);
+  }
+}
+
+function showTrayNotification(title, body, onClick = null) {
+  try {
+    if (Notification.isSupported()) {
+      const icon = getAppIcon();
+      const notif = new Notification({
+        title,
+        body,
+        icon: icon.isEmpty() ? undefined : icon,
+        silent: false
+      });
+      if (onClick) {
+        notif.on('click', onClick);
+      }
+      notif.show();
+    }
+  } catch (err) {
+    console.error('Notification error:', err);
+  }
+}
+
+// Background polling for new orders (works 24/7 even when window is minimized or closed to tray)
+function startBackgroundOrderMonitor() {
+  // Local WebSocket listener
+  function setupLocalWs() {
+    try {
+      const ws = new WebSocket('ws://localhost:3000');
+      ws.on('message', (data) => {
+        try {
+          const parsed = JSON.parse(data.toString());
+          if (parsed.type === 'NEW_ORDER' && parsed.order) {
+            triggerBackgroundAlert(parsed.order);
+          }
+        } catch (e) {}
+      });
+      ws.on('close', () => setTimeout(setupLocalWs, 3000));
+      ws.on('error', () => ws.close());
+    } catch (e) {
+      setTimeout(setupLocalWs, 3000);
+    }
+  }
+  setupLocalWs();
+}
+
+function triggerBackgroundAlert(order) {
+  playNativeWindowsSound();
+  showTrayNotification(
+    `🔔 طلب جديد وصل! #${order.id}`,
+    `الزبون: ${order.name}\nالمدينة: ${order.city}\nالكمية: ${order.quantity} (${order.price} درهم)`,
+    () => {
+      if (mainWindow) {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+    }
+  );
+}
+
 function createWindow() {
   const icon = getAppIcon();
 
@@ -50,7 +118,8 @@ function createWindow() {
     icon: icon.isEmpty() ? undefined : icon,
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      backgroundThrottling: false // Prevent background throttling when minimized
     }
   });
 
@@ -117,27 +186,13 @@ function createTray() {
   }
 }
 
-function showTrayNotification(title, body) {
-  try {
-    if (Notification.isSupported()) {
-      const icon = getAppIcon();
-      new Notification({
-        title,
-        body,
-        icon: icon.isEmpty() ? undefined : icon
-      }).show();
-    }
-  } catch (err) {
-    console.error('Notification error:', err);
-  }
-}
-
 app.whenReady().then(() => {
   startServerIfNeeded();
 
   setTimeout(() => {
     createWindow();
     createTray();
+    startBackgroundOrderMonitor();
   }, 800);
 
   app.on('activate', () => {
