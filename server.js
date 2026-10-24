@@ -3,11 +3,13 @@ const cors = require('cors');
 const path = require('path');
 const crypto = require('crypto');
 const http = require('http');
+const fs = require('fs');
 const { WebSocketServer } = require('ws');
-const { DatabaseSync } = require('node:sqlite');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
 // Create HTTP server for Express & WebSockets
 const server = http.createServer(app);
@@ -22,8 +24,7 @@ function broadcastNewOrder(orderData) {
   });
 }
 
-function broadcastStockUpdate() {
-  const stockInfo = getStockInfo();
+function broadcastStockUpdate(stockInfo) {
   const payload = JSON.stringify({ type: 'STOCK_UPDATE', stock: stockInfo });
   wss.clients.forEach(client => {
     if (client.readyState === 1 /* OPEN */) {
@@ -37,8 +38,6 @@ wss.on('connection', (ws) => {
   ws.send(JSON.stringify({ type: 'CONNECTED', message: 'Connected to real-time stream' }));
 });
 
-const fs = require('fs');
-
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -50,41 +49,101 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname));
 
-const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD || process.env.AWS_LAMBDA_FUNCTION_NAME);
+// ==================== DATABASE INITIALIZATION ====================
 
-// Determine SQLite DB path safely (Vercel Serverless read-only filesystem workaround)
-function initDatabase() {
-  const localDbPath = path.join(__dirname, 'database.db');
-  const tmpDbPath = path.join('/tmp', 'database.db');
+const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING;
 
-  let dbFile = localDbPath;
-  if (isVercel) {
-    if (!fs.existsSync(tmpDbPath) && fs.existsSync(localDbPath)) {
-      try { fs.copyFileSync(localDbPath, tmpDbPath); } catch (e) {}
-    }
-    dbFile = tmpDbPath;
-  }
+let pgPool = null;
+let sqliteDb = null;
 
-  // 1. Try node:sqlite (Node 22+)
+if (databaseUrl) {
   try {
-    const { DatabaseSync } = require('node:sqlite');
-    return new DatabaseSync(dbFile);
-  } catch (e1) {
-    console.log('node:sqlite not available, attempting better-sqlite3 fallback:', e1.message);
+    pgPool = new Pool({
+      connectionString: databaseUrl,
+      ssl: { rejectUnauthorized: false }
+    });
+    console.log('🐘 Neon Postgres database configured!');
+  } catch (err) {
+    console.error('Failed to configure Postgres pool:', err);
   }
-
-  // 2. Fallback to better-sqlite3
-  try {
-    const BetterSqlite = require('better-sqlite3');
-    return new BetterSqlite(dbFile);
-  } catch (e2) {
-    console.error('better-sqlite3 failed:', e2.message);
-  }
-
-  throw new Error('No SQLite driver available on this Node runtime environment.');
 }
 
-const db = initDatabase();
+if (!pgPool) {
+  function initSqlite() {
+    const localDbPath = path.join(__dirname, 'database.db');
+    const tmpDbPath = path.join('/tmp', 'database.db');
+
+    let dbFile = localDbPath;
+    if (isVercel) {
+      if (!fs.existsSync(tmpDbPath) && fs.existsSync(localDbPath)) {
+        try { fs.copyFileSync(localDbPath, tmpDbPath); } catch (e) {}
+      }
+      dbFile = tmpDbPath;
+    }
+
+    try {
+      const { DatabaseSync } = require('node:sqlite');
+      return new DatabaseSync(dbFile);
+    } catch (e1) {
+      try {
+        const BetterSqlite = require('better-sqlite3');
+        return new BetterSqlite(dbFile);
+      } catch (e2) {
+        throw new Error('No SQLite driver available.');
+      }
+    }
+  }
+  sqliteDb = initSqlite();
+}
+
+function formatPgSql(sql) {
+  let paramIdx = 1;
+  let formatted = sql.replace(/\?/g, () => `$${paramIdx++}`);
+  formatted = formatted.replace(/INTEGER PRIMARY KEY AUTOINCREMENT/gi, 'SERIAL PRIMARY KEY');
+  formatted = formatted.replace(/DATETIME DEFAULT CURRENT_TIMESTAMP/gi, 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+  return formatted;
+}
+
+async function dbQuery(sql, params = []) {
+  if (pgPool) {
+    const res = await pgPool.query(formatPgSql(sql), params);
+    return res.rows;
+  } else {
+    return sqliteDb.prepare(sql).all(...params);
+  }
+}
+
+async function dbGet(sql, params = []) {
+  if (pgPool) {
+    const res = await pgPool.query(formatPgSql(sql), params);
+    return res.rows[0] || null;
+  } else {
+    return sqliteDb.prepare(sql).get(...params) || null;
+  }
+}
+
+async function dbRun(sql, params = []) {
+  if (pgPool) {
+    let pgSql = formatPgSql(sql);
+    if (pgSql.trim().toUpperCase().startsWith('INSERT') && !pgSql.toUpperCase().includes('RETURNING')) {
+      pgSql += ' RETURNING id';
+    }
+    const res = await pgPool.query(pgSql, params);
+    const lastId = res.rows && res.rows[0] ? res.rows[0].id : null;
+    return { lastInsertRowid: lastId, changes: res.rowCount };
+  } else {
+    const res = sqliteDb.prepare(sql).run(...params);
+    return { lastInsertRowid: res.lastInsertRowid, changes: res.changes };
+  }
+}
+
+async function dbExec(sql) {
+  if (pgPool) {
+    await pgPool.query(formatPgSql(sql));
+  } else {
+    sqliteDb.exec(sql);
+  }
+}
 
 // Helper function to hash password
 function hashPassword(password) {
@@ -95,93 +154,108 @@ function hashPassword(password) {
 const validTokens = new Set();
 
 // Initialize Database Tables
-db.exec(`
-  CREATE TABLE IF NOT EXISTS orders (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    phone TEXT NOT NULL,
-    city TEXT NOT NULL,
-    quantity INTEGER NOT NULL DEFAULT 1,
-    address TEXT DEFAULT '',
-    price REAL NOT NULL DEFAULT 199.0,
-    status TEXT DEFAULT 'جديد',
-    notes TEXT DEFAULT '',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+async function initTables() {
+  try {
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        city TEXT NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        address TEXT DEFAULT '',
+        price REAL NOT NULL DEFAULT 199.0,
+        status TEXT DEFAULT 'جديد',
+        notes TEXT DEFAULT '',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-  CREATE TABLE IF NOT EXISTS settings (
-    key TEXT PRIMARY KEY,
-    value TEXT NOT NULL
-  );
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
+    `);
 
-  CREATE TABLE IF NOT EXISTS packs (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    quantity INTEGER NOT NULL DEFAULT 1,
-    price REAL NOT NULL DEFAULT 199.0,
-    old_price REAL DEFAULT 0.0,
-    badge TEXT DEFAULT '',
-    sort_order INTEGER DEFAULT 0,
-    active INTEGER DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS packs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        price REAL NOT NULL DEFAULT 199.0,
+        old_price REAL DEFAULT 0.0,
+        badge TEXT DEFAULT '',
+        sort_order INTEGER DEFAULT 0,
+        active INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-  CREATE TABLE IF NOT EXISTS stock (
-    id INTEGER PRIMARY KEY,
-    total_stock INTEGER NOT NULL DEFAULT 100,
-    remaining_stock INTEGER NOT NULL DEFAULT 30,
-    auto_decrement INTEGER DEFAULT 1,
-    low_stock_threshold INTEGER DEFAULT 10,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
-`);
+    await dbExec(`
+      CREATE TABLE IF NOT EXISTS stock (
+        id INTEGER PRIMARY KEY,
+        total_stock INTEGER NOT NULL DEFAULT 100,
+        remaining_stock INTEGER NOT NULL DEFAULT 30,
+        auto_decrement INTEGER DEFAULT 1,
+        low_stock_threshold INTEGER DEFAULT 10,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-// Add old_price column if missing
-try {
-  db.exec('ALTER TABLE packs ADD COLUMN old_price REAL DEFAULT 0.0');
-} catch (e) {}
+    // Set default admin password if empty
+    const defaultPasswordRow = await dbGet('SELECT value FROM settings WHERE key = ?', ['admin_password']);
+    if (!defaultPasswordRow) {
+      const defaultHash = hashPassword('admin123');
+      await dbRun('INSERT INTO settings (key, value) VALUES (?, ?)', ['admin_password', defaultHash]);
+      console.log('Default admin password set to: admin123');
+    }
 
-// Set default admin password
-const getPasswordStmt = db.prepare('SELECT value FROM settings WHERE key = ?');
-const defaultPasswordRow = getPasswordStmt.get('admin_password');
-if (!defaultPasswordRow) {
-  const defaultHash = hashPassword('admin123');
-  const insertStmt = db.prepare('INSERT INTO settings (key, value) VALUES (?, ?)');
-  insertStmt.run('admin_password', defaultHash);
-  console.log('Default admin password set to: admin123');
+    // Pre-populate default product packs/pricing if empty
+    const checkPacks = await dbGet('SELECT COUNT(*) as count FROM packs');
+    if (!checkPacks || parseInt(checkPacks.count, 10) === 0) {
+      await dbRun(`
+        INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
+        VALUES (?, ?, ?, ?, ?, ?, 1)
+      `, ['1 Starter Kit', 1, 199.0, 299.0, '', 1]);
+
+      await dbRun(`
+        INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
+        VALUES (?, ?, ?, ?, ?, ?, 1)
+      `, ['2 Starter Kits', 2, 350.0, 499.0, '🔥 الأكثر طلباً', 2]);
+
+      await dbRun(`
+        INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
+        VALUES (?, ?, ?, ?, ?, ?, 1)
+      `, ['3 Starter Kits', 3, 490.0, 699.0, '🎁 أفضل قيمة', 3]);
+
+      console.log('Default product packs initialized.');
+    }
+
+    // Initialize Stock level if empty
+    const checkStock = await dbGet('SELECT COUNT(*) as count FROM stock');
+    if (!checkStock || parseInt(checkStock.count, 10) === 0) {
+      await dbRun('INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)');
+      console.log('Default stock initialized: 30 / 100.');
+    }
+  } catch (err) {
+    console.error('Error initializing tables:', err);
+  }
 }
 
-// Pre-populate default product packs/pricing if empty
-const checkPacksStmt = db.prepare('SELECT COUNT(*) as count FROM packs');
-if (checkPacksStmt.get().count === 0) {
-  const insertPack = db.prepare(`
-    INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
-    VALUES (?, ?, ?, ?, ?, ?, 1)
-  `);
-  insertPack.run('1 Starter Kit', 1, 199.0, 299.0, '', 1);
-  insertPack.run('2 Starter Kits', 2, 350.0, 499.0, '🔥 الأكثر طلباً', 2);
-  insertPack.run('3 Starter Kits', 3, 490.0, 699.0, '🎁 أفضل قيمة', 3);
-  console.log('Default product packs initialized.');
-}
+initTables();
 
-// Initialize Stock level if empty
-const checkStockStmt = db.prepare('SELECT COUNT(*) as count FROM stock');
-if (checkStockStmt.get().count === 0) {
-  db.exec('INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)');
-  console.log('Default stock initialized: 30 / 100.');
-}
-
-function getStockInfo() {
+async function getStockInfo() {
   let stock = null;
   try {
-    stock = db.prepare('SELECT * FROM stock WHERE id = 1').get();
+    stock = await dbGet('SELECT * FROM stock WHERE id = 1');
   } catch (e) {}
 
   if (!stock) {
     stock = { total_stock: 100, remaining_stock: 30, auto_decrement: 1, low_stock_threshold: 10 };
     try {
-      db.prepare('INSERT OR IGNORE INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)').run();
+      await dbRun('INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)');
     } catch (e) {}
   }
 
@@ -209,9 +283,9 @@ function authenticateAdmin(req, res, next) {
 // ==================== PUBLIC API ENDPOINTS ====================
 
 // Get Public Stock Status
-app.get('/api/stock', (req, res) => {
+app.get('/api/stock', async (req, res) => {
   try {
-    const stock = getStockInfo();
+    const stock = await getStockInfo();
     res.json({ success: true, stock });
   } catch (error) {
     console.error('Error fetching stock:', error);
@@ -220,9 +294,9 @@ app.get('/api/stock', (req, res) => {
 });
 
 // Get Active Packs / Offers
-app.get('/api/packs', (req, res) => {
+app.get('/api/packs', async (req, res) => {
   try {
-    const packs = db.prepare('SELECT * FROM packs WHERE active = 1 ORDER BY sort_order ASC, id ASC').all();
+    const packs = await dbQuery('SELECT * FROM packs WHERE active = 1 ORDER BY sort_order ASC, id ASC');
     res.json({ success: true, packs });
   } catch (error) {
     console.error('Error fetching public packs:', error);
@@ -231,7 +305,7 @@ app.get('/api/packs', (req, res) => {
 });
 
 // Submit a new order
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   try {
     const { name, phone, city, qty, quantity, pack_id, address } = req.body;
 
@@ -250,14 +324,14 @@ app.post('/api/orders', (req, res) => {
 
     let price = 0;
     if (pack_id) {
-      const selectedPack = db.prepare('SELECT * FROM packs WHERE id = ?').get(pack_id);
+      const selectedPack = await dbGet('SELECT * FROM packs WHERE id = ?', [pack_id]);
       if (selectedPack) {
         price = selectedPack.price;
       }
     }
 
     if (!price) {
-      const matchingPack = db.prepare('SELECT * FROM packs WHERE quantity = ? AND active = 1 LIMIT 1').get(orderQty);
+      const matchingPack = await dbGet('SELECT * FROM packs WHERE quantity = ? AND active = 1 LIMIT 1', [orderQty]);
       if (matchingPack) {
         price = matchingPack.price;
       } else {
@@ -268,19 +342,18 @@ app.post('/api/orders', (req, res) => {
       }
     }
 
-    const insertStmt = db.prepare(`
+    const result = await dbRun(`
       INSERT INTO orders (name, phone, city, quantity, address, price, status, notes)
       VALUES (?, ?, ?, ?, ?, ?, 'جديد', '')
-    `);
-
-    const result = insertStmt.run(clientName, clientPhone, clientCity, orderQty, clientAddress, price);
+    `, [clientName, clientPhone, clientCity, orderQty, clientAddress, price]);
 
     // Auto decrement stock
-    const stockRow = db.prepare('SELECT * FROM stock WHERE id = 1').get();
+    const stockRow = await dbGet('SELECT * FROM stock WHERE id = 1');
     if (stockRow && stockRow.auto_decrement) {
       const newRemaining = Math.max(0, stockRow.remaining_stock - orderQty);
-      db.prepare('UPDATE stock SET remaining_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1').run(newRemaining);
-      broadcastStockUpdate();
+      await dbRun('UPDATE stock SET remaining_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1', [newRemaining]);
+      const updatedStock = await getStockInfo();
+      broadcastStockUpdate(updatedStock);
     }
 
     const createdOrder = {
@@ -312,9 +385,9 @@ app.post('/api/orders', (req, res) => {
 
 // ==================== ADMIN STOCK API ====================
 
-app.get('/api/admin/stock', authenticateAdmin, (req, res) => {
+app.get('/api/admin/stock', authenticateAdmin, async (req, res) => {
   try {
-    const stock = getStockInfo();
+    const stock = await getStockInfo();
     res.json({ success: true, stock });
   } catch (error) {
     console.error('Error fetching admin stock:', error);
@@ -322,31 +395,45 @@ app.get('/api/admin/stock', authenticateAdmin, (req, res) => {
   }
 });
 
-app.patch('/api/admin/stock', authenticateAdmin, (req, res) => {
+app.patch('/api/admin/stock', authenticateAdmin, async (req, res) => {
   try {
     const { total_stock, remaining_stock, auto_decrement, low_stock_threshold } = req.body;
 
-    const current = getStockInfo();
+    const current = await getStockInfo();
 
     const newTotal = Number.isNaN(parseInt(total_stock, 10)) ? current.total_stock : parseInt(total_stock, 10);
     const newRemaining = Number.isNaN(parseInt(remaining_stock, 10)) ? current.remaining_stock : parseInt(remaining_stock, 10);
     const newAuto = auto_decrement !== undefined ? (auto_decrement ? 1 : 0) : (current.auto_decrement ? 1 : 0);
     const newThreshold = Number.isNaN(parseInt(low_stock_threshold, 10)) ? current.low_stock_threshold : parseInt(low_stock_threshold, 10);
 
-    db.prepare(`
-      INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
-      VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-      ON CONFLICT(id) DO UPDATE SET
-        total_stock = excluded.total_stock,
-        remaining_stock = excluded.remaining_stock,
-        auto_decrement = excluded.auto_decrement,
-        low_stock_threshold = excluded.low_stock_threshold,
-        updated_at = CURRENT_TIMESTAMP
-    `).run(newTotal, newRemaining, newAuto, newThreshold);
+    if (pgPool) {
+      await dbRun(`
+        INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
+        VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(id) DO UPDATE SET
+          total_stock = EXCLUDED.total_stock,
+          remaining_stock = EXCLUDED.remaining_stock,
+          auto_decrement = EXCLUDED.auto_decrement,
+          low_stock_threshold = EXCLUDED.low_stock_threshold,
+          updated_at = CURRENT_TIMESTAMP
+      `, [newTotal, newRemaining, newAuto, newThreshold]);
+    } else {
+      await dbRun(`
+        INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold, updated_at)
+        VALUES (1, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(id) DO UPDATE SET
+          total_stock = excluded.total_stock,
+          remaining_stock = excluded.remaining_stock,
+          auto_decrement = excluded.auto_decrement,
+          low_stock_threshold = excluded.low_stock_threshold,
+          updated_at = CURRENT_TIMESTAMP
+      `, [newTotal, newRemaining, newAuto, newThreshold]);
+    }
 
-    broadcastStockUpdate();
+    const updatedStock = await getStockInfo();
+    broadcastStockUpdate(updatedStock);
 
-    res.json({ success: true, message: 'تم تحديث إعدادات المخزون بنجاح.', stock: getStockInfo() });
+    res.json({ success: true, message: 'تم تحديث إعدادات المخزون بنجاح.', stock: updatedStock });
   } catch (error) {
     console.error('Error updating stock:', error);
     res.status(500).json({ success: false, message: 'خطأ أثناء تحديث المخزون.' });
@@ -356,9 +443,9 @@ app.patch('/api/admin/stock', authenticateAdmin, (req, res) => {
 // ==================== ADMIN PACKS API ====================
 
 // Get all packs (Admin)
-app.get('/api/admin/packs', authenticateAdmin, (req, res) => {
+app.get('/api/admin/packs', authenticateAdmin, async (req, res) => {
   try {
-    const packs = db.prepare('SELECT * FROM packs ORDER BY sort_order ASC, id ASC').all();
+    const packs = await dbQuery('SELECT * FROM packs ORDER BY sort_order ASC, id ASC');
     res.json({ success: true, packs });
   } catch (error) {
     console.error('Error fetching admin packs:', error);
@@ -367,7 +454,7 @@ app.get('/api/admin/packs', authenticateAdmin, (req, res) => {
 });
 
 // Add new pack (Admin)
-app.post('/api/admin/packs', authenticateAdmin, (req, res) => {
+app.post('/api/admin/packs', authenticateAdmin, async (req, res) => {
   try {
     const { name, quantity, price, old_price, badge, sort_order } = req.body;
 
@@ -380,12 +467,10 @@ app.post('/api/admin/packs', authenticateAdmin, (req, res) => {
     const oldPriceVal = parseFloat(old_price || 0);
     const orderVal = parseInt(sort_order || 0, 10);
 
-    const stmt = db.prepare(`
+    const result = await dbRun(`
       INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
       VALUES (?, ?, ?, ?, ?, ?, 1)
-    `);
-
-    const result = stmt.run(name.trim(), qtyVal, priceVal, oldPriceVal, (badge || '').trim(), orderVal);
+    `, [name.trim(), qtyVal, priceVal, oldPriceVal, (badge || '').trim(), orderVal]);
 
     res.status(201).json({ success: true, message: 'تم إضافة الباقة بنجاح.', id: result.lastInsertRowid });
   } catch (error) {
@@ -395,12 +480,12 @@ app.post('/api/admin/packs', authenticateAdmin, (req, res) => {
 });
 
 // Update pack (Admin)
-app.patch('/api/admin/packs/:id', authenticateAdmin, (req, res) => {
+app.patch('/api/admin/packs/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { name, quantity, price, old_price, badge, sort_order, active } = req.body;
 
-    const existing = db.prepare('SELECT * FROM packs WHERE id = ?').get(id);
+    const existing = await dbGet('SELECT * FROM packs WHERE id = ?', [id]);
     if (!existing) {
       return res.status(404).json({ success: false, message: 'الباقة غير موجودة.' });
     }
@@ -413,13 +498,11 @@ app.patch('/api/admin/packs/:id', authenticateAdmin, (req, res) => {
     const updatedOrder = sort_order !== undefined ? parseInt(sort_order, 10) : existing.sort_order;
     const updatedActive = active !== undefined ? (active ? 1 : 0) : existing.active;
 
-    const stmt = db.prepare(`
+    await dbRun(`
       UPDATE packs
       SET name = ?, quantity = ?, price = ?, old_price = ?, badge = ?, sort_order = ?, active = ?
       WHERE id = ?
-    `);
-
-    stmt.run(updatedName, updatedQty, updatedPrice, updatedOldPrice, updatedBadge, updatedOrder, updatedActive, id);
+    `, [updatedName, updatedQty, updatedPrice, updatedOldPrice, updatedBadge, updatedOrder, updatedActive, id]);
 
     res.json({ success: true, message: 'تم تحديث بيانات الباقة بنجاح.' });
   } catch (error) {
@@ -429,11 +512,10 @@ app.patch('/api/admin/packs/:id', authenticateAdmin, (req, res) => {
 });
 
 // Delete pack (Admin)
-app.delete('/api/admin/packs/:id', authenticateAdmin, (req, res) => {
+app.delete('/api/admin/packs/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const stmt = db.prepare('DELETE FROM packs WHERE id = ?');
-    const result = stmt.run(id);
+    const result = await dbRun('DELETE FROM packs WHERE id = ?', [id]);
 
     if (result.changes === 0) {
       return res.status(404).json({ success: false, message: 'الباقة غير موجودة.' });
@@ -449,22 +531,27 @@ app.delete('/api/admin/packs/:id', authenticateAdmin, (req, res) => {
 // ==================== OTHER ADMIN API ENDPOINTS ====================
 
 // Admin Login
-app.post('/api/admin/login', (req, res) => {
-  const { password } = req.body;
-  if (!password) {
-    return res.status(400).json({ success: false, message: 'يرجى إدخال كلمة المرور.' });
-  }
+app.post('/api/admin/login', async (req, res) => {
+  try {
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({ success: false, message: 'يرجى إدخال كلمة المرور.' });
+    }
 
-  const row = db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_password');
-  const storedHash = row ? row.value : hashPassword('admin123');
-  const inputHash = hashPassword(password);
+    const row = await dbGet('SELECT value FROM settings WHERE key = ?', ['admin_password']);
+    const storedHash = row ? row.value : hashPassword('admin123');
+    const inputHash = hashPassword(password);
 
-  if (inputHash === storedHash) {
-    const token = crypto.randomBytes(32).toString('hex');
-    validTokens.add(token);
-    res.json({ success: true, token, message: 'تم تسجيل الدخول بنجاح.' });
-  } else {
-    res.status(401).json({ success: false, message: 'كلمة المرور غير صحيحة.' });
+    if (inputHash === storedHash) {
+      const token = crypto.randomBytes(32).toString('hex');
+      validTokens.add(token);
+      res.json({ success: true, token, message: 'تم تسجيل الدخول بنجاح.' });
+    } else {
+      res.status(401).json({ success: false, message: 'كلمة المرور غير صحيحة.' });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, message: 'خطأ في تسجيل الدخول.' });
   }
 });
 
@@ -482,29 +569,29 @@ app.get('/api/admin/check-auth', authenticateAdmin, (req, res) => {
 });
 
 // Get Dashboard Statistics
-app.get('/api/admin/stats', authenticateAdmin, (req, res) => {
+app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
   try {
-    const totalRow = db.prepare('SELECT COUNT(*) as count FROM orders').get();
-    const newRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'جديد'").get();
-    const confirmedRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'تم التأكيد'").get();
-    const shippedRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'تم الشحن'").get();
-    const deliveredRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'تم التسليم'").get();
-    const cancelledRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'ملغى'").get();
+    const totalRow = await dbGet('SELECT COUNT(*) as count FROM orders');
+    const newRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE status = 'جديد'");
+    const confirmedRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE status = 'تم التأكيد'");
+    const shippedRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE status = 'تم الشحن'");
+    const deliveredRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE status = 'تم التسليم'");
+    const cancelledRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE status = 'ملغى'");
 
-    const revenueRow = db.prepare("SELECT SUM(price) as total FROM orders WHERE status != 'ملغى'").get();
-    const todayRow = db.prepare("SELECT COUNT(*) as count FROM orders WHERE date(created_at) = date('now')").get();
+    const revenueRow = await dbGet("SELECT SUM(price) as total FROM orders WHERE status != 'ملغى'");
+    const todayRow = await dbGet("SELECT COUNT(*) as count FROM orders WHERE date(created_at) = CURRENT_DATE");
 
     res.json({
       success: true,
       stats: {
-        totalOrders: totalRow.count || 0,
-        newOrders: newRow.count || 0,
-        confirmedOrders: confirmedRow.count || 0,
-        shippedOrders: shippedRow.count || 0,
-        deliveredOrders: deliveredRow.count || 0,
-        cancelledOrders: cancelledRow.count || 0,
-        todayOrders: todayRow.count || 0,
-        totalRevenue: revenueRow.total || 0
+        totalOrders: parseInt(totalRow?.count || 0, 10),
+        newOrders: parseInt(newRow?.count || 0, 10),
+        confirmedOrders: parseInt(confirmedRow?.count || 0, 10),
+        shippedOrders: parseInt(shippedRow?.count || 0, 10),
+        deliveredOrders: parseInt(deliveredRow?.count || 0, 10),
+        cancelledOrders: parseInt(cancelledRow?.count || 0, 10),
+        todayOrders: parseInt(todayRow?.count || 0, 10),
+        totalRevenue: parseFloat(revenueRow?.total || 0)
       }
     });
   } catch (error) {
@@ -514,7 +601,7 @@ app.get('/api/admin/stats', authenticateAdmin, (req, res) => {
 });
 
 // Get Orders
-app.get('/api/admin/orders', authenticateAdmin, (req, res) => {
+app.get('/api/admin/orders', authenticateAdmin, async (req, res) => {
   try {
     const { status, search } = req.query;
 
@@ -534,8 +621,7 @@ app.get('/api/admin/orders', authenticateAdmin, (req, res) => {
 
     sql += ' ORDER BY id DESC';
 
-    const stmt = db.prepare(sql);
-    const orders = stmt.all(...params);
+    const orders = await dbQuery(sql, params);
 
     res.json({ success: true, orders });
   } catch (error) {
@@ -545,7 +631,7 @@ app.get('/api/admin/orders', authenticateAdmin, (req, res) => {
 });
 
 // Add Order Manually
-app.post('/api/admin/orders', authenticateAdmin, (req, res) => {
+app.post('/api/admin/orders', authenticateAdmin, async (req, res) => {
   try {
     const { name, phone, city, quantity, address, price, status, notes } = req.body;
 
@@ -557,19 +643,18 @@ app.post('/api/admin/orders', authenticateAdmin, (req, res) => {
     const priceVal = parseFloat(price) || 199;
     const statusVal = status || 'جديد';
 
-    const insertStmt = db.prepare(`
+    const result = await dbRun(`
       INSERT INTO orders (name, phone, city, quantity, address, price, status, notes)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const result = insertStmt.run(name.trim(), phone.trim(), city.trim(), qtyVal, (address || '').trim(), priceVal, statusVal, (notes || '').trim());
+    `, [name.trim(), phone.trim(), city.trim(), qtyVal, (address || '').trim(), priceVal, statusVal, (notes || '').trim()]);
 
     // Auto decrement stock
-    const stockRow = db.prepare('SELECT * FROM stock WHERE id = 1').get();
+    const stockRow = await dbGet('SELECT * FROM stock WHERE id = 1');
     if (stockRow && stockRow.auto_decrement) {
       const newRemaining = Math.max(0, stockRow.remaining_stock - qtyVal);
-      db.prepare('UPDATE stock SET remaining_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1').run(newRemaining);
-      broadcastStockUpdate();
+      await dbRun('UPDATE stock SET remaining_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1', [newRemaining]);
+      const updatedStock = await getStockInfo();
+      broadcastStockUpdate(updatedStock);
     }
 
     const createdOrder = {
@@ -595,12 +680,12 @@ app.post('/api/admin/orders', authenticateAdmin, (req, res) => {
 });
 
 // Update Order
-app.patch('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
+app.patch('/api/admin/orders/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, notes, name, phone, city, quantity, address, price } = req.body;
 
-    const existing = db.prepare('SELECT * FROM orders WHERE id = ?').get(id);
+    const existing = await dbGet('SELECT * FROM orders WHERE id = ?', [id]);
     if (!existing) {
       return res.status(404).json({ success: false, message: 'الطلب غير موجود.' });
     }
@@ -614,13 +699,11 @@ app.patch('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
     const updatedAddress = address !== undefined ? address : existing.address;
     const updatedPrice = price !== undefined ? parseFloat(price) : existing.price;
 
-    const updateStmt = db.prepare(`
+    await dbRun(`
       UPDATE orders
       SET status = ?, notes = ?, name = ?, phone = ?, city = ?, quantity = ?, address = ?, price = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
-    `);
-
-    updateStmt.run(updatedStatus, updatedNotes, updatedName, updatedPhone, updatedCity, updatedQuantity, updatedAddress, updatedPrice, id);
+    `, [updatedStatus, updatedNotes, updatedName, updatedPhone, updatedCity, updatedQuantity, updatedAddress, updatedPrice, id]);
 
     res.json({ success: true, message: 'تم تحديث الطلب بنجاح.' });
   } catch (error) {
@@ -630,11 +713,10 @@ app.patch('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
 });
 
 // Delete Order
-app.delete('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
+app.delete('/api/admin/orders/:id', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteStmt = db.prepare('DELETE FROM orders WHERE id = ?');
-    const result = deleteStmt.run(id);
+    const result = await dbRun('DELETE FROM orders WHERE id = ?', [id]);
 
     if (result.changes === 0) {
       return res.status(404).json({ success: false, message: 'الطلب غير موجود.' });
@@ -648,7 +730,7 @@ app.delete('/api/admin/orders/:id', authenticateAdmin, (req, res) => {
 });
 
 // Change Password
-app.post('/api/admin/change-password', authenticateAdmin, (req, res) => {
+app.post('/api/admin/change-password', authenticateAdmin, async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
@@ -656,15 +738,14 @@ app.post('/api/admin/change-password', authenticateAdmin, (req, res) => {
       return res.status(400).json({ success: false, message: 'كلمة المرور الجديدة يجب أن تتكون من 6 أحرف على الأقل.' });
     }
 
-    const row = db.prepare('SELECT value FROM settings WHERE key = ?').get('admin_password');
+    const row = await dbGet('SELECT value FROM settings WHERE key = ?', ['admin_password']);
     const storedHash = row ? row.value : hashPassword('admin123');
 
     if (hashPassword(currentPassword) !== storedHash) {
       return res.status(400).json({ success: false, message: 'كلمة المرور الحالية غير صحيحة.' });
     }
 
-    const updateStmt = db.prepare('UPDATE settings SET value = ? WHERE key = ?');
-    updateStmt.run(hashPassword(newPassword), 'admin_password');
+    await dbRun('UPDATE settings SET value = ? WHERE key = ?', [hashPassword(newPassword), 'admin_password']);
 
     res.json({ success: true, message: 'تم تغيير كلمة المرور بنجاح.' });
   } catch (error) {
@@ -674,9 +755,9 @@ app.post('/api/admin/change-password', authenticateAdmin, (req, res) => {
 });
 
 // Export CSV
-app.get('/api/admin/export-csv', authenticateAdmin, (req, res) => {
+app.get('/api/admin/export-csv', authenticateAdmin, async (req, res) => {
   try {
-    const orders = db.prepare('SELECT * FROM orders ORDER BY id DESC').all();
+    const orders = await dbQuery('SELECT * FROM orders ORDER BY id DESC');
 
     let csv = '\uFEFF';
     csv += 'رقم الطلب,التاريخ,اسم الزبون,الهاتف,المدينة,العنوان,الكمية,الثمن (درهم),الحالة,ملاحظات\n';
