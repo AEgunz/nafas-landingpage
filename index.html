@@ -4,6 +4,23 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="موسّع الأنف للراحة أثناء النوم والرياضة. اطلب Starter Kit بسهولة والتوصيل متاح داخل المغرب.">
 <title>تنفّس براحة | موسّع الأنف</title>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1004196072707813');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" alt=""
+src="https://www.facebook.com/tr?id=1004196072707813&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192x192.png">
@@ -353,6 +370,9 @@ document.getElementById('orderForm').addEventListener('submit', async function(e
     const data = await response.json();
 
     if (data.success) {
+      if (typeof fbq === 'function') {
+        fbq('track', 'Purchase', { value: data.order?.price || 199, currency: 'MAD' });
+      }
       const orderId = data.orderId || data.order?.id || '';
       const orderContainer = document.getElementById('orderContainer');
       const waMsg = `السلام عليكم، أنا ${encodeURIComponent(name)}، تأكيد الطلب رقم #${orderId} لموسع الأنف مدينة ${encodeURIComponent(city)}.`;
