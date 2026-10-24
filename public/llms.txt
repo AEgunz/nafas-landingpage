@@ -1,0 +1,17 @@
+# NAFAS | نَفَس براحة — E-Commerce Store
+
+> Starter Kit موسع الأنف عالي الجودة للراحة أثناء النوم والرياضة مع خدمة الدفع عند الاستلام والتوصيل المجاني لجميع المدن المغربية.
+
+## Core Products & Offers
+- [Starter Kit - 1 Pack](https://estilo-co.ma/#order): 199 MAD (30 nasal strips included, Free Delivery)
+- [Starter Kit - 2 Pack Offer](https://estilo-co.ma/#order): 350 MAD (Save 48 MAD)
+- [Starter Kit - 3 Pack Offer](https://estilo-co.ma/#order): 490 MAD (Save 107 MAD)
+
+## Key Features & Benefits
+- [Product Benefits & Details](https://estilo-co.ma/#details): Ergonomic magnetic design for improved airflow during sleep and exercise.
+- [Usage Instructions](https://estilo-co.ma/#details): 4 simple steps to clean, apply, and position the nasal dilator comfortably.
+
+## Customer Policies
+- Delivery: 100% Free Shipping to all cities across Morocco.
+- Payment Method: Cash on Delivery (COD) after inspection.
+- Order Confirmation: Phone call verification before shipping.

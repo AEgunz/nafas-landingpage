@@ -1,0 +1,13 @@
+# robots.txt for NAFAS / Shrishop
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /public/
+
+# Exclude admin panel & private endpoints
+Disallow: /admin
+Disallow: /admin.html
+Disallow: /api/admin/
+
+# Sitemap declaration
+Sitemap: https://estilo-co.ma/sitemap.xml
