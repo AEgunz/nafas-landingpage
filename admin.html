@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة التحكم | نَفَس براحة</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap">
+  <style>
+    :root {
+      --navy: #102b3a;
+      --navy-light: #183e54;
+      --teal: #18b7c4;
+      --teal-dark: #0f8e99;
+      --aqua: #dff9fa;
+      --ink: #152631;
+      --muted: #667984;
+      --bg: #f4f8fa;
+      --card-bg: #ffffff;
+      --line: #e2ecee;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    /* Top Navigation */
+    .navbar {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: var(--teal);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+    }
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-right: 8px;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--teal); color: #053136; }
+    .btn-primary:hover { background: var(--teal-dark); color: #fff; }
+    .btn-navy { background: var(--navy-light); color: #fff; }
+    .btn-navy:hover { background: var(--navy); }
+    .btn-light { background: #fff; border: 1px solid var(--line); color: var(--navy); }
+    .btn-light:hover { background: #eef6f8; }
+    .btn-danger { background: #fee2e2; color: var(--red); }
+    .btn-danger:hover { background: var(--red); color: #fff; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 7px; }
+
+    /* Login Modal Overlay */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(16, 43, 58, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .login-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .login-box h2 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-weight: 900;
+    }
+    .login-box p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+      text-align: right;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--navy);
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      background: #fbfefe;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(24, 183, 196, 0.15);
+    }
+
+    /* KPI Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-info span {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .stat-info h3 {
+      margin: 4px 0 0;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--navy);
+    }
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+    .bg-blue { background: #e0f2fe; color: #0284c7; }
+    .bg-yellow { background: #fef3c7; color: #d97706; }
+    .bg-purple { background: #f3e8ff; color: #7e22ce; }
+    .bg-green { background: #dcfce7; color: #15803d; }
+    .bg-red { background: #fee2e2; color: #b91c1c; }
+
+    /* Control Panel Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    .card-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+    .search-box input {
+      padding-right: 38px;
+    }
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    /* Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .filter-tab {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--muted);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .filter-tab.active {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    /* Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 14px;
+    }
+    th {
+      background: #f8fafc;
+      padding: 14px;
+      font-weight: 800;
+      color: var(--navy);
+      border-bottom: 2px solid var(--line);
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+    }
+    tr { transition: background 0.5s ease; }
+    tr:hover { background: #fdfefe; }
+    tr.new-order-highlight {
+      background: #dcfce7 !important;
+      animation: highlightFade 4s forwards;
+    }
+    @keyframes highlightFade {
+      0% { background: #dcfce7; }
+      100% { background: #ffffff; }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .badge-delivered { background: #dcfce7; color: #15803d; }
+    .badge-cancelled { background: #fee2e2; color: #b91c1c; }
+
+    /* Client info formatting */
+    .client-name { font-weight: 800; color: var(--navy); }
+    .client-phone { font-size: 13px; color: var(--muted); font-family: monospace; direction: ltr; display: inline-block; }
+
+    /* Status Select Dropdown in Table */
+    .status-select {
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty-state h4 { margin: 10px 0 0; color: var(--navy); }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+    }
+    .modal-header h3 { margin: 0; font-weight: 800; color: var(--navy); font-size: 18px; }
+    .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
+    .modal-body { padding: 24px; }
+    .modal-footer {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 14px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+      font-weight: 800;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border: 2px solid var(--teal);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .navbar { flex-direction: column; gap: 12px; align-items: stretch; text-align: center; }
+      .nav-actions { justify-content: center; flex-wrap: wrap; }
+      .card-header { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-logo">نَفَس</div>
+      <span>لوحة التحكم المباشرة</span>
+      <span class="live-badge"><span class="pulse-dot"></span> مباشر Real-Time</span>
+    </div>
+    <div class="nav-actions" id="navActions" style="display: none;">
+      <button class="btn btn-primary" onclick="openAddModal()">➕ إضافة طلب يدوياً</button>
+      <button class="btn btn-navy" onclick="openPacksModal()">📦 إدارة العروض والأسعار</button>
+      <button class="btn btn-navy" onclick="openStockModal()">🏬 إدارة المخزون</button>
+      <button class="btn btn-light" onclick="enableAudioAndNotifications()" title="تفعيل الصوت وإشعارات الويندوز">🔔 تفعيل التنبيه الصوتي</button>
+      <button class="btn btn-light" onclick="exportCSV()">📥 تصدير CSV</button>
+      <button class="btn btn-navy" onclick="openPasswordModal()">🔑 كلمة المرور</button>
+      <button class="btn btn-danger btn-sm" onclick="logout()">خروج 🚪</button>
+    </div>
+  </header>
+
+  <!-- Login Modal Overlay -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <div class="brand-logo" style="margin: 0 auto 16px; width: 48px; height: 48px; font-size: 24px;">نَفَس</div>
+      <h2>دخول لوحة التحكم</h2>
+      <p>أدخل كلمة مرور المسؤول للوصول إلى قاعدة البيانات</p>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginPassword">كلمة المرور (الافتراضية: admin123)</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 8px;">تسجيل الدخول ←</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="container" id="mainContent" style="display: none;">
+
+    <!-- KPI Statistics Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>إجمالي الطلبات</span>
+          <h3 id="statTotal">0</h3>
+        </div>
+        <div class="stat-icon bg-blue">📦</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>طلبات جديدة</span>
+          <h3 id="statNew">0</h3>
+        </div>
+        <div class="stat-icon bg-yellow">🆕</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>طلبات مؤكدة</span>
+          <h3 id="statConfirmed">0</h3>
+        </div>
+        <div class="stat-icon bg-purple">✅</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>تم الشحن والتسليم</span>
+          <h3 id="statDelivered">0</h3>
+        </div>
+        <div class="stat-icon bg-green">🚚</div>
+      </div>
+      <div class="stat-card" onclick="openStockModal()" style="cursor: pointer;" title="اضغط للتحكم في المخزون">
+        <div class="stat-info">
+          <span>المخزون المتبقي</span>
+          <h3 id="statStock">30 قطعة</h3>
+        </div>
+        <div class="stat-icon bg-red">🏬</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>إجمالي المبيعات</span>
+          <h3 id="statRevenue">0 درهم</h3>
+        </div>
+        <div class="stat-icon bg-green">💰</div>
+      </div>
+    </div>
+
+    <!-- Orders Management Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" aria-label="ابحث بالاسم أو رقم الهاتف أو المدينة" class="form-control" placeholder="ابحث بالاسم، رقم الهاتف، أو المدينة..." oninput="debounceSearch()">
+        </div>
+
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="setFilter('الكل', this)">الكل</button>
+          <button class="filter-tab" onclick="setFilter('جديد', this)">جديد 🆕</button>
+          <button class="filter-tab" onclick="setFilter('تم التأكيد', this)">مؤكد ✅</button>
+          <button class="filter-tab" onclick="setFilter('تم الشحن', this)">تم الشحن 🚚</button>
+          <button class="filter-tab" onclick="setFilter('تم التسليم', this)">تم التسليم 🎉</button>
+          <button class="filter-tab" onclick="setFilter('ملغى', this)">ملغى ❌</button>
+        </div>
+
+        <button class="btn btn-light btn-sm" onclick="fetchOrders()">🔄 تحديث</button>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>تاريخ الطلب</th>
+              <th>الزبون والهاتف</th>
+              <th>المدينة والعنوان</th>
+              <th>الكمية</th>
+              <th>الثمن الإجمالي</th>
+              <th>حالة الطلب</th>
+              <th>تواصل سريع</th>
+              <th>ملاحظات</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Dynamic Order Rows -->
+          </tbody>
+        </table>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <div style="font-size: 40px;">📭</div>
+          <h4>لا توجد طلبات متطابقة حالياً</h4>
+          <p>سيظهر أي طلب جديد هنا مباشرة وبشكل أوتوماتيكي مع صوت تنبيه.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Stock Management Modal -->
+  <div class="modal-overlay" id="stockModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🏬 إدارة المخزون (Gestion de Stock)</h3>
+        <button class="modal-close" onclick="closeModal('stockModal')">&times;</button>
+      </div>
+      <form onsubmit="handleSaveStock(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>المخزون المتبقي حالياً (قطع) *</label>
+            <input type="number" id="stockRemaining" class="form-control" min="0" required>
+            <small style="color: var(--muted); font-size: 12px;">هذا الرقم هو الذي يظهر للزبائن في موقع الاندينغ بيج.</small>
+          </div>
+          <div class="form-group">
+            <label>إجمالي سعة المخزون الكلي (قطع)</label>
+            <input type="number" id="stockTotal" class="form-control" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>حد التنبيه بقلة المخزون</label>
+            <input type="number" id="stockThreshold" class="form-control" min="1" value="10" required>
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+            <input type="checkbox" id="stockAutoDecrement" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="stockAutoDecrement" style="margin: 0; cursor: pointer; font-size: 14px;">خصم تلقائي للمخزون مع كل طلب جديد يتم تسجيله</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="closeModal('stockModal')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">تحديث المخزون</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Packs & Pricing Management Modal -->
+  <div class="modal-overlay" id="packsModal">
+    <div class="modal" style="max-width: 780px;">
+      <div class="modal-header">
+        <h3>📦 إدارة عروض وباقات المنتجات والأسعار</h3>
+        <button class="modal-close" onclick="closeModal('packsModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+        <!-- Add / Edit Pack Form -->
+        <div style="background: #f8fafc; padding: 18px; border-radius: 14px; border: 1px solid var(--line); margin-bottom: 20px;">
+          <h4 style="margin: 0 0 14px; color: var(--navy);" id="packFormTitle">➕ إضافة عرض/باقة جديدة</h4>
+          <form id="packForm" onsubmit="handleSavePack(event)">
+            <input type="hidden" id="packId">
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label>اسم العرض *</label>
+                <input type="text" id="packName" class="form-control" placeholder="مثال: 1 Starter Kit" required>
+              </div>
+              <div class="form-group">
+                <label>الكمية *</label>
+                <input type="number" id="packQuantity" class="form-control" min="1" value="1" required>
+              </div>
+              <div class="form-group">
+                <label>السعر القديم (قبل الخصم)</label>
+                <input type="number" id="packOldPrice" class="form-control" placeholder="299">
+              </div>
+              <div class="form-group">
+                <label>الثمن الحالي *</label>
+                <input type="number" id="packPrice" class="form-control" placeholder="199" required>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label>شارة مميزة (اختياري)</label>
+                <input type="text" id="packBadge" class="form-control" placeholder="مثال: 🔥 الأكثر طلباً (توفير 50 درهم)">
+              </div>
+              <div class="form-group">
+                <label>الترتيب</label>
+                <input type="number" id="packSortOrder" class="form-control" value="1">
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+              <button type="button" class="btn btn-light btn-sm" onclick="resetPackForm()">إلغاء التعديل</button>
+              <button type="submit" class="btn btn-primary">حفظ العرض</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Existing Packs Table -->
+        <h4 style="margin: 0 0 12px; color: var(--navy);">العروض المتاحة حالياً على الموقع:</h4>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>الترتيب</th>
+                <th>اسم العرض</th>
+                <th>الكمية</th>
+                <th>السعر القديم</th>
+                <th>الثمن الحالي</th>
+                <th>الشارة</th>
+                <th>الحالة</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="packsTableBody">
+              <!-- Dynamic Packs Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" onclick="closeModal('packsModal')">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Order Modal -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>➕ إضافة طلب جديد يدوياً</h3>
+        <button class="modal-close" onclick="closeModal('addModal')">&times;</button>
+      </div>
+      <form onsubmit="handleAddOrder(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>اسم الزبون الكامل *</label>
+            <input type="text" id="addName" class="form-control" placeholder="مثال: يوسف العلمي" required>
+          </div>
+          <div class="form-group">
+            <label>رقم الهاتف *</label>
+            <input type="tel" id="addPhone" class="form-control" placeholder="06XXXXXXXX" required>
+          </div>
+          <div class="form-group">
+            <label>المدينة *</label>
+            <input type="text" id="addCity" class="form-control" placeholder="مثال: الرباط" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label>الكمية والعرض</label>
+              <select id="addQuantity" class="form-control" onchange="autoFillPriceFromPack('addQuantity', 'addPrice')">
+                <!-- Dynamic Options -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label>الثمن الإجمالي (درهم)</label>
+              <input type="number" id="addPrice" class="form-control" value="199" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>العنوان التفصيلي (اختياري)</label>
+            <textarea id="addAddress" class="form-control" rows="2" placeholder="الحي، الشارع..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>ملاحظة الإدارة</label>
+            <input type="text" id="addNotes" class="form-control" placeholder="مثال: يفضل الاتصال مساءً">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="closeModal('addModal')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ الطلب</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Order Modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✏️ تعديل بيانات الطلب</h3>
+        <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+      </div>
+      <form onsubmit="handleEditOrder(event)">
+        <input type="hidden" id="editId">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>اسم الزبون</label>
+            <input type="text" id="editName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>رقم الهاتف</label>
+            <input type="tel" id="editPhone" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>المدينة</label>
+            <input type="text" id="editCity" class="form-control" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label>الكمية</label>
+              <input type="number" id="editQuantity" class="form-control" min="1" required>
+            </div>
+            <div class="form-group">
+              <label>الثمن (درهم)</label>
+              <input type="number" id="editPrice" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>العنوان</label>
+            <textarea id="editAddress" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>حالة الطلب</label>
+            <select id="editStatus" class="form-control">
+              <option value="جديد">جديد 🆕</option>
+              <option value="تم التأكيد">تم التأكيد ✅</option>
+              <option value="تم الشحن">تم الشحن 🚚</option>
+              <option value="تم التسليم">تم التسليم 🎉</option>
+              <option value="ملغى">ملغى ❌</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>ملاحظات خاصة</label>
+            <textarea id="editNotes" class="form-control" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="closeModal('editModal')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Password Change Modal -->
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🔑 تغيير كلمة مرور المسؤول</h3>
+        <button class="modal-close" onclick="closeModal('passwordModal')">&times;</button>
+      </div>
+      <form onsubmit="handleChangePassword(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>كلمة المرور الحالية</label>
+            <input type="password" id="currentPass" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور الجديدة (6 أحرف على الأقل)</label>
+            <input type="password" id="newPass" class="form-control" minlength="6" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" onclick="closeModal('passwordModal')">إلغاء</button>
+          <button type="submit" class="btn btn-navy">تحديث كلمة المرور</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div class="toast" id="toast">
+    <span id="toastIcon">🔔</span>
+    <span id="toastMsg">رسالة التنبيه</span>
+  </div>
+
+  <script>
+    let token = localStorage.getItem('admin_token') || '';
+    let currentFilter = 'الكل';
+    let currentSearch = '';
+    let searchDebounceTimer = null;
+    let ordersData = [];
+    let adminPacks = [];
+    let currentStock = { total_stock: 100, remaining_stock: 30 };
+    let ws = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (token) {
+        checkAuth();
+      }
+    });
+
+    // Sound alert generator
+    function playOrderChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+
+        osc1.frequency.setValueAtTime(587.33, now);
+        osc1.frequency.setValueAtTime(880, now + 0.15);
+        osc2.frequency.setValueAtTime(1174.66, now + 0.3);
+
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now + 0.3);
+        osc1.stop(now + 0.8);
+        osc2.stop(now + 0.8);
+      } catch (e) {
+        console.log('Audio playback error:', e);
+      }
+    }
+
+    function enableAudioAndNotifications() {
+      playOrderChime();
+      if ('Notification' in window) {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            showToast('✅ تم تفعيل الصوت والإشعارات المكتبية بنجاح!');
+          } else {
+            showToast('🔊 تم تجربة التنبيه الصوتي.');
+          }
+        });
+      } else {
+        showToast('🔊 تم تجربة التنبيه الصوتي.');
+      }
+    }
+
+    function sendDesktopNotification(order) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          const n = new Notification('📦 طلب جديد وصل!', {
+            body: `الزبون: ${order.name}\nالمدينة: ${order.city}\nالكمية: ${order.quantity} (${order.price} درهم)`
+          });
+          n.onclick = () => { window.focus(); };
+        } catch (e) {
+          console.log('Notification error:', e);
+        }
+      }
+    }
+
+    function setupWebSocket() {
+      if (ws) return;
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}`;
+
+      try {
+        ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+          console.log('Connected to real-time WebSockets');
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'NEW_ORDER') {
+              const newOrder = data.order;
+              playOrderChime();
+              sendDesktopNotification(newOrder);
+              showToast(`🔔 طلب جديد وصل من ${newOrder.name} (${newOrder.city})!`);
+              fetchStats();
+              fetchOrders(newOrder.id);
+              fetchAdminStock();
+            } else if (data.type === 'STOCK_UPDATE') {
+              currentStock = data.stock;
+              updateStockUI(currentStock);
+            }
+          } catch (e) {
+            console.error('WS message parse error:', e);
+          }
+        };
+
+        ws.onclose = () => {
+          ws = null;
+          setTimeout(setupWebSocket, 3000);
+        };
+      } catch (e) {
+        console.error('WS setup error:', e);
+      }
+    }
+
+    setInterval(() => {
+      if (token) {
+        fetchOrdersSilent();
+      }
+    }, 4000);
+
+    async function fetchOrdersSilent() {
+      try {
+        const url = new URL('/api/admin/orders', window.location.origin);
+        if (currentFilter !== 'الكل') url.searchParams.append('status', currentFilter);
+        if (currentSearch) url.searchParams.append('search', currentSearch);
+
+        const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+
+        if (data.success) {
+          if (ordersData.length > 0 && data.orders.length > ordersData.length) {
+            const newest = data.orders[0];
+            playOrderChime();
+            sendDesktopNotification(newest);
+            showToast(`🔔 طلب جديد وصل من ${newest.name}!`);
+            fetchStats();
+            fetchAdminStock();
+          }
+          ordersData = data.orders;
+          renderOrdersTable(ordersData);
+        }
+      } catch (e) {}
+    }
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/admin/check-auth', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showAdminUI();
+        } else {
+          showLoginOverlay();
+        }
+      } catch (err) {
+        showLoginOverlay();
+      }
+    }
+
+    function showLoginOverlay() {
+      document.getElementById('loginOverlay').style.display = 'flex';
+      document.getElementById('mainContent').style.display = 'none';
+      document.getElementById('navActions').style.display = 'none';
+    }
+
+    function showAdminUI() {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      document.getElementById('navActions').style.display = 'flex';
+      setupWebSocket();
+      fetchStats();
+      fetchOrders();
+      fetchAdminPacks();
+      fetchAdminStock();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          token = data.token;
+          localStorage.setItem('admin_token', token);
+          showToast('✅ تم تسجيل الدخول بنجاح');
+          showAdminUI();
+        } else {
+          alert(data.message || 'كلمة المرور غير صحيحة');
+        }
+      } catch (err) {
+        alert('حدث خطأ بالاتصال بالخادم.');
+      }
+    }
+
+    function logout() {
+      if (confirm('هل أنت تأكد من تسجيل الخروج؟')) {
+        fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).finally(() => {
+          token = '';
+          localStorage.removeItem('admin_token');
+          showLoginOverlay();
+        });
+      }
+    }
+
+    async function fetchStats() {
+      try {
+        const res = await fetch('/api/admin/stats', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          const s = data.stats;
+          document.getElementById('statTotal').textContent = s.totalOrders;
+          document.getElementById('statNew').textContent = s.newOrders;
+          document.getElementById('statConfirmed').textContent = s.confirmedOrders;
+          document.getElementById('statDelivered').textContent = (s.shippedOrders + s.deliveredOrders);
+          document.getElementById('statRevenue').textContent = s.totalRevenue.toLocaleString() + ' درهم';
+        }
+      } catch (err) {
+        console.error('Stats error:', err);
+      }
+    }
+
+    // ==================== STOCK FUNCTIONS ====================
+
+    async function fetchAdminStock() {
+      try {
+        const res = await fetch('/api/admin/stock', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          currentStock = data.stock;
+          updateStockUI(currentStock);
+        }
+      } catch (err) {
+        console.error('Error fetching stock:', err);
+      }
+    }
+
+    function updateStockUI(stock) {
+      const el = document.getElementById('statStock');
+      if (el) el.textContent = `${stock.remaining_stock} / ${stock.total_stock} قطعة`;
+
+      document.getElementById('stockRemaining').value = stock.remaining_stock;
+      document.getElementById('stockTotal').value = stock.total_stock;
+      document.getElementById('stockThreshold').value = stock.low_stock_threshold;
+      document.getElementById('stockAutoDecrement').checked = stock.auto_decrement;
+    }
+
+    function openStockModal() {
+      fetchAdminStock();
+      document.getElementById('stockModal').classList.add('open');
+    }
+
+    async function handleSaveStock(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+
+      const body = {
+        remaining_stock: document.getElementById('stockRemaining').value,
+        total_stock: document.getElementById('stockTotal').value,
+        low_stock_threshold: document.getElementById('stockThreshold').value,
+        auto_decrement: document.getElementById('stockAutoDecrement').checked
+      };
+
+      try {
+        const res = await fetch('/api/admin/stock', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeModal('stockModal');
+          showToast('✅ تم تحديث المخزون بنجاح');
+          currentStock = data.stock;
+          updateStockUI(currentStock);
+        } else {
+          alert(data.message || 'حدث خطأ أثناء التحديث.');
+        }
+      } catch (err) {
+        alert('تعذر الاتصال بالخادم. يرجى التأكد من أن السيرفر يعمل.');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    // ==================== ORDERS FUNCTIONS ====================
+
+    async function fetchOrders(highlightId = null) {
+      try {
+        const url = new URL('/api/admin/orders', window.location.origin);
+        if (currentFilter !== 'الكل') url.searchParams.append('status', currentFilter);
+        if (currentSearch) url.searchParams.append('search', currentSearch);
+
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          ordersData = data.orders;
+          renderOrdersTable(ordersData, highlightId);
+        } else if (res.status === 401) {
+          showLoginOverlay();
+        }
+      } catch (err) {
+        console.error('Fetch orders error:', err);
+      }
+    }
+
+    function renderOrdersTable(orders, highlightId = null) {
+      const tbody = document.getElementById('ordersTableBody');
+      const emptyState = document.getElementById('emptyState');
+      tbody.innerHTML = '';
+
+      if (orders.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      orders.forEach(o => {
+        const tr = document.createElement('tr');
+        if (o.id === highlightId) {
+          tr.classList.add('new-order-highlight');
+        }
+
+        const cleanPhone = o.phone.replace(/[^0-9+]/g, '');
+        let waPhone = cleanPhone;
+        if (cleanPhone.startsWith('0')) waPhone = '212' + cleanPhone.substring(1);
+
+        const waText = encodeURIComponent(`السلام عليكم ${o.name}، معاك متجر نَفَس بخصوص طلبك لموسع الأنف Starter Kit (الكمية: ${o.quantity} - الثمن: ${o.price} درهم) لمدينة ${o.city}. واش نقدرو نأكدو معاك الطلب دابا؟`);
+        const waUrl = `https://wa.me/${waPhone}?text=${waText}`;
+
+        const dateObj = new Date(o.created_at);
+        const formattedDate = isNaN(dateObj) ? o.created_at : dateObj.toLocaleString('ar-MA', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        tr.innerHTML = `
+          <td><b>#${o.id}</b></td>
+          <td style="font-size: 12px; color: var(--muted);">${formattedDate}</td>
+          <td>
+            <div class="client-name">${escapeHtml(o.name)}</div>
+            <div class="client-phone">${escapeHtml(o.phone)}</div>
+          </td>
+          <td>
+            <b>${escapeHtml(o.city)}</b>
+            ${o.address ? `<br><small style="color: var(--muted);">${escapeHtml(o.address)}</small>` : ''}
+          </td>
+          <td><b>${o.quantity}</b> قطعة</td>
+          <td><b style="color: var(--teal-dark);">${o.price} درهم</b></td>
+          <td>
+            <select class="status-select" onchange="changeOrderStatus(${o.id}, this.value)">
+              <option value="جديد" ${o.status === 'جديد' ? 'selected' : ''}>🆕 جديد</option>
+              <option value="تم التأكيد" ${o.status === 'تم التأكيد' ? 'selected' : ''}>✅ تم التأكيد</option>
+              <option value="تم الشحن" ${o.status === 'تم الشحن' ? 'selected' : ''}>🚚 تم الشحن</option>
+              <option value="تم التسليم" ${o.status === 'تم التسليم' ? 'selected' : ''}>🎉 تم التسليم</option>
+              <option value="ملغى" ${o.status === 'ملغى' ? 'selected' : ''}>❌ ملغى</option>
+            </select>
+          </td>
+          <td>
+            <a href="${waUrl}" target="_blank" class="btn btn-sm" style="background:#25D366; color:white;" title="تواصل عبر واتساب">💬 واتساب</a>
+            <a href="tel:${cleanPhone}" class="btn btn-light btn-sm" title="اتصال هاتفي">📞</a>
+          </td>
+          <td>
+            <small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(o.notes) : '—'}</small>
+          </td>
+          <td>
+            <div style="display: flex; gap: 4px;">
+              <button class="btn btn-light btn-sm" onclick="openEditModal(${o.id})" title="تعديل">✏️</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteOrder(${o.id})" title="حذف">🗑️</button>
+            </div>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ==================== PACKS & PRICING FUNCTIONS ====================
+
+    async function fetchAdminPacks() {
+      try {
+        const res = await fetch('/api/admin/packs', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          adminPacks = data.packs;
+          renderPacksTable(adminPacks);
+          updateOrderModalPackDropdowns(adminPacks);
+        }
+      } catch (err) {
+        console.error('Error fetching admin packs:', err);
+      }
+    }
+
+    function renderPacksTable(packs) {
+      const tbody = document.getElementById('packsTableBody');
+      tbody.innerHTML = '';
+
+      if (packs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted);">لا توجد عروض مضافة حالياً.</td></tr>';
+        return;
+      }
+
+      packs.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>#${p.sort_order}</b></td>
+          <td><b>${escapeHtml(p.name)}</b></td>
+          <td>${p.quantity} قطعة</td>
+          <td><span style="text-decoration:line-through; color:var(--muted);">${p.old_price ? p.old_price + ' DH' : '—'}</span></td>
+          <td><b style="color:var(--teal-dark);">${p.price} درهم</b></td>
+          <td><small style="color:var(--yellow);">${p.badge ? escapeHtml(p.badge) : '—'}</small></td>
+          <td>
+            <span class="badge ${p.active ? 'badge-delivered' : 'badge-cancelled'}">
+              ${p.active ? 'مفعل ✅' : 'معطل ❌'}
+            </span>
+          </td>
+          <td>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-light btn-sm" onclick="editPack(${p.id})">✏️ تعديل</button>
+              <button class="btn btn-light btn-sm" onclick="togglePackActive(${p.id}, ${p.active ? 0 : 1})">
+                ${p.active ? 'إيقاف' : 'تفعيل'}
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="deletePack(${p.id})">🗑️</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateOrderModalPackDropdowns(packs) {
+      const addQtySelect = document.getElementById('addQuantity');
+      if (addQtySelect) {
+        addQtySelect.innerHTML = '';
+        packs.filter(p => p.active).forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.quantity;
+          opt.dataset.price = p.price;
+          opt.textContent = `${p.name} (${p.price} درهم)`;
+          addQtySelect.appendChild(opt);
+        });
+        autoFillPriceFromPack('addQuantity', 'addPrice');
+      }
+    }
+
+    function autoFillPriceFromPack(selectId, priceInputId) {
+      const sel = document.getElementById(selectId);
+      if (sel && sel.selectedIndex >= 0) {
+        const price = sel.options[sel.selectedIndex].dataset.price;
+        if (price) {
+          document.getElementById(priceInputId).value = price;
+        }
+      }
+    }
+
+    function openPacksModal() {
+      resetPackForm();
+      fetchAdminPacks();
+      document.getElementById('packsModal').classList.add('open');
+    }
+
+    function resetPackForm() {
+      document.getElementById('packId').value = '';
+      document.getElementById('packName').value = '';
+      document.getElementById('packQuantity').value = '1';
+      document.getElementById('packOldPrice').value = '';
+      document.getElementById('packPrice').value = '';
+      document.getElementById('packBadge').value = '';
+      document.getElementById('packSortOrder').value = '1';
+      document.getElementById('packFormTitle').textContent = '➕ إضافة عرض/باقة جديدة';
+    }
+
+    function editPack(id) {
+      const pack = adminPacks.find(p => p.id === id);
+      if (!pack) return;
+
+      document.getElementById('packId').value = pack.id;
+      document.getElementById('packName').value = pack.name;
+      document.getElementById('packQuantity').value = pack.quantity;
+      document.getElementById('packOldPrice').value = pack.old_price || '';
+      document.getElementById('packPrice').value = pack.price;
+      document.getElementById('packBadge').value = pack.badge || '';
+      document.getElementById('packSortOrder').value = pack.sort_order || 1;
+      document.getElementById('packFormTitle').textContent = `✏️ تعديل العرض: ${pack.name}`;
+    }
+
+    async function handleSavePack(e) {
+      e.preventDefault();
+      const id = document.getElementById('packId').value;
+      const body = {
+        name: document.getElementById('packName').value,
+        quantity: document.getElementById('packQuantity').value,
+        old_price: document.getElementById('packOldPrice').value,
+        price: document.getElementById('packPrice').value,
+        badge: document.getElementById('packBadge').value,
+        sort_order: document.getElementById('packSortOrder').value
+      };
+
+      const url = id ? `/api/admin/packs/${id}` : '/api/admin/packs';
+      const method = id ? 'PATCH' : 'POST';
+
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ تم حفظ العرض بنجاح');
+          resetPackForm();
+          fetchAdminPacks();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ أثناء حفظ العرض.');
+      }
+    }
+
+    async function togglePackActive(id, newActive) {
+      try {
+        const res = await fetch(`/api/admin/packs/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ active: newActive })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('✅ تم تحديث حالة العرض');
+          fetchAdminPacks();
+        }
+      } catch (err) {
+        alert('خطأ أثناء التحديث.');
+      }
+    }
+
+    async function deletePack(id) {
+      if (!confirm('هل أنت متأكد من حذف هذا العرض؟')) return;
+
+      try {
+        const res = await fetch(`/api/admin/packs/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('🗑️ تم حذف العرض بنجاح');
+          fetchAdminPacks();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ أثناء الحذف.');
+      }
+    }
+
+    // ==================== OTHER ACTIONS ====================
+
+    async function changeOrderStatus(id, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/orders/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`تم تغيير الحالة إلى "${newStatus}"`);
+          fetchStats();
+        } else {
+          alert('تعذر تحديث الحالة.');
+        }
+      } catch (err) {
+        alert('خطأ أثناء التحديث.');
+      }
+    }
+
+    function setFilter(status, btn) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      fetchOrders();
+    }
+
+    function debounceSearch() {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        currentSearch = document.getElementById('searchInput').value;
+        fetchOrders();
+      }, 300);
+    }
+
+    function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    function openPasswordModal() { document.getElementById('passwordModal').classList.add('open'); }
+
+    function openEditModal(id) {
+      const order = ordersData.find(o => o.id === id);
+      if (!order) return;
+
+      document.getElementById('editId').value = order.id;
+      document.getElementById('editName').value = order.name;
+      document.getElementById('editPhone').value = order.phone;
+      document.getElementById('editCity').value = order.city;
+      document.getElementById('editQuantity').value = order.quantity;
+      document.getElementById('editPrice').value = order.price;
+      document.getElementById('editAddress').value = order.address || '';
+      document.getElementById('editStatus').value = order.status;
+      document.getElementById('editNotes').value = order.notes || '';
+
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    async function handleAddOrder(e) {
+      e.preventDefault();
+      const body = {
+        name: document.getElementById('addName').value,
+        phone: document.getElementById('addPhone').value,
+        city: document.getElementById('addCity').value,
+        quantity: document.getElementById('addQuantity').value,
+        price: document.getElementById('addPrice').value,
+        address: document.getElementById('addAddress').value,
+        notes: document.getElementById('addNotes').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/orders', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeModal('addModal');
+          showToast('✅ تمت إضافة الطلب بنجاح');
+          fetchStats();
+          fetchOrders();
+          fetchAdminStock();
+          e.target.reset();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ في الاتصال بالخادم.');
+      }
+    }
+
+    async function handleEditOrder(e) {
+      e.preventDefault();
+      const id = document.getElementById('editId').value;
+      const body = {
+        name: document.getElementById('editName').value,
+        phone: document.getElementById('editPhone').value,
+        city: document.getElementById('editCity').value,
+        quantity: document.getElementById('editQuantity').value,
+        price: document.getElementById('editPrice').value,
+        address: document.getElementById('editAddress').value,
+        status: document.getElementById('editStatus').value,
+        notes: document.getElementById('editNotes').value
+      };
+
+      try {
+        const res = await fetch(`/api/admin/orders/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeModal('editModal');
+          showToast('✅ تم حفظ التعديلات');
+          fetchStats();
+          fetchOrders();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ أثناء حفظ التعديلات.');
+      }
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm(`هل أنت متأكد من حذف الطلب رقم #${id} نهائياً؟`)) return;
+
+      try {
+        const res = await fetch(`/api/admin/orders/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('🗑️ تم حذف الطلب بنجاح');
+          fetchStats();
+          fetchOrders();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ أثناء الحذف.');
+      }
+    }
+
+    async function handleChangePassword(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('currentPass').value;
+      const newPassword = document.getElementById('newPass').value;
+
+      try {
+        const res = await fetch('/api/admin/change-password', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeModal('passwordModal');
+          showToast('🔑 تم تغيير كلمة المرور بنجاح');
+          e.target.reset();
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert('خطأ أثناء تغيير كلمة المرور.');
+      }
+    }
+
+    function exportCSV() {
+      window.open(`/api/admin/export-csv?token=${token}`, '_blank');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
