@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, Notification, nativeImage } = require('electron');
+const { app, BrowserWindow, Tray, Menu, Notification, nativeImage, shell } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 const http = require('http');
@@ -6,6 +6,10 @@ const http = require('http');
 let mainWindow = null;
 let tray = null;
 let serverProcess = null;
+
+// LIVE PUBLIC VERCEL URL
+const PUBLIC_URL = 'https://nafas-landingpage.vercel.app';
+const LOCAL_URL = 'http://localhost:3000';
 
 // Helper to safely load app icon
 function getAppIcon() {
@@ -21,10 +25,10 @@ function getAppIcon() {
   return nativeImage.createEmpty();
 }
 
-// Ensure backend server is running
+// Ensure local backend server is running in background if needed
 function startServerIfNeeded() {
-  http.get('http://localhost:3000/api/admin/check-auth', (res) => {
-    console.log('Backend server is already running.');
+  http.get(`${LOCAL_URL}/api/admin/check-auth`, (res) => {
+    console.log('Local backend server is running.');
   }).on('error', () => {
     console.log('Starting internal backend server process...');
     serverProcess = spawn(process.execPath, [path.join(__dirname, 'server.js')], {
@@ -42,7 +46,7 @@ function createWindow() {
     height: 850,
     minWidth: 900,
     minHeight: 600,
-    title: 'نَفَس - لوحة إدارة الطلبات',
+    title: 'نَفَس - لوحة إدارة الطلبات المباشرة',
     icon: icon.isEmpty() ? undefined : icon,
     webPreferences: {
       nodeIntegration: false,
@@ -50,14 +54,15 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL('http://localhost:3000/admin');
+  // Load LIVE PUBLIC VERCEL Dashboard by default
+  mainWindow.loadURL(`${PUBLIC_URL}/admin`);
 
   // Minimize to tray on close
   mainWindow.on('close', (event) => {
     if (!app.isQuitting) {
       event.preventDefault();
       mainWindow.hide();
-      showTrayNotification('التطبيق يعمل في الخلفية', 'سيصلك تنبيه صوني وفوري بمجرد وصول أي طلب جديد.');
+      showTrayNotification('التطبيق يعمل في الخلفية 🌐', 'متصل مباشرة بموقع نَفَس العمومي لمتابعة الطلبات المباشرة.');
     }
     return false;
   });
@@ -69,13 +74,36 @@ function createTray() {
     tray = new Tray(icon);
 
     const contextMenu = Menu.buildFromTemplate([
-      { label: 'فتح لوحة التحكم', click: () => { if (mainWindow) { mainWindow.show(); mainWindow.focus(); } } },
-      { label: 'فتح الموقع للزبائن', click: () => { require('electron').shell.openExternal('http://localhost:3000'); } },
+      {
+        label: '📊 فتح لوحة التحكم المباشرة (الموقع الحي)',
+        click: () => {
+          if (mainWindow) {
+            mainWindow.loadURL(`${PUBLIC_URL}/admin`);
+            mainWindow.show();
+            mainWindow.focus();
+          }
+        }
+      },
+      {
+        label: '🌐 فتح موقع الزبائن العمومي (Vercel)',
+        click: () => { shell.openExternal(PUBLIC_URL); }
+      },
       { type: 'separator' },
-      { label: 'إغلاق التطبيق نهائياً', click: () => { app.isQuitting = true; app.quit(); } }
+      {
+        label: '🖥️ التبديل للسيرفر المحلي (Localhost)',
+        click: () => {
+          if (mainWindow) {
+            mainWindow.loadURL(`${LOCAL_URL}/admin`);
+            mainWindow.show();
+            mainWindow.focus();
+          }
+        }
+      },
+      { type: 'separator' },
+      { label: 'إغلاق التطبيق نهائياً 🚪', click: () => { app.isQuitting = true; app.quit(); } }
     ]);
 
-    tray.setToolTip('نَفَس - متابعة الطلبات المباشرة');
+    tray.setToolTip('نَفَس - متابعة الطلبات المباشرة الحية');
     tray.setContextMenu(contextMenu);
 
     tray.on('double-click', () => {
