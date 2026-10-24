@@ -16,6 +16,7 @@
   },
   "type": "commonjs",
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
     "electron": "^45.0.0",

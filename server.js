@@ -49,26 +49,25 @@ app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname));
 
+const { neon } = require('@neondatabase/serverless');
+
 // ==================== DATABASE INITIALIZATION ====================
 
 const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || process.env.POSTGRES_URL_NON_POOLING;
 
-let pgPool = null;
+let neonSql = null;
 let sqliteDb = null;
 
 if (databaseUrl) {
   try {
-    pgPool = new Pool({
-      connectionString: databaseUrl,
-      ssl: { rejectUnauthorized: false }
-    });
-    console.log('🐘 Neon Postgres database configured!');
+    neonSql = neon(databaseUrl);
+    console.log('🐘 Neon Serverless HTTP driver configured!');
   } catch (err) {
-    console.error('Failed to configure Postgres pool:', err);
+    console.error('Failed to configure Neon Serverless driver:', err);
   }
 }
 
-if (!pgPool) {
+if (!neonSql) {
   function initSqlite() {
     const localDbPath = path.join(__dirname, 'database.db');
     const tmpDbPath = path.join('/tmp', 'database.db');
@@ -105,32 +104,31 @@ function formatPgSql(sql) {
 }
 
 async function dbQuery(sql, params = []) {
-  if (pgPool) {
-    const res = await pgPool.query(formatPgSql(sql), params);
-    return res.rows;
+  if (neonSql) {
+    return await neonSql.query(formatPgSql(sql), params);
   } else {
     return sqliteDb.prepare(sql).all(...params);
   }
 }
 
 async function dbGet(sql, params = []) {
-  if (pgPool) {
-    const res = await pgPool.query(formatPgSql(sql), params);
-    return res.rows[0] || null;
+  if (neonSql) {
+    const rows = await neonSql.query(formatPgSql(sql), params);
+    return rows[0] || null;
   } else {
     return sqliteDb.prepare(sql).get(...params) || null;
   }
 }
 
 async function dbRun(sql, params = []) {
-  if (pgPool) {
+  if (neonSql) {
     let pgSql = formatPgSql(sql);
     if (pgSql.trim().toUpperCase().startsWith('INSERT') && !pgSql.toUpperCase().includes('RETURNING')) {
       pgSql += ' RETURNING id';
     }
-    const res = await pgPool.query(pgSql, params);
-    const lastId = res.rows && res.rows[0] ? res.rows[0].id : null;
-    return { lastInsertRowid: lastId, changes: res.rowCount };
+    const rows = await neonSql.query(pgSql, params);
+    const lastId = rows && rows[0] ? rows[0].id : null;
+    return { lastInsertRowid: lastId, changes: rows ? rows.length : 1 };
   } else {
     const res = sqliteDb.prepare(sql).run(...params);
     return { lastInsertRowid: res.lastInsertRowid, changes: res.changes };
@@ -138,8 +136,8 @@ async function dbRun(sql, params = []) {
 }
 
 async function dbExec(sql) {
-  if (pgPool) {
-    await pgPool.query(formatPgSql(sql));
+  if (neonSql) {
+    await neonSql.query(formatPgSql(sql));
   } else {
     sqliteDb.exec(sql);
   }
