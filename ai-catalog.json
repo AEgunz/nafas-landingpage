@@ -1,52 +1,63 @@
 {
-  "$schema": "https://schema.org",
-  "version": "1.0",
-  "store": {
-    "name": "نَفَس براحة | NAFAS Store",
-    "url": "https://estilo-co.ma",
-    "country": "MA",
-    "currency": "MAD",
-    "language": "ar"
-  },
-  "products": [
+  "@context": "https://schema.org",
+  "@type": "DataFeed",
+  "dataFeedElement": [
     {
-      "id": "starter-kit-1",
+      "@type": "Product",
+      "sku": "starter-kit-1",
       "name": "موسع الأنف Starter Kit - علبة واحدة",
       "description": "موسع الأنف المريح للمساعدة على فتح مجاري التنفس أثناء النوم والرياضة. تحتوي العلبة على 30 قطعة لاصقة.",
       "url": "https://estilo-co.ma/#order",
       "image": "https://estilo-co.ma/assets/product-kit.webp",
-      "price": 199.00,
-      "old_price": 299.00,
-      "currency": "MAD",
-      "availability": "https://schema.org/InStock",
-      "quantity": 1,
-      "badge": "مجاني التوصيل"
+      "offers": {
+        "@type": "Offer",
+        "price": 199.00,
+        "priceCurrency": "MAD",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "نَفَس براحة | NAFAS Store"
+        }
+      }
     },
     {
-      "id": "starter-kit-2",
+      "@type": "Product",
+      "sku": "starter-kit-2",
       "name": "عرض علبتين Starter Kits",
       "description": "عرض علبتين موسع الأنف (60 قطعة لاصقة) مع توفير خاص وتوصيل بالمجان.",
       "url": "https://estilo-co.ma/#order",
       "image": "https://estilo-co.ma/assets/product-kit.webp",
-      "price": 350.00,
-      "old_price": 499.00,
-      "currency": "MAD",
-      "availability": "https://schema.org/InStock",
-      "quantity": 2,
-      "badge": "🔥 الأكثر طلباً"
+      "offers": {
+        "@type": "Offer",
+        "price": 350.00,
+        "priceCurrency": "MAD",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "نَفَس براحة | NAFAS Store"
+        }
+      }
     },
     {
-      "id": "starter-kit-3",
+      "@type": "Product",
+      "sku": "starter-kit-3",
       "name": "عرض 3 علب Starter Kits",
       "description": "عرض 3 علب موسع الأنف (90 قطعة لاصقة) بأفضل قيمة وتوفير ممتازة مع توصيل بالمجان.",
       "url": "https://estilo-co.ma/#order",
       "image": "https://estilo-co.ma/assets/product-kit.webp",
-      "price": 490.00,
-      "old_price": 699.00,
-      "currency": "MAD",
-      "availability": "https://schema.org/InStock",
-      "quantity": 3,
-      "badge": "🎁 أفضل قيمة"
+      "offers": {
+        "@type": "Offer",
+        "price": 490.00,
+        "priceCurrency": "MAD",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "نَفَس براحة | NAFAS Store"
+        }
+      }
     }
   ]
 }
