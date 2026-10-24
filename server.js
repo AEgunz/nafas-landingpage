@@ -37,6 +37,8 @@ wss.on('connection', (ws) => {
   ws.send(JSON.stringify({ type: 'CONNECTED', message: 'Connected to real-time stream' }));
 });
 
+const fs = require('fs');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -45,8 +47,18 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static(__dirname));
 
-// Initialize SQLite Database
-const dbPath = path.join(__dirname, 'database.db');
+// Determine SQLite DB path (Vercel Serverless read-only filesystem workaround)
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD);
+let dbPath = path.join(__dirname, 'database.db');
+
+if (isVercel) {
+  const tmpDbPath = path.join('/tmp', 'database.db');
+  if (!fs.existsSync(tmpDbPath) && fs.existsSync(dbPath)) {
+    try { fs.copyFileSync(dbPath, tmpDbPath); } catch(e) {}
+  }
+  dbPath = tmpDbPath;
+}
+
 const db = new DatabaseSync(dbPath);
 
 // Helper function to hash password
@@ -669,12 +681,16 @@ app.use((req, res) => {
 });
 
 // Start Server
-server.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🛒 Landing Page: http://localhost:${PORT}`);
-  console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
-  console.log(`⚡ WebSockets: ws://localhost:${PORT}`);
-  console.log(`🔑 Default Admin Password: admin123`);
-  console.log(`====================================================`);
-});
+if (!isVercel) {
+  server.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`🛒 Landing Page: http://localhost:${PORT}`);
+    console.log(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
+    console.log(`⚡ WebSockets: ws://localhost:${PORT}`);
+    console.log(`🔑 Default Admin Password: admin123`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = app;
