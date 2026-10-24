@@ -16,10 +16,10 @@ const LOCAL_URL = 'http://localhost:3000';
 // Helper to safely load app icon
 function getAppIcon() {
   try {
-    const pngPath = path.join(__dirname, 'assets', 'hero-arabic.png');
+    const pngPath = path.join(__dirname, 'assets', 'icon.png');
     const img = nativeImage.createFromPath(pngPath);
     if (!img.isEmpty()) {
-      return img.resize({ width: 32, height: 32 });
+      return img.resize({ width: 64, height: 64 });
     }
   } catch (e) {
     console.log('Icon load fallback:', e);
