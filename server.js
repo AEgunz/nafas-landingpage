@@ -150,8 +150,39 @@ function hashPassword(password) {
   return crypto.createHash('sha256').update(password + '_nasal_salt').digest('hex');
 }
 
-// Active session tokens
-const validTokens = new Set();
+// Stateless HMAC Auth Tokens (for Vercel Serverless Functions persistence)
+const AUTH_SECRET = 'nasal_landing_secret_key_2026_x99';
+
+function generateAuthToken() {
+  const timestamp = Date.now();
+  const payload = `admin_${timestamp}`;
+  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+  return `${payload}.${signature}`;
+}
+
+function verifyAuthToken(token) {
+  if (!token || typeof token !== 'string') return false;
+  const parts = token.split('.');
+  if (parts.length !== 2) return false;
+
+  const [payload, signature] = parts;
+  try {
+    const expectedSignature = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('hex');
+    const sigBuf = Buffer.from(signature, 'hex');
+    const expBuf = Buffer.from(expectedSignature, 'hex');
+
+    if (sigBuf.length === expBuf.length && crypto.timingSafeEqual(sigBuf, expBuf)) {
+      const timestamp = parseInt(payload.replace('admin_', ''), 10);
+      if (isNaN(timestamp)) return false;
+      const ageMs = Date.now() - timestamp;
+      const maxAgeMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+      return ageMs >= 0 && ageMs < maxAgeMs;
+    }
+  } catch (e) {
+    return false;
+  }
+  return false;
+}
 
 // Initialize Database Tables
 async function initTables() {
@@ -272,9 +303,9 @@ async function getStockInfo() {
 // Authentication Middleware for Admin Routes
 function authenticateAdmin(req, res, next) {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = (authHeader && authHeader.split(' ')[1]) || req.query.token;
 
-  if (!token || !validTokens.has(token)) {
+  if (!token || !verifyAuthToken(token)) {
     return res.status(401).json({ success: false, message: 'غير مسموح. يرجى تسجيل الدخول.' });
   }
   next();
@@ -543,8 +574,7 @@ app.post('/api/admin/login', async (req, res) => {
     const inputHash = hashPassword(password);
 
     if (inputHash === storedHash) {
-      const token = crypto.randomBytes(32).toString('hex');
-      validTokens.add(token);
+      const token = generateAuthToken();
       res.json({ success: true, token, message: 'تم تسجيل الدخول بنجاح.' });
     } else {
       res.status(401).json({ success: false, message: 'كلمة المرور غير صحيحة.' });
@@ -557,9 +587,6 @@ app.post('/api/admin/login', async (req, res) => {
 
 // Admin Logout
 app.post('/api/admin/logout', authenticateAdmin, (req, res) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token) validTokens.delete(token);
   res.json({ success: true, message: 'تم تسجيل الخروج بنجاح.' });
 });
 
