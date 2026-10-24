@@ -11,8 +11,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "22.x"
+  },
   "type": "commonjs",
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "cors": "^2.8.6",
     "electron": "^45.0.0",
     "electron-builder": "^26.18.0",

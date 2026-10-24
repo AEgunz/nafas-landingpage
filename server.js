@@ -47,24 +47,38 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static(__dirname));
 
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD || process.env.AWS_LAMBDA_FUNCTION_NAME);
+
 // Determine SQLite DB path safely (Vercel Serverless read-only filesystem workaround)
 function initDatabase() {
-  const isVercel = Boolean(process.env.VERCEL || process.env.NOW_BUILD || process.env.AWS_LAMBDA_FUNCTION_NAME);
   const localDbPath = path.join(__dirname, 'database.db');
   const tmpDbPath = path.join('/tmp', 'database.db');
 
+  let dbFile = localDbPath;
   if (isVercel) {
     if (!fs.existsSync(tmpDbPath) && fs.existsSync(localDbPath)) {
       try { fs.copyFileSync(localDbPath, tmpDbPath); } catch (e) {}
     }
-    return new DatabaseSync(tmpDbPath);
+    dbFile = tmpDbPath;
   }
 
+  // 1. Try node:sqlite (Node 22+)
   try {
-    return new DatabaseSync(localDbPath);
-  } catch (err) {
-    return new DatabaseSync(tmpDbPath);
+    const { DatabaseSync } = require('node:sqlite');
+    return new DatabaseSync(dbFile);
+  } catch (e1) {
+    console.log('node:sqlite not available, attempting better-sqlite3 fallback:', e1.message);
   }
+
+  // 2. Fallback to better-sqlite3
+  try {
+    const BetterSqlite = require('better-sqlite3');
+    return new BetterSqlite(dbFile);
+  } catch (e2) {
+    console.error('better-sqlite3 failed:', e2.message);
+  }
+
+  throw new Error('No SQLite driver available on this Node runtime environment.');
 }
 
 const db = initDatabase();
