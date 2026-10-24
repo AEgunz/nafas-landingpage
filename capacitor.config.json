@@ -3,7 +3,7 @@
   "appName": "نَفَس - لوحة التحكم",
   "webDir": "mobile-dist",
   "server": {
-    "url": "https://estilo-co.ma/admin",
+    "url": "https://nafas-landingpage.vercel.app/admin",
     "cleartext": true
   }
 }
