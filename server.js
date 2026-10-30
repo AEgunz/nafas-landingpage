@@ -812,6 +812,11 @@ app.get('/api/admin/export-csv', authenticateAdmin, async (req, res) => {
   }
 });
 
+// HTML Route for Mugs Personnalises
+app.get('/mugs', (req, res) => {
+  res.sendFile(path.join(__dirname, 'mugs.html'));
+});
+
 // HTML Route for Admin
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));

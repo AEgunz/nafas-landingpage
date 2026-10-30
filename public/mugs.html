@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Khelli Taswirtk Twelli Mug Wa3er - Mugs Personnalisés f المغرب مع تصميم وتعيين مجاني قبل الطباعة والدفع عند الاستلام.">
+  <title>Mugs Personnalisés | كيسان مخصصين ببطاقتك وصورتك</title>
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap">
+
+  <style>
+    :root {
+      --cream: #fdfbf7;
+      --off-white: #f8fafc;
+      --navy: #102b3a;
+      --slate: #1e293b;
+      --muted: #64748b;
+      --wa-green: #25D366;
+      --wa-hover: #1eb956;
+      --amber: #f59e0b;
+      --teal: #18b7c4;
+      --line: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', Arial, sans-serif;
+      background-color: var(--cream);
+      color: var(--slate);
+      line-height: 1.7;
+      padding-bottom: 70px;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    .wrap { width: min(1140px, 92%); margin: auto; }
+
+    /* Top Bar */
+    .topbar {
+      background: var(--navy);
+      color: #e2e8f0;
+      text-align: center;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .topbar strong { color: var(--wa-green); }
+
+    /* Navbar */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--navy);
+    }
+    .nav-links a:hover { color: var(--teal); }
+
+    .btn-wa-sm {
+      background: var(--wa-green);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-weight: 800;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+    }
+    .btn-wa-sm:hover {
+      background: var(--wa-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 48px 0 60px;
+      background: radial-gradient(circle at 10% 20%, #f1f8f6 0%, var(--cream) 70%);
+      overflow: hidden;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 4.2vw, 54px);
+      line-height: 1.25;
+      color: var(--navy);
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+    .hero h1 span { color: var(--wa-green); }
+    .hero p.lead {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    /* Main Animated WA CTA Button */
+    .btn-wa-hero {
+      background: var(--wa-green);
+      color: #ffffff;
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+      animation: pulseWa 2.2s infinite ease-in-out;
+      transition: transform 0.2s;
+    }
+    .btn-wa-hero:hover {
+      transform: scale(1.03);
+      background: var(--wa-hover);
+    }
+    @keyframes pulseWa {
+      0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+      70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+    }
+
+    .trust-badges {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 100px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    /* Hero Visual Card & Arrow Flow */
+    .hero-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(16, 43, 58, 0.08);
+      position: relative;
+    }
+    .hero-card img {
+      width: 100%;
+      height: 380px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: #f8fafc;
+    }
+
+    .visual-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      border-radius: 16px;
+      padding: 12px 18px;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .flow-arrow {
+      color: var(--wa-green);
+      font-size: 18px;
+    }
+
+    /* Section Component */
+    .section { padding: 64px 0; }
+    .section-head {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+    .section-head span.eyebrow {
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .section-head h2 {
+      font-size: clamp(26px, 3.2vw, 38px);
+      color: var(--navy);
+      font-weight: 900;
+      margin: 8px 0;
+    }
+    .section-head p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* 3-Step Process */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .process-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .process-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+    }
+    .step-number {
+      width: 52px;
+      height: 52px;
+      background: var(--navy);
+      color: #ffffff;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 900;
+      margin: 0 auto 20px;
+    }
+    .process-card h3 {
+      font-size: 20px;
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .process-card p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Mug Types Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .mug-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s;
+    }
+    .mug-card:hover { transform: translateY(-4px); }
+    .mug-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #f8fafc;
+      margin-bottom: 14px;
+    }
+    .mug-card h3 {
+      font-size: 17px;
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .mug-card p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .mug-card .btn-wa-card {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .mug-card .btn-wa-card:hover {
+      background: var(--wa-green);
+    }
+
+    /* Why Order From Us */
+    .why-box {
+      background: var(--navy);
+      color: #ffffff;
+      border-radius: 32px;
+      padding: 50px 40px;
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .why-item {
+      text-align: right;
+    }
+    .why-icon {
+      font-size: 36px;
+      margin-bottom: 14px;
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+    }
+    .why-item h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+    .why-item p {
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+
+    /* Customer Reviews */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .review-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 22px;
+    }
+    .stars { color: var(--amber); margin-bottom: 10px; font-size: 16px; }
+    .review-card p {
+      font-size: 14px;
+      color: #334155;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 12px;
+    }
+    .reviewer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .reviewer-info h4 { font-size: 14px; color: var(--navy); font-weight: 800; }
+    .reviewer-info small { color: var(--muted); font-size: 12px; }
+
+    /* FAQ */
+    .faq-container {
+      max-width: 800px;
+      margin: auto;
+    }
+    .faq-container details {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+    .faq-container summary {
+      font-weight: 800;
+      color: var(--navy);
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .faq-container details p {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--muted);
+      border-top: 1px solid #f1f5f9;
+      padding-top: 10px;
+    }
+
+    /* Floating WhatsApp Button on Mobile */
+    .floating-wa {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--wa-green);
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 100px;
+      font-weight: 900;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      background: #0b1720;
+      color: #94a3b8;
+      padding: 40px 0 20px;
+      text-align: center;
+      font-size: 13px;
+    }
+    footer strong { color: #ffffff; font-size: 16px; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .process-grid, .why-grid, .reviews-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+      .floating-wa { display: flex; }
+    }
+    @media (max-width: 500px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .why-box { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="topbar">
+    ☕ صاوب كاسك الخاص بصورتك أو إهديه لمن تحب <strong> | تصميم وتعيين مجاني 100% في WhatsApp | الدفع عند الاستلام 🚚</strong>
+  </div>
+
+  <!-- Navbar -->
+  <header class="nav">
+    <div class="wrap" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+      <a href="/mugs" class="brand">
+        <img src="assets/logo.png" alt="ShriShop Logo" height="48">
+      </a>
+
+      <nav class="nav-links">
+        <a href="#khedma">Khedma dyalna</a>
+        <a href="#models">L-Models</a>
+        <a href="#joda">L-Joda</a>
+        <a href="#reviews">Araa l-Zobana</a>
+        <a href="#faq">As'ila</a>
+      </nav>
+
+      <a href="https://wa.me/212600000000?text=Salam%20bghit%20nsaweb%20mug%20personnalisé" target="_blank" class="btn-wa-sm">
+        <span>💬 Twassel m3ana direct</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="hero-eyebrow">✨ Khedma Personnalisée 100% Sur Mesure</span>
+        <h1>Khelli Taswirtk Twelli Mug Wa3er —<br><span>Bla ma Tmehen Rask, Hna Nsaibouha Lik!</span></h1>
+        <p class="lead">Sift lina ghir l-photo f WhatsApp, w hna nqaddou lik visual mockup fabor qbel ma n-tbe3ouh. Ma katkhless hta kateslem l-mug dyalk!</p>
+
+        <a href="https://wa.me/212600000000?text=Salam%20bghit%20nsaweb%20mug%20personnalisé%20w%20chouf%20mockup" target="_blank" class="btn-wa-hero">
+          <span>📲 Sift Taswirtk f WhatsApp & Chouf Design Fabor</span>
+        </a>
+
+        <div class="trust-badges">
+          <span class="trust-badge">✅ Validation qbel Tba3a</span>
+          <span class="trust-badge">🤝 Khlass 3nd l-Istilam (COD)</span>
+          <span class="trust-badge">🚚 Livraison f kolchi l-Maghrib</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card">
+          <img src="assets/product-kit.webp" alt="Mug Personnalisé Showcase">
+          <div class="visual-flow">
+            <span class="flow-step">📸 Taswirtk</span>
+            <span class="flow-arrow">➔</span>
+            <span class="flow-step">🎨 Design Fabor</span>
+            <span class="flow-arrow">➔</span>
+            <span class="flow-step">☕ Mug Dyalk</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-Step Process Section -->
+  <section class="section" id="khedma" style="background: #ffffff;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kifash Katkhedem?</span>
+        <h2>3 Khetwat Sahlina — Hna Ntkelfo Lik B Kolchi 🛠️</h2>
+        <p>Bla ma tmehen rask m3a les logiciels dyal design. Kolchi kandorozoh m3ak f WhatsApp fabor.</p>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-card">
+          <div class="step-number">1</div>
+          <h3>Khetwa 1: Sift lina f WhatsApp</h3>
+          <p>Sift lina l-photo aw l-fikra اللي بغيتي، مmsj f WhatsApp w ntkelfo بجميع التفاصيل.</p>
+        </div>
+
+        <div class="process-card">
+          <div class="step-number">2</div>
+          <h3>Khetwa 2: Nwarriwk Design Mockup</h3>
+          <p>Kan-qaddou lik l-visual fabor، kan-زيدو السْمِية أو الكتابة اللي بغيتي، وkan-صيفتو ليك أختين قبل الطباعة.</p>
+        </div>
+
+        <div class="process-card">
+          <div class="step-number">3</div>
+          <h3>Khetwa 3: N-tbe3ou w Nsiftoha</h3>
+          <p>Melli kat-confirmi l-design، kan-tbe3oh f HD sublimation w nsiftoh hta l-bab dar. Katkhless 3nd l-istilam.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mug Types & Inspiration Gallery -->
+  <section class="section" id="models">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">A3la L-Models</span>
+        <h2>Mug Types & Inspiration Gallery ☕</h2>
+        <p>Khtar l-model اللي عجبك، و اضغط باش نراوبوه ليك بصورتك الشخصية.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- Item 1 -->
+        <div class="mug-card">
+          <img src="assets/product-kit.webp" alt="Mug Blanc Classique">
+          <h3>Mug Blanc Classique</h3>
+          <p>Perfect for daily use with sharp, vivid HD colors and durable ceramic.</p>
+          <a href="https://wa.me/212600000000?text=Salam%20bghit%20bhal%20had%20Mug%20Blanc%20Classique" target="_blank" class="btn-wa-card">
+            <span>💬 Bghit bhal had l-model</span>
+          </a>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="mug-card">
+          <img src="assets/product-kit.webp" alt="Magic Mug Tasse Magique">
+          <h3>Magic Mug (Tasse Magique)</h3>
+          <p>Black mug that reveals your hidden custom photo when filled with hot coffee or tea!</p>
+          <a href="https://wa.me/212600000000?text=Salam%20bghit%20bhal%20had%20Magic%20Mug" target="_blank" class="btn-wa-card">
+            <span>💬 Bghit bhal had l-model</span>
+          </a>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="mug-card">
+          <img src="assets/product-kit.webp" alt="Mug bi Couleur Intérieur">
+          <h3>Mug Inner Color / Handle</h3>
+          <p>Stylish mug with vibrant interior & handle colors (Red, Black, Royal Blue, Pink).</p>
+          <a href="https://wa.me/212600000000?text=Salam%20bghit%20bhal%20had%20Mug%20Inner%20Color" target="_blank" class="btn-wa-card">
+            <span>💬 Bghit bhal had l-model</span>
+          </a>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="mug-card">
+          <img src="assets/product-kit.webp" alt="Pack Cadeau Couple Anniversaire">
+          <h3>Pack Cadeau (Couple / Gift)</h3>
+          <p>Complete gift package including custom gift box and personalized card.</p>
+          <a href="https://wa.me/212600000000?text=Salam%20bghit%20bhal%20had%20Pack%20Cadeau" target="_blank" class="btn-wa-card">
+            <span>💬 Bghit bhal had l-model</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Order From Us -->
+  <section class="section" id="joda">
+    <div class="wrap">
+      <div class="why-box">
+        <div class="section-head" style="margin-bottom: 30px;">
+          <span class="eyebrow" style="color: #38bdf8;">3lash T-khtar Khedmetna?</span>
+          <h2 style="color: #ffffff;">Joda Certo & Khedma Mqada 💯</h2>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-item">
+            <div class="why-icon">🎨</div>
+            <h3>Design Professionel Fabor</h3>
+            <p>Ma 3ndk ma t-tmehen f les applications. L-designer dyalna kiyqad lik l-image w kijebed la résolution fabor.</p>
+          </div>
+
+          <div class="why-item">
+            <div class="why-icon">🔥</div>
+            <h3>Tba3a HD Sublimation</h3>
+            <p>طباعة حرارية عالية الجودة ومقاومة للغسيل والماء الساخن بدون ما تضيع الصورة.</p>
+          </div>
+
+          <div class="why-item">
+            <div class="why-icon">🎁</div>
+            <h3>Emballage Cadeau Raki</h3>
+            <p>كل كاس كيوصلك مغلف ومحمي f emballage مناسب جداً للإهداء مباشرة لأحبابك.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section class="section" id="reviews" style="background: #ffffff;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Araa L-Zobana</span>
+        <h2>Shnou Kay-qolou 3lina l-Kliyan? ⭐</h2>
+        <p>آراء حقيقية من زبنائنا اللي توصلوا بالـ Mugs dyalhom.</p>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"تبارك الله عليكم الكاس وصلني واعر بزاف و الكواليتي ديال الطباعة ناضية! شكراً على التعامل الراقي f WhatsApp."</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">س</div>
+            <div class="reviewer-info">
+              <h4>سارة من الرباط</h4>
+              <small>طلب: Pack Cadeau</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"الـ Tasse Magique خرجت خطيرة! صيفطت ليهم التصويرة و وراوني الموكاب قبل الطباعة ووصلتني f يومين للدار البيضاء."</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">ع</div>
+            <div class="reviewer-info">
+              <h4>عمر من الدار البيضاء</h4>
+              <small>طلب: Magic Mug</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"أحسن خدمة هدايا صاوبتها لحد الآن. زادوا ليا السمية والتاريخ فوق الصورة فابور. كنشكركم بزاف."</p>
+          <div class="reviewer">
+            <div class="reviewer-avatar">م</div>
+            <div class="reviewer-info">
+              <h4>مريم من طنجة</h4>
+              <small>طلب: Mug Inner Red</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">As'ila Sha'i3a</span>
+        <h2>قبل ما تطلب — الأسئلة الشائعة ❓</h2>
+      </div>
+
+      <div class="faq-container">
+        <details open>
+          <summary>Wach momkin n-chouf l-mug qbel ma nkhless wla n-tbe3?</summary>
+          <p>Ah أكيد! كنزوقو ليك التصميم وكنصيفتوه ليك f WhatsApp على شكل visual mockup حقيقي باش تشوفو وتأكدو قبل ما نطبعوه.</p>
+        </details>
+
+        <details>
+          <summary>Wach l-photo kadi3 m3a l-ghsil?</summary>
+          <p>La أبداً. الطباعة كتم بطريقة HD Sublimation الحرارية f قلب السيراميك، كتقاوم الغسيل والماء الساخن وما كتتمسحش.</p>
+        </details>
+
+        <details>
+          <summary>Chhal kiyakhod l-waqt bach tewselni?</summary>
+          <p>التوصيل كياخد من 24 إلى 48 ساعة لجميع المدن المغربية، وكتخلص عند الاستلام بعد معاينة طلبك.</p>
+        </details>
+
+        <details>
+          <summary>Wach momkin t-zidou liya ktaba aw smiya m3a l-photo?</summary>
+          <p>Ah طبعاً! أي كتابة، تاريخ، أو إهداء بغيتي تزيدو مع الصورة كنزيدوه ليك فابور بدون أي مصاريف إضافية.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sticky Floating Mobile WA CTA -->
+  <a href="https://wa.me/212600000000?text=Salam%20bghit%20nsaweb%20mug%20personnalisé" target="_blank" class="floating-wa">
+    <span>💬 Sift lina l-photo f WhatsApp</span>
+  </a>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <strong>Mugs Personnalisés | ShriShop</strong><br>
+      Khedma عالية الجودة، تصميم مجاني والتوصيل لجميع المدن المغربية 🇲🇦<br>
+      © <span id="year">2026</span> جميع الحقوق محفوظة
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

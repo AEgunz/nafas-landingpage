@@ -21,6 +21,10 @@
   ],
   "rewrites": [
     {
+      "source": "/mugs",
+      "destination": "/mugs.html"
+    },
+    {
       "source": "/admin",
       "destination": "/admin.html"
     },
