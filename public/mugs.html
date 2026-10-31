@@ -226,10 +226,10 @@
               <div class="flex items-center justify-between pb-4 border-b border-slate-100 text-xs">
                 <div class="flex items-center gap-2 font-bold text-slate-900">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span>Exemple de Réalisation en Atelier</span>
+                  <span data-i18n="mockupTitle">نموذج حقيقي من ورشتنا</span>
                 </div>
-                <span class="px-2.5 py-1 bg-brand-50 text-brand-700 font-bold rounded-full text-[11px]">
-                  Modèle Céramique 330ml
+                <span class="px-2.5 py-1 bg-brand-50 text-brand-700 font-bold rounded-full text-[11px]" data-i18n="mockupModel">
+                  كوب سيراميك 330 مل
                 </span>
               </div>
 
@@ -239,7 +239,7 @@
                 <!-- Floating badge on visual -->
                 <div class="absolute bottom-2 right-2 bg-white/95 backdrop-blur px-3 py-1.5 rounded-xl text-xs font-bold text-slate-800 shadow-md border border-slate-100 flex items-center gap-1.5">
                   <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
-                  <span>Impression Haute Définition</span>
+                  <span data-i18n="badgeHD">طباعة عالية الدقة والوضوح</span>
                 </div>
               </div>
 
@@ -250,11 +250,11 @@
                     1
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-slate-900">Vous envoyez la photo / texte</p>
-                    <p class="text-[11px] text-slate-500">Confirmation WhatsApp rapide</p>
+                    <p class="text-xs font-bold text-slate-900" data-i18n="recapStep1">ترسل الصورة أو النص</p>
+                    <p class="text-[11px] text-slate-500" data-i18n="recapStep1Sub">تأكيد سريع عبر الواتساب</p>
                   </div>
                 </div>
-                <span class="text-xs font-black text-brand-600 bg-brand-100 px-2.5 py-1 rounded-lg">Gratuit</span>
+                <span class="text-xs font-black text-brand-600 bg-brand-100 px-2.5 py-1 rounded-lg" data-i18n="recapFree">مجاناً</span>
               </div>
 
             </div>
@@ -270,12 +270,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="text-center max-w-2xl mx-auto mb-14">
-        <span class="text-brand-600 text-xs font-extrabold tracking-widest uppercase bg-brand-50 px-3.5 py-1.5 rounded-full border border-brand-200">
-          Notre Processus Simple
+        <span class="text-brand-600 text-xs font-extrabold tracking-widest uppercase bg-brand-50 px-3.5 py-1.5 rounded-full border border-brand-200" data-i18n="conceptBadge">
+          طريقتنا البسيطة
         </span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 text-slate-900">Comment commander chez shrishop.online ?</h2>
-        <p class="text-slate-500 text-sm sm:text-base mt-2">
-          Finis les outils de création complexes ! Nos graphistes préparent le fichier parfait pour vous, sans frais additionnels.
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 text-slate-900" data-i18n="conceptHeading">كيف تطلب من shrishop.online ؟</h2>
+        <p class="text-slate-500 text-sm sm:text-base mt-2" data-i18n="conceptSub">
+          لا داعي لاستخدام برامج معقدة! مصممونا يتكفلون بتجهيز التصميم المثالي لك بدون أي مصاريف إضافية.
         </p>
       </div>
 
@@ -287,32 +287,34 @@
             1
           </div>
           <div class="space-y-2">
-            <h3 class="text-xl font-bold text-slate-900">Envoyez vos photos & idées</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Remplissez le formulaire en bas de page ou écrivez-nous directement sur WhatsApp en joignant vos photos (famille, couple, logo, citation préférée...).
+            <h3 class="text-xl font-bold text-slate-900" data-i18n="conceptStep1Title">أرسل صورك وأفكارك</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="conceptStep1Desc">
+              قم بتعبئة الاستمارة أسفل الصفحة أو راسلنا مباشرة عبر الواتساب مع إرفاق صورك (عائلة، ثنائي، شعار، عبارة مفضلة...).
             </p>
           </div>
           <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-brand-600 font-bold flex items-center gap-1.5">
-            <i data-lucide="image" class="w-4 h-4"></i> Photos smartphone acceptées
+            <i data-lucide="image" class="w-4 h-4"></i>
+            <span data-i18n="conceptStep1Badge">صور الهاتف مقبولة بجودة ممتازة</span>
           </div>
         </div>
 
         <!-- Step 2 -->
         <div class="bg-slate-50 rounded-3xl p-8 border-2 border-brand-400 relative flex flex-col justify-between shadow-md hover:shadow-xl transition-all group">
-          <div class="absolute -top-3.5 right-6 bg-brand-600 text-white text-[11px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
-            Service Inclus
+          <div class="absolute -top-3.5 right-6 bg-brand-600 text-white text-[11px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm" data-i18n="conceptStep2BadgeTitle">
+            خدمة مجانية
           </div>
           <div class="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center text-xl font-bold shadow-md shadow-brand-500/30 mb-6 group-hover:scale-110 transition-transform">
             2
           </div>
           <div class="space-y-2">
-            <h3 class="text-xl font-bold text-slate-900">Validation rapide du design</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Notre designer retouche vos photos, ajuste la mise en page et vous transmet le visuel de validation sur WhatsApp. Vous pouvez demander des modifications jusqu'à satisfaction complète !
+            <h3 class="text-xl font-bold text-slate-900" data-i18n="conceptStep2Title">تأكيد وتعديل التصميم</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="conceptStep2Desc">
+              يقوم مصممنا بتحسين صورك وضبط الألوان والتنسيق ثم يرسل لك التصميم لمعاينته عبر الواتساب. يمكنك طلب أي تعديل حتى ترضى تماماً!
             </p>
           </div>
           <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-emerald-700 font-bold flex items-center gap-1.5">
-            <i data-lucide="check-check" class="w-4 h-4"></i> Validation 100% sans risque
+            <i data-lucide="check-check" class="w-4 h-4"></i>
+            <span data-i18n="conceptStep2Badge">تأكيد مجاني 100% بدون مخاطرة</span>
           </div>
         </div>
 
@@ -322,13 +324,14 @@
             3
           </div>
           <div class="space-y-2">
-            <h3 class="text-xl font-bold text-slate-900">Impression HD & Paiement à la réception</h3>
-            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Après votre validation, nous imprimons votre mug sous haute température et vous l'expédions dans un emballage ultra-protégé. Vous payez en espèces au livreur.
+            <h3 class="text-xl font-bold text-slate-900" data-i18n="conceptStep3Title">طباعة حرارية HD والتوصيل للمنزل</h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" data-i18n="conceptStep3Desc">
+              بعد موافقتك، نقوم بطباعة الكوب بدرجة حرارة عالية وضمان ثبات الألوان، ثم نشحنه لك في تغليف واقٍ ضد الكسر. وتدفع عند الاستلام.
             </p>
           </div>
           <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-600 font-bold flex items-center gap-1.5">
-            <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i> Expédition 24h à 48h partout au Maroc
+            <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i>
+            <span data-i18n="conceptStep3Badge">شحن خلال 24 إلى 48 ساعة لكل المغرب</span>
           </div>
         </div>
 
@@ -342,11 +345,11 @@
 
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
         <div>
-          <span class="text-brand-600 text-xs font-bold uppercase tracking-wider">Nos Réalisations Populaires</span>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Choisissez votre inspiration</h2>
+          <span class="text-brand-600 text-xs font-bold uppercase tracking-wider" data-i18n="galleryBadge">أكثر تصاميمنا إقبالاً</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1" data-i18n="galleryHeading">اختر التصميم الذي يعجبك</h2>
         </div>
-        <p class="text-slate-500 text-sm max-w-md mt-2 md:mt-0">
-          Voici les créations les plus appréciées chez <strong>shrishop.online</strong>. Cliquez sur l'une d'elles pour pré-remplir votre commande !
+        <p class="text-slate-500 text-sm max-w-md mt-2 md:mt-0" data-i18n="gallerySub">
+          إليك التصاميم الأكثر طلباً لدى shrishop.online. اضغط على أي نموذج لتعبئة الطلب مباشرة!
         </p>
       </div>
 
@@ -361,8 +364,8 @@
             </div>
 
             <div class="mt-4">
-              <h3 class="text-base font-bold text-slate-900">Mug Souvenir & Date Spéciale</h3>
-              <p class="text-xs text-slate-500 mt-1">Photo de couple préférée avec date de mariage, fiançailles ou première rencontre dans une typographie intemporelle.</p>
+              <h3 class="text-base font-bold text-slate-900" data-i18n="card1Title">كوب الذكريات والتاريخ المميز</h3>
+              <p class="text-xs text-slate-500 mt-1" data-i18n="card1Desc">صورة الثنائي المفضلة مع تاريخ الزواج أو الخطوبة أو أول لقاء بأسلوب خط أنيق وخالد.</p>
             </div>
           </div>
 
@@ -372,7 +375,7 @@
               <span class="text-lg font-black text-brand-600">95 DH</span>
             </div>
             <button onclick="fillIdeaSelection('Mug Souvenir Couple avec photo et date spéciale')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
-              <span>Je veux celui-ci</span>
+              <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -386,8 +389,8 @@
             </div>
 
             <div class="mt-4">
-              <h3 class="text-base font-bold text-slate-900">Mug Pêle-Mêle Multi-Photos</h3>
-              <p class="text-xs text-slate-500 mt-1">Envoyez 2 à 4 photos de famille. Nous réalisons un montage équilibré avec cadre et inscription de votre nom de famille.</p>
+              <h3 class="text-base font-bold text-slate-900" data-i18n="card2Title">كوب تجميعة الصور العائلية</h3>
+              <p class="text-xs text-slate-500 mt-1" data-i18n="card2Desc">أرسل من 2 إلى 4 صور عائلية ونحن ننسقها لك في تصميم متناسق مع كتابة اسم العائلة.</p>
             </div>
           </div>
 
@@ -397,7 +400,7 @@
               <span class="text-lg font-black text-brand-600">95 DH</span>
             </div>
             <button onclick="fillIdeaSelection('Mug Pêle-Mêle Famille avec photos et nom de famille')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
-              <span>Je veux celui-ci</span>
+              <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -411,8 +414,8 @@
             </div>
 
             <div class="mt-4">
-              <h3 class="text-base font-bold text-slate-900">Mug Citation & Calligraphie</h3>
-              <p class="text-xs text-slate-500 mt-1">Votre prénom, message ou citation préférée sublimés avec une typographie et mise en page artistique sur-mesure.</p>
+              <h3 class="text-base font-bold text-slate-900" data-i18n="card3Title">كوب عبارات وخط عربي فاخر</h3>
+              <p class="text-xs text-slate-500 mt-1" data-i18n="card3Desc">اسمك، رسالتك أو عبارتك المفضلة مصممة بأسلوب فني وخط عربي أو عصري مميز.</p>
             </div>
           </div>
 
@@ -422,7 +425,7 @@
               <span class="text-lg font-black text-brand-600">95 DH</span>
             </div>
             <button onclick="fillIdeaSelection('Mug avec Citation et Calligraphie Personnalisée')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
-              <span>Je veux celui-ci</span>
+              <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -436,8 +439,8 @@
             </div>
 
             <div class="mt-4">
-              <h3 class="text-base font-bold text-slate-900">Pack Cadeau avec Boîte Soignée</h3>
-              <p class="text-xs text-slate-500 mt-1">Mug personnalisé livré dans une boîte cadeau élégante avec carte de vœux personnalisée pour vos proches.</p>
+              <h3 class="text-base font-bold text-slate-900" data-i18n="card4Title">علبة هدايا وتغليف أنيق</h3>
+              <p class="text-xs text-slate-500 mt-1" data-i18n="card4Desc">كوب مخصص يصلك في علبة هدايا أنيقة مع بطاقة تهنئة مخصصة لأحبائك.</p>
             </div>
           </div>
 
@@ -447,7 +450,7 @@
               <span class="text-lg font-black text-brand-600">95 DH</span>
             </div>
             <button onclick="fillIdeaSelection('Pack Cadeau avec Boîte Soignée et carte')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
-              <span>Je veux celui-ci</span>
+              <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
           </div>
@@ -658,8 +661,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <div class="text-center max-w-xl mx-auto mb-12">
-        <h2 class="text-3xl font-extrabold text-slate-900">Pourquoi choisir shrishop.online ?</h2>
-        <p class="text-slate-500 text-xs sm:text-sm mt-1">Des céramiques haut de gamme conçues pour résister au quotidien.</p>
+        <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="whyHeading">لماذا تختار shrishop.online ؟</h2>
+        <p class="text-slate-500 text-xs sm:text-sm mt-1" data-i18n="whySub">سيراميك عالي الجودة مصمم ليدوم معك يومياً.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -668,32 +671,32 @@
           <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto">
             <i data-lucide="sparkles" class="w-6 h-6"></i>
           </div>
-          <h3 class="font-bold text-sm text-slate-900">Couleurs Sublimées HD</h3>
-          <p class="text-xs text-slate-600">Technologie de thermo-sublimation 300 DPI pour un rendu photographique ultra-net et éclatant.</p>
+          <h3 class="font-bold text-sm text-slate-900" data-i18n="g1Title">سيراميك بـ 3 طبقات حماية</h3>
+          <p class="text-xs text-slate-600" data-i18n="g1Desc">بورسلين أبيض عالي الكثافة سعة 330 مل مع معالجة لمعان خاصة لإبراز دقة ألوان صورك.</p>
         </div>
 
         <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 text-center space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto">
             <i data-lucide="waves" class="w-6 h-6"></i>
           </div>
-          <h3 class="font-bold text-sm text-slate-900">Micro-ondes & Lave-vaisselle</h3>
-          <p class="text-xs text-slate-600">Cuits à très haute température, nos mugs conservent leur éclat même après des centaines de lavages.</p>
+          <h3 class="font-bold text-sm text-slate-900" data-i18n="g2Title">آمن في الميكروويف وغسالة الأطباق</h3>
+          <p class="text-xs text-slate-600" data-i18n="g2Desc">مطبوع بدرجات حرارة عالية جداً، تحافظ الكؤوس على بريقها وألوانها حتى بعد مئات الغسلات.</p>
         </div>
 
         <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 text-center space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto">
             <i data-lucide="package-check" class="w-6 h-6"></i>
           </div>
-          <h3 class="font-bold text-sm text-slate-900">Protection Renforcée Anti-Choc</h3>
-          <p class="text-xs text-slate-600">Polystyrène protecteur et boîte solide. Si votre mug arrive abîmé, nous vous en renvoyons un neuf sans frais !</p>
+          <h3 class="font-bold text-sm text-slate-900" data-i18n="g3Title">حماية مضاعفة ضد الكسر</h3>
+          <p class="text-xs text-slate-600" data-i18n="g3Desc">تغليف مقوى وبوليستيريل واقٍ. إذا وصلك الكوب به أي ضرر، نعوضك بكوب جديد مجاناً!</p>
         </div>
 
         <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 text-center space-y-3">
           <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center mx-auto">
             <i data-lucide="check-circle" class="w-6 h-6"></i>
           </div>
-          <h3 class="font-bold text-sm text-slate-900">Validation Garantie</h3>
-          <p class="text-xs text-slate-600">Aucune impression n'est lancée sans votre accord sur le design.</p>
+          <h3 class="font-bold text-sm text-slate-900" data-i18n="g4Title">ضمان الموافقة والرضا</h3>
+          <p class="text-xs text-slate-600" data-i18n="g4Desc">لا نقوم بطباعة أي كوب إلا بعد موافقتك الكاملة على التصميم.</p>
         </div>
 
       </div>
@@ -712,8 +715,8 @@
           <i data-lucide="star" class="w-5 h-5 fill-current"></i>
           <i data-lucide="star" class="w-5 h-5 fill-current"></i>
         </div>
-        <h2 class="text-3xl font-extrabold text-slate-900">Avis de nos clients au Maroc</h2>
-        <p class="text-slate-500 text-sm mt-1">Plus de 2 400 mugs personnalisés livrés avec succès à Casablanca, Rabat, Marrakech, Fès, Tanger et partout au Royaume.</p>
+        <h2 class="text-3xl font-extrabold text-slate-900" data-i18n="reviewsHeading">آراء عملائنا الكرام</h2>
+        <p class="text-slate-500 text-sm mt-1" data-i18n="reviewsSub">مئات الكؤوس المخصصة نقتنيها ونوصلها شهرياً لجميع أنحاء المغرب.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -728,8 +731,8 @@
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
             </div>
-            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed">
-              « Service impeccable ! J'ai simplement envoyé 3 photos de notre voyage et le designer de shrishop m'a composé un visuel magnifique sur WhatsApp en moins d'une heure. Livraison en 48h à Casablanca. Je recommande vivement ! »
+            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed" data-i18n="rev1Text">
+              « خدمة ممتازة ورائعة! أرسلت 3 صور من سفرتنا ومصمم shrishop جهز لي تصميماً رائعاً على الواتساب في أقل من ساعة. التوصيل وصلني خلال 48 ساعة للدار البيضاء. أنصح بهم بشدة! »
             </p>
           </div>
           <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
@@ -737,8 +740,8 @@
               SB
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">Salma Berrada</p>
-              <p class="text-[11px] text-slate-400">Casablanca • Mug Souvenir de Couple</p>
+              <p class="font-bold text-xs text-slate-900">سلمى برادة</p>
+              <p class="text-[11px] text-slate-400">الدار البيضاء • كوب ذكريات الثنائي</p>
             </div>
           </div>
         </div>
@@ -753,8 +756,8 @@
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
             </div>
-            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed">
-              « Le modèle "Dreams shaped with coffee" est superbe sur mon bureau ! La céramique est lourde et agréable, et l'impression est d'une grande netteté. Le livreur était très courtois. »
+            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed" data-i18n="rev2Text">
+              « الكوب وصلني بجودة سيراميك ممتازة وثقيلة، والطباعة واضحة جداً بألوان زاهية. الموزع كان محترماً وسريعاً. شكراً لكم! »
             </p>
           </div>
           <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
@@ -762,8 +765,8 @@
               OE
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">Omar El Idrissi</p>
-              <p class="text-[11px] text-slate-400">Rabat • Mug Typographie Rétro</p>
+              <p class="font-bold text-xs text-slate-900">عمر الإدريسي</p>
+              <p class="text-[11px] text-slate-400">الرباط • كوب عبارات مخصص</p>
             </div>
           </div>
         </div>
@@ -778,8 +781,8 @@
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               <i data-lucide="star" class="w-4 h-4 fill-current"></i>
             </div>
-            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed">
-              « J'ai profité de l'offre duo pour offrir un mug à ma sœur et un pour moi avec la photo de notre nièce (style arc-en-ciel). Emballage solide, rien de cassé, et les couleurs sont vives. Merci l'équipe shrishop ! »
+            <p class="text-slate-700 text-xs sm:text-sm italic leading-relaxed" data-i18n="rev3Text">
+              « استغليت عرض الكوبين وأهديت كوباً لأختي وكوباً لي مع صورة ابنة أختي. التغليف آمن ووصل كل شيء سليماً. شكراً فريق shrishop! »
             </p>
           </div>
           <div class="flex items-center gap-3 mt-6 pt-4 border-t border-slate-100">
@@ -787,8 +790,8 @@
               HC
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">Houda Chraibi</p>
-              <p class="text-[11px] text-slate-400">Marrakech • Pack Duo Cadeau Famille</p>
+              <p class="font-bold text-xs text-slate-900">هدى الشرايبي</p>
+              <p class="text-[11px] text-slate-400">مراكش • عرض الكوبين للعائلة</p>
             </div>
           </div>
         </div>
@@ -863,8 +866,8 @@
           <a href="#" class="flex items-center gap-2">
             <img src="assets/logo.png" alt="shrishop.online Logo" class="h-12 w-auto object-contain">
           </a>
-          <p class="text-slate-400 leading-relaxed">
-            Votre boutique de référence au Maroc pour la création de mugs céramiques personnalisés. Conception graphique offerte, validation WhatsApp et paiement à la livraison.
+          <p class="text-slate-400 leading-relaxed" data-i18n="footerDesc">
+            متجرك المفضل بالمغرب لابتكار وتخصيص الكؤوس السيراميكية. تصميم جرافيكي مجاني، تأكيد عبر الواتساب والدفع عند الاستلام.
           </p>
           <div class="flex items-center gap-3 pt-2">
             <a href="https://wa.me/212693360625" target="_blank" class="w-8 h-8 rounded-full bg-emerald-800/80 flex items-center justify-center hover:bg-emerald-600 text-white transition-colors">
@@ -880,41 +883,40 @@
         </div>
 
         <div>
-          <h4 class="text-white font-bold uppercase tracking-wider mb-4">Navigation</h4>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" data-i18n="navTitle">روابط سريعة</h4>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="#concept" class="hover:text-white transition-colors">Comment ça marche ?</a></li>
-            <li><a href="#exemples" class="hover:text-white transition-colors">Nos Réalisations</a></li>
-            <li><a href="#formulaire-commande" class="hover:text-white transition-colors">Passer commande</a></li>
-            <li><a href="#garanties" class="hover:text-white transition-colors">Qualité de la céramique</a></li>
-            <li><a href="#avis" class="hover:text-white transition-colors">Avis clients</a></li>
+            <li><a href="#concept" class="hover:text-white transition-colors" data-i18n="navConcept">فكرتنا</a></li>
+            <li><a href="#exemples" class="hover:text-white transition-colors" data-i18n="navExemples">نماذج وأفكار</a></li>
+            <li><a href="#formulaire-commande" class="hover:text-white transition-colors" data-i18n="navCreate">صمم كوبك</a></li>
+            <li><a href="#garanties" class="hover:text-white transition-colors" data-i18n="navQuality">جودة السيراميك</a></li>
+            <li><a href="#avis" class="hover:text-white transition-colors" data-i18n="navReviews">آراء العملاء</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="text-white font-bold uppercase tracking-wider mb-4">Commandes Entreprises / B2B</h4>
-          <p class="text-slate-400 leading-relaxed mb-3">
-            Vous souhaitez imprimer des mugs corporatifs avec votre logo pour vos collaborateurs ou événements professionnels ?
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" data-i18n="b2bHeading">طلبات الشركات والمؤسسات B2B</h4>
+          <p class="text-slate-400 leading-relaxed mb-3" data-i18n="b2bDesc">
+            هل ترغب في طباعة كؤوس مخصصة بشعار شركتك لموظفيك أو فعالياتك المهنية؟
           </p>
-          <a href="https://wa.me/212693360625?text=Bonjour!%20Je%20souhaite%20un%20devis%20pour%20des%20mugs%20entreprise%20sur%20shrishop.online" target="_blank" class="text-accent-cyan font-bold hover:underline flex items-center gap-1">
-            Demander un devis B2B →
+          <a href="https://wa.me/212693360625?text=Bonjour!%20Je%20souhaite%20un%20devis%20pour%20des%20mugs%20entreprise%20sur%20shrishop.online" target="_blank" class="text-accent-cyan font-bold hover:underline flex items-center gap-1" data-i18n="b2bLink">
+            طلب عرض سعر للشركات ←
           </a>
         </div>
 
         <div>
-          <h4 class="text-white font-bold uppercase tracking-wider mb-4">Expéditions au Maroc</h4>
+          <h4 class="text-white font-bold uppercase tracking-wider mb-4" data-i18n="shippingHeading">الشحن والتوصيل بالمغرب</h4>
           <ul class="space-y-2 text-slate-400">
-            <li>• Casablanca & Rabat : 24h à 48h</li>
-            <li>• Marrakech, Tanger, Fès, Agadir : 48h à 72h</li>
-            <li>• Autres villes et régions : 48h à 72h</li>
-            <li>• Paiement en espèces à la livraison</li>
+            <li>• الدار البيضاء والرباط: خلال 24 إلى 48 ساعة</li>
+            <li>• مراكش، طنجة، فاس، أقاليم أخرى: خلال 48 إلى 72 ساعة</li>
+            <li>• الدفع نقداً عند الاستلام</li>
           </ul>
         </div>
 
       </div>
 
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-slate-500 text-xs text-center sm:text-left">
-        <p>© 2026 shrishop.online - Tous droits réservés. Conçu pour le Maroc 🇲🇦</p>
-        <p class="mt-2 sm:mt-0">Service Client WhatsApp : +212 6 93 36 06 25</p>
+        <p>© 2026 shrishop.online - جميع الحقوق محفوظة. صُمم للمغرب 🇲🇦</p>
+        <p class="mt-2 sm:mt-0">خدمة العملاء عبر الواتساب: +212 6 93 36 06 25</p>
       </div>
     </div>
   </footer>
