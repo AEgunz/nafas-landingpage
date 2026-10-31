@@ -85,14 +85,14 @@
   <!-- Top Announcement Bar -->
   <div class="bg-brand-800 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2 border-b border-brand-700">
     <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-accent-cyan text-brand-900 text-xs font-black">✦</span>
-    <span><strong>Conception Graphique 100% Offerte :</strong> Envoyez votre idée ou photo, nos designers préparent votre design avant toute impression !</span>
+    <span data-i18n="topBar"><strong>Conception Graphique 100% Offerte :</strong> Envoyez votre idée ou photo, nos designers préparent votre design avant toute impression !</span>
   </div>
 
   <!-- Live Scarcity & Countdown Timer Banner -->
   <div class="bg-gradient-to-r from-amber-500 via-rose-500 to-amber-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-bold tracking-wide flex items-center justify-center flex-wrap gap-2 shadow-sm">
-    <span class="flex items-center gap-1">🔥 <strong>Ne ratez pas l'opportunité !</strong> Commandez votre Mug avec le Design de votre choix — Conception Graphique Offerte !</span>
+    <span class="flex items-center gap-1" data-i18n="scarcityBanner">🔥 <strong>Ne ratez pas l'opportunité !</strong> Commandez votre Mug avec le Design de votre choix — Conception Graphique Offerte !</span>
     <span class="bg-black/20 px-3 py-1 rounded-full text-[11px] font-mono flex items-center gap-1.5 border border-white/20">
-      <span>⏱️ Expire dans :</span>
+      <span data-i18n="expireLabel">⏱️ Expire dans :</span>
       <span id="countdown-timer" class="font-black text-amber-200">00:14:52</span>
     </span>
   </div>
@@ -108,19 +108,25 @@
 
       <!-- Desktop Links -->
       <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-        <a href="#concept" class="hover:text-brand-600 transition-colors">Notre Concept</a>
-        <a href="#exemples" class="hover:text-brand-600 transition-colors">Modèles & Inspirations</a>
+        <a href="#concept" class="hover:text-brand-600 transition-colors" data-i18n="navConcept">Notre Concept</a>
+        <a href="#exemples" class="hover:text-brand-600 transition-colors" data-i18n="navExemples">Modèles & Inspirations</a>
         <a href="#formulaire-commande" class="hover:text-brand-600 transition-colors flex items-center gap-1.5 text-brand-600 font-bold">
           <i data-lucide="sparkles" class="w-4 h-4"></i>
-          <span>Créer mon Design</span>
+          <span data-i18n="navCreate">Créer mon Design</span>
         </a>
-        <a href="#garanties" class="hover:text-brand-600 transition-colors">Qualité Céramique</a>
-        <a href="#avis" class="hover:text-brand-600 transition-colors">Avis Clients</a>
+        <a href="#garanties" class="hover:text-brand-600 transition-colors" data-i18n="navQuality">Qualité Céramique</a>
+        <a href="#avis" class="hover:text-brand-600 transition-colors" data-i18n="navReviews">Avis Clients</a>
       </nav>
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-3">
-        <a href="#formulaire-commande" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-gradient-to-r from-brand-800 via-brand-600 to-brand-500 hover:from-brand-900 hover:to-brand-600 text-white text-xs sm:text-sm font-black shadow-lg shadow-brand-500/30 transition-all pulse-glow hover:scale-105">
+        <!-- Language Switcher Toggle -->
+        <button id="lang-switch-btn" onclick="toggleLanguage()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-800 text-xs font-black border border-brand-200 shadow-sm transition-all">
+          <span>🌐</span>
+          <span id="lang-switch-label">العربية</span>
+        </button>
+
+        <a href="#formulaire-commande" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-gradient-to-r from-brand-800 via-brand-600 to-brand-500 hover:from-brand-900 hover:to-brand-600 text-white text-xs sm:text-sm font-black shadow-lg shadow-brand-500/30 transition-all pulse-glow hover:scale-105" data-i18n="ctaHeader">
           🛒 Commander ✦
         </a>
 
@@ -931,7 +937,67 @@
       recalculatePrice();
       startCountdownTimer();
       startSocialProofLoop();
+      applyLanguage(detectUserLang());
     });
+
+    // -----------------------------------------------------------------
+    // Bilingual i18n Engine (French & Moroccan Arabic RTL)
+    // -----------------------------------------------------------------
+    const translations = {
+      fr: {
+        topBar: "Conception Graphique 100% Offerte : Envoyez votre idée ou photo, nos designers préparent votre design avant toute impression !",
+        scarcityBanner: "🔥 Ne ratez pas l'opportunité ! Commandez votre Mug avec le Design de votre choix — Conception Graphique Offerte !",
+        navConcept: "Notre Concept",
+        navExemples: "Modèles & Inspirations",
+        navCreate: "Créer mon Design",
+        navQuality: "Qualité Céramique",
+        navReviews: "Avis Clients",
+        ctaHeader: "🛒 Commander ✦"
+      },
+      ar: {
+        topBar: "تصميم جرافيكي مجاني 100% : أرسل صورتك أو فكرتك وفريقنا يصمم لك الكوب بلمسة احترافية قبل أي طباعة!",
+        scarcityBanner: "🔥 لا تدع الفرصة تفوتك! اطلب كوبك المخصص بالتصميم الذي تحبه — التصميم الجرافيكي مجاني!",
+        navConcept: "فكرتنا",
+        navExemples: "نماذج وأفكار",
+        navCreate: "صمم كوبك",
+        navQuality: "جودة السيراميك",
+        navReviews: "آراء العملاء",
+        ctaHeader: "🛒 اطلب الآن ✦"
+      }
+    };
+
+    let currentActiveLang = 'fr';
+
+    function detectUserLang() {
+      const userLang = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+      if (userLang.startsWith('ar')) {
+        return 'ar';
+      }
+      return 'fr';
+    }
+
+    function toggleLanguage() {
+      const targetLang = currentActiveLang === 'fr' ? 'ar' : 'fr';
+      applyLanguage(targetLang);
+    }
+
+    function applyLanguage(lang) {
+      currentActiveLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      const label = document.getElementById('lang-switch-label');
+      if (label) label.textContent = lang === 'fr' ? 'العربية' : 'Français';
+
+      const dict = translations[lang] || translations.fr;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+    }
 
     // Live Countdown Timer (14m 52s ticking down)
     function startCountdownTimer() {
