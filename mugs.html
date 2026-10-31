@@ -88,6 +88,16 @@
     <span><strong>Conception Graphique 100% Offerte :</strong> Envoyez votre idée ou photo, nos designers réalisent votre maquette 3D avant toute impression !</span>
   </div>
 
+  <!-- Live Scarcity & Countdown Timer Banner -->
+  <div class="bg-gradient-to-r from-amber-500 via-rose-500 to-amber-600 text-white text-xs sm:text-sm py-2 px-4 text-center font-bold tracking-wide flex items-center justify-center flex-wrap gap-2 shadow-sm">
+    <span class="flex items-center gap-1">🔥 <strong>Offre Spéciale :</strong> Conception 3D + Emballage Cadeau Offerts !</span>
+    <span class="bg-black/20 px-3 py-1 rounded-full text-[11px] font-mono flex items-center gap-1.5 border border-white/20">
+      <span>⏱️ Expire dans :</span>
+      <span id="countdown-timer" class="font-black text-amber-200">00:14:52</span>
+    </span>
+    <span class="hidden md:inline-block bg-white/20 px-2.5 py-0.5 rounded-full text-[11px]">⚡ Stock limité : <strong id="mugs-stock-left">8</strong> coffrets disponibles</span>
+  </div>
+
   <!-- Header / Nav -->
   <header class="sticky top-0 z-40 glass-nav border-b border-slate-200 transition-all duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -806,6 +816,19 @@
     <span>🛒 Commander Maintenant (95 DH)</span>
   </a>
 
+  <!-- Social Proof Live Sales Toast Notification -->
+  <div id="salesToastMugs" class="fixed bottom-20 left-5 z-50 bg-white border-2 border-emerald-500/30 rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 max-w-xs opacity-0 translate-y-10 transition-all duration-500 pointer-events-none">
+    <div class="w-12 h-12 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden border border-slate-200">
+      <img src="assets/mugs/mug-couple.webp" alt="Mug Custom" class="w-full h-full object-contain">
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-xs font-bold text-slate-900 truncate" id="toast-client-name">Khadija de Casablanca</p>
+      <p class="text-[11px] text-emerald-600 font-bold truncate" id="toast-offer-name">A commandé Pack 2 Mugs (170 DH) ☕</p>
+      <span class="text-[10px] text-slate-400 font-medium" id="toast-time">Il y a 3 minutes</span>
+    </div>
+    <button onclick="closeSalesToastMugs()" class="text-slate-400 hover:text-slate-600 text-base leading-none p-1">&times;</button>
+  </div>
+
   <!-- Success Modal for Cash on Delivery Orders -->
   <div id="confirmation-modal" class="fixed inset-0 z-50 bg-brand-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
@@ -919,7 +942,67 @@
       lucide.createIcons();
       initMobileNav();
       recalculatePrice();
+      startCountdownTimer();
+      startSocialProofLoop();
     });
+
+    // Live Countdown Timer (14m 52s ticking down)
+    function startCountdownTimer() {
+      let secondsLeft = 14 * 60 + 52;
+      const timerEl = document.getElementById('countdown-timer');
+      if (!timerEl) return;
+
+      setInterval(() => {
+        if (secondsLeft > 0) secondsLeft--;
+        const mins = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
+        const secs = String(secondsLeft % 60).padStart(2, '0');
+        timerEl.textContent = `00:${mins}:${secs}`;
+      }, 1000);
+    }
+
+    // Social Proof Sales Loop
+    const mugSalesData = [
+      { name: 'Khadija de Casablanca', offer: 'A commandé Pack 2 Mugs (170 DH)', time: 'Il y a 2 minutes' },
+      { name: 'Youssef de Rabat', offer: 'A validé son visuel 3D sur WhatsApp', time: 'Il y a 4 minutes' },
+      { name: 'Houda de Marrakech', offer: 'A commandé Pack 3 Mugs (225 DH)', time: 'Il y a 6 minutes' },
+      { name: 'Mehdi de Tanger', offer: 'A réservé l\'emballage подарок', time: 'Il y a 3 minutes' },
+      { name: 'Amine de Fès', offer: 'A commandé 1 Mug Souvenir (95 DH)', time: 'Il y a 1 minute' }
+    ];
+
+    let toastIndex = 0;
+    function showNextSalesToast() {
+      const toast = document.getElementById('salesToastMugs');
+      if (!toast) return;
+
+      const sale = mugSalesData[toastIndex % mugSalesData.length];
+      toastIndex++;
+
+      document.getElementById('toast-client-name').textContent = sale.name;
+      document.getElementById('toast-offer-name').textContent = sale.offer + ' ☕';
+      document.getElementById('toast-time').textContent = sale.time;
+
+      toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        closeSalesToastMugs();
+      }, 5000);
+    }
+
+    function closeSalesToastMugs() {
+      const toast = document.getElementById('salesToastMugs');
+      if (toast) {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+      }
+    }
+
+    function startSocialProofLoop() {
+      setTimeout(() => {
+        showNextSalesToast();
+        setInterval(showNextSalesToast, 12000);
+      }, 3000);
+    }
 
     // Tiered pricing calculation:
     // 1 Mug = 95 DH
