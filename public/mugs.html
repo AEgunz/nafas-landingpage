@@ -516,11 +516,11 @@
               <label class="relative flex flex-col p-4 rounded-2xl border-2 border-brand-800 bg-brand-950/60 cursor-pointer hover:border-brand-500 transition-all pack-card" id="pack-card-3" onclick="selectPackQty(3)">
                 <div class="flex items-center justify-between">
                   <span class="text-2xl">☕☕☕</span>
-                  <span class="text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase">Économisez 35 DH</span>
+                  <span class="text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase">Économisez 60 DH</span>
                 </div>
                 <h4 class="font-bold text-sm text-white mt-2">Pack 3 Mugs</h4>
-                <p class="text-[11px] text-slate-300 mt-0.5">83 DH / pièce (Au lieu de 285 DH)</p>
-                <div class="mt-3 text-lg font-black text-amber-400">250 DH <small class="text-xs text-slate-400 line-through">285 DH</small></div>
+                <p class="text-[11px] text-slate-300 mt-0.5">75 DH / pièce (Au lieu de 285 DH)</p>
+                <div class="mt-3 text-lg font-black text-amber-400">225 DH <small class="text-xs text-slate-400 line-through">285 DH</small></div>
               </label>
 
             </div>
@@ -565,7 +565,7 @@
               <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-1">Quantité souhaitée</span>
               <p class="text-[11px] text-accent-cyan font-semibold flex items-center gap-1">
                 <i data-lucide="tag" class="w-3.5 h-3.5"></i>
-                <span>1 Mug = 95 DH | 2 Mugs = 170 DH | 3 Mugs = 250 DH</span>
+                <span>1 Mug = 95 DH | 2 Mugs = 170 DH | 3 Mugs = 225 DH</span>
               </p>
               <div id="display-savings" class="text-[11px] text-emerald-400 font-bold mt-1" style="display:none;"></div>
             </div>
@@ -924,13 +924,13 @@
     // Tiered pricing calculation:
     // 1 Mug = 95 DH
     // 2 Mugs = 170 DH (Save 20 DH)
-    // 3 Mugs = 250 DH (Save 35 DH)
-    // 4+ Mugs = 250 + (qty - 3) * 80 DH
+    // 3 Mugs = 225 DH (Save 60 DH)
+    // 4+ Mugs = 225 + (qty - 3) * 75 DH
     function calculateTieredPrice(qty) {
       if (qty === 1) return { total: 95, savings: 0 };
       if (qty === 2) return { total: 170, savings: 20 };
-      if (qty === 3) return { total: 250, savings: 35 };
-      const total = 250 + (qty - 3) * 80;
+      if (qty === 3) return { total: 225, savings: 60 };
+      const total = 225 + (qty - 3) * 75;
       return { total, savings: (qty * 95) - total };
     }
 
