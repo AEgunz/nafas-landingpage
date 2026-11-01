@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="fr" dir="ltr" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>shrishop.online | أكواب مخصصة وتصميم جرافيكي مجاني</title>
+  <meta name="description" content="Créez votre mug personnalisé avec un design graphique offert. Livraison partout au Maroc et paiement à la réception.">
+  <title>shrishop.online | Mugs personnalisés et design offert</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -47,6 +48,54 @@
   </script>
 
   <style>
+    html[lang="ar"] body,
+    html[lang="ar"] button,
+    html[lang="ar"] input,
+    html[lang="ar"] textarea {
+      font-family: "Cairo", sans-serif;
+    }
+
+    html[lang="ar"] .text-left,
+    html[lang="ar"] [class~="sm:text-left"],
+    html[lang="ar"] [class~="lg:text-left"] {
+      text-align: start;
+    }
+
+    html[lang="ar"] .text-right,
+    html[lang="ar"] [class~="sm:text-right"],
+    html[lang="ar"] [class~="lg:text-right"] {
+      text-align: end;
+    }
+
+    html[lang="ar"] #floating-whatsapp-link {
+      right: 1.25rem;
+      left: auto;
+    }
+
+    html[lang="ar"] #floatingCommander {
+      right: auto;
+      left: 1.25rem;
+    }
+
+    html[lang="ar"] #salesToastMugs {
+      right: 1.25rem;
+      left: auto;
+    }
+
+    html[lang="ar"] #concept [class~="right-6"] {
+      right: auto;
+      left: 1.5rem;
+    }
+
+    html[lang="ar"] .hero-gradient .absolute.bottom-2.right-2 {
+      right: auto;
+      left: 0.5rem;
+    }
+
+    html[lang="ar"] [data-lucide="arrow-right"] {
+      transform: rotate(180deg);
+    }
+
     .glass-nav {
       background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(16px);
@@ -103,11 +152,11 @@
 
       <!-- Logo Shrishop.online -->
       <a href="#" class="flex items-center gap-3 group">
-        <img src="assets/logo.png" alt="shrishop.online Logo" class="h-14 sm:h-16 w-auto object-contain transition-transform group-hover:scale-105">
+        <img src="assets/logo.png" alt="Logo shrishop.online" class="h-14 sm:h-16 w-auto object-contain transition-transform group-hover:scale-105">
       </a>
 
       <!-- Desktop Links -->
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
         <a href="#concept" class="hover:text-brand-600 transition-colors" data-i18n="navConcept">فكرتنا</a>
         <a href="#exemples" class="hover:text-brand-600 transition-colors" data-i18n="navExemples">نماذج وأفكار</a>
         <a href="#formulaire-commande" class="hover:text-brand-600 transition-colors flex items-center gap-1.5 text-brand-600 font-bold">
@@ -183,7 +232,7 @@
               <span data-i18n="heroCtaMain">Envoyer mes photos & passer commande</span>
             </a>
 
-            <a href="https://wa.me/212693360625?text=Bonjour!%20Je%20souhaite%20commander%20un%20mug%20sur%20shrishop.online" target="_blank" class="w-full sm:w-auto px-7 py-4 rounded-2xl border-2 border-emerald-600 text-emerald-800 font-bold bg-emerald-50/70 hover:bg-emerald-100 transition-all text-center flex items-center justify-center gap-2">
+            <a id="hero-whatsapp-link" href="https://wa.me/212693360625?text=Bonjour!%20Je%20souhaite%20commander%20un%20mug%20sur%20shrishop.online" target="_blank" class="w-full sm:w-auto px-7 py-4 rounded-2xl border-2 border-emerald-600 text-emerald-800 font-bold bg-emerald-50/70 hover:bg-emerald-100 transition-all text-center flex items-center justify-center gap-2">
               <i data-lucide="message-circle" class="w-5 h-5 text-emerald-600"></i>
               <span data-i18n="heroCtaWa">Échanger sur WhatsApp</span>
             </a>
@@ -235,7 +284,7 @@
 
               <!-- Realistic Visual representation of the Coffee Mug -->
               <div class="my-4 relative flex items-center justify-center">
-                <img src="assets/mugs/mug-hero.webp" alt="Exemple de Réalisation Mug Personnalisé" class="w-full h-80 object-contain rounded-2xl bg-slate-50">
+                <img src="assets/mugs/mug-hero.webp" alt="Exemple de mug personnalisé réalisé dans notre atelier" data-i18n-alt="altWorkshopMugs" class="w-full h-80 object-contain rounded-2xl bg-slate-50">
                 <!-- Floating badge on visual -->
                 <div class="absolute bottom-2 right-2 bg-white/95 backdrop-blur px-3 py-1.5 rounded-xl text-xs font-bold text-slate-800 shadow-md border border-slate-100 flex items-center gap-1.5">
                   <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
@@ -360,7 +409,7 @@
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
           <div>
             <div class="h-64 rounded-2xl bg-slate-50 border border-slate-200 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
-              <img src="assets/mugs/mug-couple.webp" alt="Mug Souvenir Couple" class="w-full h-full object-contain rounded-xl">
+              <img src="assets/mugs/mug-couple.webp" alt="Mug souvenir personnalisé pour un couple" data-i18n-alt="altCoupleMug" class="w-full h-full object-contain rounded-xl">
             </div>
 
             <div class="mt-4">
@@ -371,10 +420,10 @@
 
           <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
             <div>
-              <span class="text-xs text-slate-400 block line-through">120 DH</span>
-              <span class="text-lg font-black text-brand-600">95 DH</span>
+              <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
+              <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('Mug Souvenir Couple avec photo et date spéciale')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="fillIdeaSelection('ideaCouple')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -385,7 +434,7 @@
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
           <div>
             <div class="h-64 rounded-2xl bg-slate-50 border border-slate-200 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
-              <img src="assets/mugs/mug-family.webp" alt="Mug Pêle-Mêle Famille" class="w-full h-full object-contain rounded-xl">
+              <img src="assets/mugs/mug-family.webp" alt="Mug personnalisé avec photos de famille" data-i18n-alt="altFamilyMug" class="w-full h-full object-contain rounded-xl">
             </div>
 
             <div class="mt-4">
@@ -396,10 +445,10 @@
 
           <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
             <div>
-              <span class="text-xs text-slate-400 block line-through">120 DH</span>
-              <span class="text-lg font-black text-brand-600">95 DH</span>
+              <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
+              <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('Mug Pêle-Mêle Famille avec photos et nom de famille')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="fillIdeaSelection('ideaFamily')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -410,7 +459,7 @@
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
           <div>
             <div class="h-64 rounded-2xl bg-slate-50 border border-slate-200 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
-              <img src="assets/mugs/mug-magic.webp" alt="Mug Citation & Calligraphie" class="w-full h-full object-contain rounded-xl">
+              <img src="assets/mugs/mug-magic.webp" alt="Mug personnalisé avec citation" data-i18n-alt="altQuoteMug" class="w-full h-full object-contain rounded-xl">
             </div>
 
             <div class="mt-4">
@@ -421,10 +470,10 @@
 
           <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
             <div>
-              <span class="text-xs text-slate-400 block line-through">120 DH</span>
-              <span class="text-lg font-black text-brand-600">95 DH</span>
+              <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
+              <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('Mug avec Citation et Calligraphie Personnalisée')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="fillIdeaSelection('ideaQuote')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -435,7 +484,7 @@
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between">
           <div>
             <div class="h-64 rounded-2xl bg-slate-50 border border-slate-200 p-2 flex flex-col items-center justify-center relative overflow-hidden group">
-              <img src="assets/mugs/mug-gift.webp" alt="Pack Cadeau Soigné" class="w-full h-full object-contain rounded-xl">
+              <img src="assets/mugs/mug-gift.webp" alt="Mug personnalisé dans son coffret cadeau" data-i18n-alt="altGiftMug" class="w-full h-full object-contain rounded-xl">
             </div>
 
             <div class="mt-4">
@@ -446,10 +495,10 @@
 
           <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
             <div>
-              <span class="text-xs text-slate-400 block line-through">120 DH</span>
-              <span class="text-lg font-black text-brand-600">95 DH</span>
+              <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
+              <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('Pack Cadeau avec Boîte Soignée et carte')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="fillIdeaSelection('ideaGift')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -470,11 +519,11 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
       <div class="text-center max-w-xl mx-auto mb-12">
-        <span class="text-accent-cyan text-xs font-black tracking-widest uppercase bg-brand-900/80 px-3.5 py-1.5 rounded-full border border-brand-800">
+        <span class="text-accent-cyan text-xs font-black tracking-widest uppercase bg-brand-900/80 px-3.5 py-1.5 rounded-full border border-brand-800" data-i18n="workshopTitle">
           Atelier Sur-Mesure shrishop.online
         </span>
-        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 text-white">Commandez votre mug personnalisé</h2>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2">
+        <h2 class="text-3xl sm:text-4xl font-extrabold mt-3 text-white" data-i18n="orderHeading">Commandez votre mug personnalisé</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2" data-i18n="unitPriceDescription">
           Prix unitaire : <strong>95 DH</strong> par mug (conception graphique sur-mesure 100% offerte incluse).
         </p>
       </div>
@@ -500,11 +549,11 @@
               <label class="relative flex flex-col p-4 rounded-2xl border-2 border-brand-400 bg-brand-800/90 cursor-pointer transition-all pack-card" id="pack-card-1" onclick="selectPackQty(1)">
                 <div class="flex items-center justify-between">
                   <span class="text-2xl">☕</span>
-                  <span class="text-[10px] font-extrabold bg-brand-800 text-slate-200 px-2 py-0.5 rounded-full uppercase">1 Pièce</span>
+                  <span class="text-[10px] font-extrabold bg-brand-800 text-slate-200 px-2 py-0.5 rounded-full uppercase" data-i18n="singlePiece">1 Pièce</span>
                 </div>
                 <h4 class="font-bold text-sm text-white mt-2" data-i18n="pack1Title">1 Mug Personnalisé</h4>
                 <p class="text-[11px] text-slate-300 mt-0.5" data-i18n="pack1Sub">Impression HD + Conception offerte</p>
-                <div class="mt-3 text-lg font-black text-accent-cyan">95 DH</div>
+                <div class="mt-3 text-lg font-black text-accent-cyan" data-i18n="pack1Price">95 DH</div>
               </label>
 
               <!-- 2 Mugs (Popular) -->
@@ -515,7 +564,7 @@
                 </div>
                 <h4 class="font-bold text-sm text-white mt-2" data-i18n="pack2Title">Pack 2 Mugs</h4>
                 <p class="text-[11px] text-slate-300 mt-0.5" data-i18n="pack2Sub">85 DH / pièce (Au lieu de 190 DH)</p>
-                <div class="mt-3 text-lg font-black text-emerald-400">170 DH <small class="text-xs text-slate-400 line-through">190 DH</small></div>
+                <div class="mt-3 text-lg font-black text-emerald-400"><span data-i18n="pack2Price">170 DH</span> <small class="text-xs text-slate-400 line-through" data-i18n="pack2OldPrice">190 DH</small></div>
               </label>
 
               <!-- 3 Mugs (Best Value) -->
@@ -526,7 +575,7 @@
                 </div>
                 <h4 class="font-bold text-sm text-white mt-2" data-i18n="pack3Title">Pack 3 Mugs</h4>
                 <p class="text-[11px] text-slate-300 mt-0.5" data-i18n="pack3Sub">75 DH / pièce (Au lieu de 285 DH)</p>
-                <div class="mt-3 text-lg font-black text-amber-400">225 DH <small class="text-xs text-slate-400 line-through">285 DH</small></div>
+                <div class="mt-3 text-lg font-black text-amber-400"><span data-i18n="pack3Price">225 DH</span> <small class="text-xs text-slate-400 line-through" data-i18n="pack3OldPrice">285 DH</small></div>
               </label>
 
             </div>
@@ -645,9 +694,9 @@
           <div class="flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 pt-2 text-center sm:text-left gap-2">
             <span class="flex items-center gap-1.5 justify-center">
               <i data-lucide="shield-check" class="w-4 h-4 text-accent-cyan"></i>
-              Paiement à réception du colis partout au Maroc (Cash on Delivery)
+              <span data-i18n="securityPayment">Paiement à la réception du colis partout au Maroc</span>
             </span>
-            <span class="text-slate-400">Aucun paiement en ligne requis aujourd'hui !</span>
+            <span class="text-slate-400" data-i18n="securityNoOnlinePayment">Aucun paiement en ligne requis aujourd'hui !</span>
           </div>
 
         </form>
@@ -740,8 +789,8 @@
               SB
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">سلمى برادة</p>
-              <p class="text-[11px] text-slate-400">الدار البيضاء • كوب ذكريات الثنائي</p>
+              <p class="font-bold text-xs text-slate-900" data-i18n="reviewer1Name">Salma Berrada</p>
+              <p class="text-[11px] text-slate-400" data-i18n="reviewer1Detail">Casablanca • Mug souvenir pour couple</p>
             </div>
           </div>
         </div>
@@ -765,8 +814,8 @@
               OE
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">عمر الإدريسي</p>
-              <p class="text-[11px] text-slate-400">الرباط • كوب عبارات مخصص</p>
+              <p class="font-bold text-xs text-slate-900" data-i18n="reviewer2Name">Omar Idrissi</p>
+              <p class="text-[11px] text-slate-400" data-i18n="reviewer2Detail">Rabat • Mug avec citation personnalisée</p>
             </div>
           </div>
         </div>
@@ -790,8 +839,8 @@
               HC
             </div>
             <div>
-              <p class="font-bold text-xs text-slate-900">هدى الشرايبي</p>
-              <p class="text-[11px] text-slate-400">مراكش • عرض الكوبين للعائلة</p>
+              <p class="font-bold text-xs text-slate-900" data-i18n="reviewer3Name">Houda Chraibi</p>
+              <p class="text-[11px] text-slate-400" data-i18n="reviewer3Detail">Marrakech • Pack familial de deux mugs</p>
             </div>
           </div>
         </div>
@@ -802,12 +851,12 @@
 
   <!-- Sticky Floating Action Buttons -->
   <!-- Left: Floating WhatsApp Circle Icon -->
-  <a href="https://wa.me/212693360625?text=Bonjour%20shrishop.online!%20Je%20souhaite%20cr%C3%A9er%20un%20mug%20personnalis%C3%A9" target="_blank" class="fixed bottom-5 left-5 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 pulse-glow" title="WhatsApp Direct">
+  <a id="floating-whatsapp-link" href="https://wa.me/212693360625?text=Bonjour%20shrishop.online!%20Je%20souhaite%20cr%C3%A9er%20un%20mug%20personnalis%C3%A9" target="_blank" class="fixed bottom-5 left-5 z-50 bg-emerald-500 hover:bg-emerald-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 pulse-glow" title="Contacter notre équipe sur WhatsApp">
     <i data-lucide="message-circle" class="w-7 h-7"></i>
   </a>
 
   <!-- Right: Floating Sticky Commander CTA Button -->
-  <a href="#formulaire-commande" class="fixed bottom-5 right-5 z-50 bg-gradient-to-r from-brand-800 via-brand-600 to-brand-500 hover:from-brand-900 hover:to-brand-600 text-white px-5 py-3.5 rounded-full font-black text-xs sm:text-sm shadow-2xl flex items-center gap-2 transition-transform hover:scale-105 border-2 border-brand-400/40 pulse-glow">
+  <a id="floatingCommander" href="#formulaire-commande" class="fixed bottom-5 right-5 z-50 bg-gradient-to-r from-brand-800 via-brand-600 to-brand-500 hover:from-brand-900 hover:to-brand-600 text-white px-5 py-3.5 rounded-full font-black text-xs sm:text-sm shadow-2xl flex items-center gap-2 transition-transform hover:scale-105 border-2 border-brand-400/40 pulse-glow">
     <i data-lucide="shopping-bag" class="w-4 h-4 text-accent-cyan"></i>
     <span data-i18n="floatingCommander">🛒 اطلب الآن (95 درهم)</span>
   </a>
@@ -815,12 +864,12 @@
   <!-- Social Proof Live Sales Toast Notification -->
   <div id="salesToastMugs" class="fixed bottom-20 left-5 z-50 bg-white border-2 border-emerald-500/30 rounded-2xl p-3.5 shadow-2xl flex items-center gap-3 max-w-xs opacity-0 translate-y-10 transition-all duration-500 pointer-events-none">
     <div class="w-12 h-12 rounded-xl bg-slate-100 flex-shrink-0 overflow-hidden border border-slate-200">
-      <img src="assets/mugs/mug-couple.webp" alt="Mug Custom" class="w-full h-full object-contain">
+      <img src="assets/mugs/mug-couple.webp" alt="Exemple de mug personnalisé" data-i18n-alt="altMugExample" class="w-full h-full object-contain">
     </div>
     <div class="flex-1 min-w-0">
-      <p class="text-xs font-bold text-slate-900 truncate" id="toast-client-name">Khadija de Casablanca</p>
-      <p class="text-[11px] text-emerald-600 font-bold truncate" id="toast-offer-name">A commandé Pack 2 Mugs (170 DH) ☕</p>
-      <span class="text-[10px] text-slate-400 font-medium" id="toast-time">Il y a 3 minutes</span>
+      <p class="text-xs font-bold text-slate-900 truncate" id="toast-client-name" data-i18n="toastNameInitial">Khadija de Casablanca</p>
+      <p class="text-[11px] text-emerald-600 font-bold truncate" id="toast-offer-name" data-i18n="toastOfferInitial">A commandé Pack 2 Mugs (170 DH) ☕</p>
+      <span class="text-[10px] text-slate-400 font-medium" id="toast-time" data-i18n="toastTimeInitial">Il y a 3 minutes</span>
     </div>
     <button onclick="closeSalesToastMugs()" class="text-slate-400 hover:text-slate-600 text-base leading-none p-1">&times;</button>
   </div>
@@ -833,24 +882,24 @@
         <i data-lucide="check" class="w-8 h-8"></i>
       </div>
 
-      <h3 class="text-2xl font-black text-slate-900">Commande Enregistrée ! 🎉</h3>
+      <h3 class="text-2xl font-black text-slate-900" data-i18n="modalHeading">Commande Enregistrée ! 🎉</h3>
       <p class="text-xs sm:text-sm text-slate-600 leading-relaxed" id="modal-feedback-message">
-        شكراً لثقتكم بنا. يتولى فريقنا الجرافيكي تصميم طلبكم وسنتواصل معكم عبر الواتساب خلال ساعتين.
+        Merci pour votre confiance. Notre équipe graphique préparera votre design et vous contactera sur WhatsApp sous deux heures.
       </p>
 
       <div class="p-4 bg-slate-50 rounded-2xl text-xs text-slate-700 font-semibold space-y-1.5 border border-slate-200">
         <div class="flex justify-between">
-          <span class="text-slate-500">Mode de paiement:</span>
-          <span class="text-emerald-700 font-bold">الدفع عند الاستلام (Cash on Delivery)</span>
+          <span class="text-slate-500" data-i18n="modalPaymentLabel">Mode de paiement:</span>
+          <span class="text-emerald-700 font-bold" data-i18n="modalPayment">Paiement à la livraison</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-slate-500">Validation graphique:</span>
-          <span class="text-brand-600 font-bold">100% Gratuite avant impression</span>
+          <span class="text-slate-500" data-i18n="modalDesignLabel">Validation graphique:</span>
+          <span class="text-brand-600 font-bold" data-i18n="modalDesignValue">100% Gratuite avant impression</span>
         </div>
       </div>
 
       <button onclick="closeConfirmationModal()" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow transition-all">
-        Compris, merci !
+        <span data-i18n="modalClose">Compris, merci !</span>
       </button>
 
     </div>
@@ -864,7 +913,7 @@
         <!-- Brand Description -->
         <div class="space-y-4">
           <a href="#" class="flex items-center gap-2">
-            <img src="assets/logo.png" alt="shrishop.online Logo" class="h-12 w-auto object-contain">
+            <img src="assets/logo.png" alt="Logo shrishop.online" class="h-12 w-auto object-contain">
           </a>
           <p class="text-slate-400 leading-relaxed" data-i18n="footerDesc">
             متجرك المفضل بالمغرب لابتكار وتخصيص الكؤوس السيراميكية. تصميم جرافيكي مجاني، تأكيد عبر الواتساب والدفع عند الاستلام.
@@ -906,17 +955,17 @@
         <div>
           <h4 class="text-white font-bold uppercase tracking-wider mb-4" data-i18n="shippingHeading">الشحن والتوصيل بالمغرب</h4>
           <ul class="space-y-2 text-slate-400">
-            <li>• الدار البيضاء والرباط: خلال 24 إلى 48 ساعة</li>
-            <li>• مراكش، طنجة، فاس، أقاليم أخرى: خلال 48 إلى 72 ساعة</li>
-            <li>• الدفع نقداً عند الاستلام</li>
+            <li data-i18n="shippingCasablanca">• Casablanca et Rabat : sous 24 à 48 h</li>
+            <li data-i18n="shippingOtherCities">• Marrakech, Tanger, Fès et autres villes : sous 48 à 72 h</li>
+            <li data-i18n="shippingPayment">• Paiement en espèces à la livraison</li>
           </ul>
         </div>
 
       </div>
 
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-slate-500 text-xs text-center sm:text-left">
-        <p>© 2026 shrishop.online - جميع الحقوق محفوظة. صُمم للمغرب 🇲🇦</p>
-        <p class="mt-2 sm:mt-0">خدمة العملاء عبر الواتساب: +212 6 93 36 06 25</p>
+        <p data-i18n="copyright">© 2026 shrishop.online - Tous droits réservés. Fait pour le Maroc 🇲🇦</p>
+        <p class="mt-2 sm:mt-0" data-i18n="customerService">Service client sur WhatsApp : +212 6 93 36 06 25</p>
       </div>
     </div>
   </footer>
@@ -939,7 +988,6 @@
       recalculatePrice();
       startCountdownTimer();
       startSocialProofLoop();
-      applyLanguage(detectUserLang());
     });
 
     // -----------------------------------------------------------------
@@ -964,11 +1012,11 @@
         heroCtaWa: "Échanger sur WhatsApp",
         badge1: "Design Pro Sur-Mesure Offert",
         badge2: "Livraison Rapide Partout au Maroc",
-        badge3: "Paiement à la Livraison (COD)",
-        step1Label: "1. Choisissez la quantité (Mugs Céramique HD 330ml)",
+        badge3: "Paiement à la livraison",
+        step1Label: "1. Choisissez la quantité (mugs en céramique de 330 ml)",
         step1Tier: "Offre Spéciale & Remise Volume",
         pack1Title: "1 Mug Personnalisé",
-        pack1Sub: "Impression HD + Conception offerte",
+        pack1Sub: "Impression haute définition + design offert",
         pack2Title: "Pack 2 Mugs",
         pack2Sub: "85 DH / pièce (Au lieu de 190 DH)",
         pack2Save: "Économisez 20 DH",
@@ -994,7 +1042,137 @@
         addressLabel: "Adresse ou Quartier",
         addressPlaceholder: "N° Rue, Quartier, Résidence...",
         btnWaCheckout: "Envoyer ma demande via WhatsApp",
-        btnCodSubmit: "Valider la commande (Paiement à la livraison)"
+        btnCodSubmit: "Valider la commande (Paiement à la livraison)",
+        pageTitle: "shrishop.online | Mugs personnalisés et design offert",
+        pageDescription: "Créez votre mug personnalisé avec un design graphique offert. Livraison partout au Maroc et paiement à la réception.",
+        b2bDesc: "Vous souhaitez faire imprimer des mugs personnalisés avec le logo de votre entreprise pour vos équipes ou vos événements professionnels ?",
+        b2bHeading: "Commandes pour entreprises (B2B)",
+        b2bLink: "Demander un devis professionnel ←",
+        b2bWhatsappMessage: "Bonjour ! Je souhaite un devis pour des mugs entreprise sur shrishop.online.",
+        badgeHD: "Impression haute définition et rendu net",
+        btnSelect: "Choisir ce modèle",
+        card1Desc: "Votre photo de couple préférée avec la date de votre mariage, de vos fiançailles ou de votre première rencontre, dans un style élégant et intemporel.",
+        card1Title: "Mug souvenir avec date",
+        card2Desc: "Envoyez de 2 à 4 photos de famille : nous les mettons en page et ajoutons le nom de votre famille.",
+        card2Title: "Mug collage photo de famille",
+        card3Desc: "Votre nom, votre message ou votre citation préférée, mis en valeur par une calligraphie élégante ou un style moderne.",
+        card3Title: "Mug avec citation et calligraphie",
+        card4Desc: "Un mug personnalisé livré dans un élégant coffret cadeau, avec une carte de vœux dédiée à vos proches.",
+        card4Title: "Coffret cadeau élégant",
+        conceptBadge: "Simple et pratique",
+        conceptHeading: "Comment commander sur shrishop.online ?",
+        conceptStep1Badge: "Des photos de téléphone de bonne qualité suffisent",
+        conceptStep1Desc: "Remplissez le formulaire en bas de page ou écrivez-nous directement sur WhatsApp en joignant vos photos (famille, couple, logo, citation préférée…).",
+        conceptStep1Title: "Envoyez vos photos et vos idées",
+        conceptStep2Badge: "Validation gratuite, sans engagement",
+        conceptStep2BadgeTitle: "Service offert",
+        conceptStep2Desc: "Notre designer améliore vos photos, ajuste les couleurs et la mise en page, puis vous envoie un aperçu sur WhatsApp. Vous pouvez demander des modifications jusqu'à obtenir le résultat souhaité.",
+        conceptStep2Title: "Validez et ajustez le design",
+        conceptStep3Badge: "Livraison sous 24 à 48 h partout au Maroc",
+        conceptStep3Desc: "Après votre validation, nous imprimons le mug à haute température pour garantir des couleurs durables, puis nous l'expédions dans un emballage protecteur. Vous payez à la livraison.",
+        conceptStep3Title: "Impression haute définition et livraison à domicile",
+        conceptSub: "Pas besoin de logiciel compliqué : nos designers créent le modèle idéal pour vous, sans frais supplémentaires.",
+        ctaMobile: "Créer mon mug",
+        floatingCommander: "🛒 Commander maintenant (95 DH)",
+        footerDesc: "Votre boutique au Maroc pour créer des mugs en céramique personnalisés. Design graphique offert, validation sur WhatsApp et paiement à la livraison.",
+        g1Desc: "Porcelaine blanche haute densité de 330 ml avec finition brillante pour faire ressortir les couleurs de vos photos.",
+        g1Title: "Céramique protégée en 3 couches",
+        g2Desc: "Grâce à une cuisson à haute température, les mugs conservent leur éclat et leurs couleurs, même après de nombreux lavages.",
+        g2Title: "Compatible micro-ondes et lave-vaisselle",
+        g3Desc: "Emballage renforcé et protection en polystyrène. Si votre mug arrive endommagé, nous le remplaçons gratuitement !",
+        g3Title: "Protection renforcée contre la casse",
+        g4Desc: "Nous n'imprimons votre mug qu'après votre entière validation du design.",
+        g4Title: "Votre validation avant impression",
+        galleryBadge: "Nos modèles les plus appréciés",
+        galleryHeading: "Choisissez votre modèle préféré",
+        gallerySub: "Découvrez les modèles les plus demandés chez shrishop.online. Cliquez sur un modèle pour commencer votre commande.",
+        mockupModel: "Mug en céramique 330 ml",
+        mockupTitle: "Un exemple réalisé dans notre atelier",
+        navTitle: "Liens rapides",
+        recapFree: "Offert",
+        recapStep1: "Envoyez votre photo ou votre texte",
+        recapStep1Sub: "Validation rapide sur WhatsApp",
+        rev1Text: "« Service excellent ! J'ai envoyé trois photos de notre voyage et le designer de shrishop m'a préparé un superbe modèle sur WhatsApp en moins d'une heure. La livraison à Casablanca a pris 48 heures. Je les recommande vivement ! »",
+        rev2Text: "« Le mug est arrivé : la céramique est de très bonne qualité et bien épaisse, l'impression est nette et les couleurs sont vives. Le livreur était aimable et rapide. Merci ! »",
+        rev3Text: "« J'ai profité de l'offre de deux mugs : un pour ma sœur et un pour moi, avec la photo de ma nièce. L'emballage était sûr et tout est arrivé intact. Merci à l'équipe shrishop ! »",
+        reviewsHeading: "Les avis de nos clients",
+        reviewsSub: "Nous créons et livrons des centaines de mugs personnalisés chaque mois partout au Maroc.",
+        shippingHeading: "Livraison partout au Maroc",
+        whyHeading: "Pourquoi choisir shrishop.online ?",
+        whySub: "Une céramique de qualité conçue pour vous accompagner au quotidien.",
+        workshopTitle: "Atelier sur mesure shrishop.online",
+        orderHeading: "Commandez votre mug personnalisé",
+        unitPriceDescription: "Prix unitaire : 95 DH par mug, avec conception graphique personnalisée offerte.",
+        singlePiece: "1 pièce",
+        pack1Price: "95 DH",
+        pack2Price: "170 DH",
+        pack2OldPrice: "190 DH",
+        pack3Price: "225 DH",
+        pack3OldPrice: "285 DH",
+        galleryOldPrice: "120 DH",
+        galleryPrice: "95 DH",
+        securityPayment: "Paiement à la réception du colis partout au Maroc",
+        securityNoOnlinePayment: "Aucun paiement en ligne requis aujourd'hui !",
+        modalPaymentLabel: "Mode de paiement :",
+        modalDesignLabel: "Validation du design :",
+        modalDesignValue: "100 % offerte avant impression",
+        modalClose: "Compris, merci !",
+        modalHeading: "Commande enregistrée ! 🎉",
+        toastOfferInitial: "A commandé le pack de 2 mugs (170 DH) ☕",
+        toastTimeInitial: "Il y a 3 minutes",
+        galleryIdeaPrefix: "Modèle souhaité :",
+        ideaCouple: "Mug souvenir pour couple avec photo et date spéciale",
+        ideaFamily: "Mug avec collage de photos de famille et nom de famille",
+        ideaQuote: "Mug avec citation et calligraphie personnalisées",
+        ideaGift: "Coffret cadeau avec emballage élégant et carte",
+        photoLabel: "Photo",
+        fallbackName: "Client",
+        fallbackPhone: "Non renseigné",
+        fallbackCity: "Non renseignée",
+        fallbackAddress: "Non renseignée",
+        fallbackInstructions: "Sans détails spécifiques",
+        photoCount: "photo(s) sélectionnée(s)",
+        photosViaWhatsapp: "Photos envoyées ici sur WhatsApp",
+        whatsappOrderTitle: "*NOUVELLE COMMANDE - SHRISHOP.ONLINE* ☕✨",
+        whatsappName: "*Nom :*",
+        whatsappPhone: "*WhatsApp :*",
+        whatsappCity: "*Ville :*",
+        whatsappAddress: "*Adresse :*",
+        whatsappProduct: "*Produit :*",
+        whatsappQuantity: "*Quantité :*",
+        whatsappTotal: "*Total :*",
+        whatsappPayment: "(Paiement à la livraison)",
+        whatsappInstructions: "*Détails et instructions de personnalisation :*",
+        whatsappPhotos: "*Photos :*",
+        whatsappPhotoNote: "(Je joins mes photos ci-dessous)",
+        whatsappGreeting: "Bonjour shrishop.online ! Je souhaite créer un mug personnalisé.",
+        modalSuccess: "Merci",
+        modalThanks: "Votre demande pour",
+        modalQty: "mug(s)",
+        modalDelivery: "avec livraison à",
+        modalSent: "a bien été transmise à notre atelier. Notre équipe vous contactera au",
+        modalConfirmation: "pour confirmer votre commande sous 2 h.",
+        orderProductName: "Mug personnalisé en céramique (330 ml, impression haute définition)",
+        altWorkshopMugs: "Exemple de mugs personnalisés réalisés dans notre atelier",
+        altCoupleMug: "Mug souvenir personnalisé pour un couple",
+        altFamilyMug: "Mug personnalisé avec photos de famille",
+        altQuoteMug: "Mug personnalisé avec citation",
+        altGiftMug: "Mug personnalisé dans son coffret cadeau",
+        altMugExample: "Exemple de mug personnalisé",
+        toastNameInitial: "Khadija de Casablanca",
+        whatsappTitle: "Contacter notre équipe sur WhatsApp",
+        reviewer1Name: "Salma Berrada",
+        reviewer1Detail: "Casablanca • Mug souvenir pour couple",
+        reviewer2Name: "Omar Idrissi",
+        reviewer2Detail: "Rabat • Mug avec citation personnalisée",
+        reviewer3Name: "Houda Chraibi",
+        reviewer3Detail: "Marrakech • Pack familial de deux mugs",
+        modalPayment: "Paiement à la livraison",
+        shippingCasablanca: "• Casablanca et Rabat : sous 24 à 48 h",
+        shippingOtherCities: "• Marrakech, Tanger, Fès et autres villes : sous 48 à 72 h",
+        shippingPayment: "• Paiement en espèces à la livraison",
+        copyright: "© 2026 shrishop.online - Tous droits réservés. Fait pour le Maroc 🇲🇦",
+        customerService: "Service client sur WhatsApp : +212 6 93 36 06 25"
       },
       ar: {
         topBar: "تصميم جرافيكي مجاني 100% : أرسل صورتك أو فكرتك وفريقنا يصمم لك الكوب بلمسة احترافية قبل أي طباعة!",
@@ -1014,21 +1192,21 @@
         heroCtaWa: "تواصل عبر الواتساب",
         badge1: "تصميم مخصص مجاني 100%",
         badge2: "توصيل سريع لجميع مدن المغرب",
-        badge3: "الدفع عند الاستلام (COD)",
-        step1Label: "1. اختر الكمية (كؤوس سيراميك HD سعة 330 مل)",
+        badge3: "الدفع عند الاستلام",
+        step1Label: "1. اختر الكمية (أكواب سيراميك عالية الدقة، سعة 330 مل)",
         step1Tier: "عرض خاص وخصم الكميات",
         pack1Title: "كوب مخصص واحد",
-        pack1Sub: "طباعة HD + تصميم مجاني",
-        pack2Title: "عرض كوبين (Pack 2)",
+        pack1Sub: "طباعة عالية الدقة وتصميم مجاني",
+        pack2Title: "باقة كوبين",
         pack2Sub: "85 درهم للكوب (بدل 190 درهم)",
         pack2Save: "وفر 20 درهم",
-        pack3Title: "عرض 3 كؤوس (Pack 3)",
+        pack3Title: "باقة 3 أكواب",
         pack3Sub: "75 درهم للكوب (بدل 285 درهم)",
         pack3Save: "وفر 60 درهم",
         step2Label: "2. حمل صورك (أو أرسلها مباشرة عبر الواتساب)",
         step2Limit: "حتى 4 صور",
         dropzoneMain: "اضغط هنا لاختيار صورك من الهاتف",
-        dropzoneSub: "الصيغ المقبولة: JPG, PNG, WEBP (أو أرسلها عبر الواتساب عند التأكيد)",
+        dropzoneSub: "أرسل صورك هنا أو عبر الواتساب عند تأكيد الطلب",
         step3Label: "3. تفاصيل ورغبات التصميم (الأسماء، النصوص، العبارات)",
         step3Placeholder: "مثال: أريد دمج صورتين مع كتابة اسمين وتاريخ 10 مارس 2026 أسفل الكوب...",
         qtyLabel: "الكمية المطلوبة",
@@ -1038,29 +1216,158 @@
         nameLabel: "الاسم الكامل",
         namePlaceholder: "مثال: كريم بنجلون",
         phoneLabel: "رقم الواتساب (للمتابعة وتأكيد الطلب)",
-        phonePlaceholder: "06 XX XX XX XX",
+        phonePlaceholder: "06 •• •• •• ••",
         cityLabel: "المدينة",
         cityPlaceholder: "الدار البيضاء، الرباط، مراكش، طنجة...",
         addressLabel: "العنوان أو الحي",
         addressPlaceholder: "رقم الشارع، الحي، الإقامة...",
         btnWaCheckout: "إرسال الطلب عبر الواتساب",
-        btnCodSubmit: "تأكيد الطلب (الدفع عند الاستلام)"
+        btnCodSubmit: "تأكيد الطلب (الدفع عند الاستلام)",
+        pageTitle: "shrishop.online | أكواب مخصصة وتصميم جرافيكي مجاني",
+        pageDescription: "خصص كوبك بتصميم جرافيكي مجاني. توصيل لجميع أنحاء المغرب والدفع عند الاستلام.",
+        b2bDesc: "هل ترغب في طباعة كؤوس مخصصة بشعار شركتك لموظفيك أو فعالياتك المهنية؟",
+        b2bHeading: "طلبات الشركات والمؤسسات",
+        b2bLink: "طلب عرض سعر للشركات ←",
+        badgeHD: "طباعة عالية الدقة والوضوح",
+        btnSelect: "أريد هذا التصميم",
+        card1Desc: "صورة الثنائي المفضلة مع تاريخ الزواج أو الخطوبة أو أول لقاء بأسلوب خط أنيق وخالد.",
+        card1Title: "كوب الذكريات والتاريخ المميز",
+        card2Desc: "أرسل من 2 إلى 4 صور عائلية ونحن ننسقها لك في تصميم متناسق مع كتابة اسم العائلة.",
+        card2Title: "كوب تجميعة الصور العائلية",
+        card3Desc: "اسمك، رسالتك أو عبارتك المفضلة مصممة بأسلوب فني وخط عربي أو عصري مميز.",
+        card3Title: "كوب عبارات وخط عربي فاخر",
+        card4Desc: "كوب مخصص يصلك في علبة هدايا أنيقة مع بطاقة تهنئة مخصصة لأحبائك.",
+        card4Title: "علبة هدايا وتغليف أنيق",
+        conceptBadge: "طريقتنا البسيطة",
+        conceptHeading: "كيف تطلب من shrishop.online؟",
+        conceptStep1Badge: "صور الهاتف مقبولة بجودة ممتازة",
+        conceptStep1Desc: "قم بتعبئة الاستمارة أسفل الصفحة أو راسلنا مباشرة عبر الواتساب مع إرفاق صورك (عائلة، ثنائي، شعار، عبارة مفضلة...).",
+        conceptStep1Title: "أرسل صورك وأفكارك",
+        conceptStep2Badge: "تأكيد مجاني 100% بدون مخاطرة",
+        conceptStep2BadgeTitle: "خدمة مجانية",
+        conceptStep2Desc: "يقوم مصممنا بتحسين صورك وضبط الألوان والتنسيق ثم يرسل لك التصميم لمعاينته عبر الواتساب. يمكنك طلب أي تعديل حتى ترضى تماماً!",
+        conceptStep2Title: "تأكيد وتعديل التصميم",
+        conceptStep3Badge: "شحن خلال 24 إلى 48 ساعة لكل المغرب",
+        conceptStep3Desc: "بعد موافقتك، نقوم بطباعة الكوب بدرجة حرارة عالية وضمان ثبات الألوان، ثم نشحنه لك في تغليف واقٍ ضد الكسر. وتدفع عند الاستلام.",
+        conceptStep3Title: "طباعة حرارية عالية الدقة والتوصيل إلى المنزل",
+        conceptSub: "لا داعي لاستخدام برامج معقدة! مصممونا يتكفلون بتجهيز التصميم المثالي لك بدون أي مصاريف إضافية.",
+        ctaMobile: "صمم كوبك",
+        floatingCommander: "🛒 اطلب الآن (95 درهم)",
+        footerDesc: "متجرك المفضل بالمغرب لابتكار وتخصيص الكؤوس السيراميكية. تصميم جرافيكي مجاني، تأكيد عبر الواتساب والدفع عند الاستلام.",
+        g1Desc: "بورسلين أبيض عالي الكثافة سعة 330 مل مع معالجة لمعان خاصة لإبراز دقة ألوان صورك.",
+        g1Title: "سيراميك بـ 3 طبقات حماية",
+        g2Desc: "مطبوع بدرجات حرارة عالية جداً، تحافظ الكؤوس على بريقها وألوانها حتى بعد مئات الغسلات.",
+        g2Title: "آمن في الميكروويف وغسالة الأطباق",
+        g3Desc: "تغليف مقوى وبوليستيريل واقٍ. إذا وصلك الكوب به أي ضرر، نعوضك بكوب جديد مجاناً!",
+        g3Title: "حماية مضاعفة ضد الكسر",
+        g4Desc: "لا نقوم بطباعة أي كوب إلا بعد موافقتك الكاملة على التصميم.",
+        g4Title: "ضمان الموافقة والرضا",
+        galleryBadge: "أكثر تصاميمنا إقبالاً",
+        galleryHeading: "اختر التصميم الذي يعجبك",
+        gallerySub: "إليك التصاميم الأكثر طلباً لدى shrishop.online. اضغط على أي نموذج لتعبئة الطلب مباشرة!",
+        mockupModel: "كوب سيراميك 330 مل",
+        mockupTitle: "نموذج حقيقي من ورشتنا",
+        navTitle: "روابط سريعة",
+        recapFree: "مجاناً",
+        recapStep1: "ترسل الصورة أو النص",
+        recapStep1Sub: "تأكيد سريع عبر الواتساب",
+        rev1Text: "« خدمة ممتازة ورائعة! أرسلت 3 صور من سفرتنا والمصمم جهز لي تصميماً رائعاً على الواتساب في أقل من ساعة. وصلني الطلب خلال 48 ساعة إلى الدار البيضاء. أنصح بهم بشدة! »",
+        rev2Text: "« الكوب وصلني بجودة سيراميك ممتازة وثقيلة، والطباعة واضحة جداً بألوان زاهية. الموزع كان محترماً وسريعاً. شكراً لكم! »",
+        rev3Text: "« استغليت عرض الكوبين وأهديت كوباً لأختي واحتفظت بالآخر مع صورة ابنة أختي. التغليف آمن ووصل كل شيء سليماً. شكراً للفريق! »",
+        reviewsHeading: "آراء عملائنا الكرام",
+        reviewsSub: "مئات الكؤوس المخصصة نقتنيها ونوصلها شهرياً لجميع أنحاء المغرب.",
+        shippingHeading: "الشحن والتوصيل بالمغرب",
+        whyHeading: "لماذا تختار shrishop.online؟",
+        whySub: "سيراميك عالي الجودة مصمم ليدوم معك يومياً.",
+        workshopTitle: "ورشة التصميم حسب الطلب في shrishop.online",
+        orderHeading: "اطلب كوبك المخصص",
+        unitPriceDescription: "سعر الكوب الواحد 95 درهماً، ويشمل تصميماً مجانياً حسب طلبك.",
+        singlePiece: "قطعة واحدة",
+        pack1Price: "95 درهماً",
+        pack2Price: "170 درهماً",
+        pack2OldPrice: "190 درهماً",
+        pack3Price: "225 درهماً",
+        pack3OldPrice: "285 درهماً",
+        galleryOldPrice: "120 درهماً",
+        galleryPrice: "95 درهماً",
+        securityPayment: "الدفع عند استلام الطلب في جميع أنحاء المغرب",
+        securityNoOnlinePayment: "لا حاجة إلى الدفع عبر الإنترنت اليوم!",
+        modalPaymentLabel: "طريقة الدفع:",
+        modalDesignLabel: "الموافقة على التصميم:",
+        modalDesignValue: "مجاناً قبل الطباعة",
+        modalClose: "حسناً، شكراً لك!",
+        modalHeading: "تم تسجيل الطلب! 🎉",
+        toastOfferInitial: "طلب باقة كوبين (170 درهماً) ☕",
+        toastTimeInitial: "قبل 3 دقائق",
+        galleryIdeaPrefix: "التصميم المطلوب:",
+        ideaCouple: "كوب تذكاري للثنائي مع صورة وتاريخ مميز",
+        ideaFamily: "كوب بتجميعة صور العائلة واسمها",
+        ideaQuote: "كوب بعبارة وخط مخصصين",
+        ideaGift: "علبة هدايا أنيقة مع بطاقة تهنئة",
+        photoLabel: "صورة",
+        fallbackName: "الزبون",
+        fallbackPhone: "غير محدد",
+        fallbackCity: "غير محددة",
+        fallbackAddress: "غير محدد",
+        fallbackInstructions: "لا توجد تفاصيل إضافية",
+        photoCount: "صور مختارة",
+        photosViaWhatsapp: "سأرسل الصور هنا عبر الواتساب",
+        whatsappOrderTitle: "*طلب جديد من متجر shrishop.online* ☕✨",
+        whatsappName: "*الاسم:*",
+        whatsappPhone: "*رقم الواتساب:*",
+        whatsappCity: "*المدينة:*",
+        whatsappAddress: "*العنوان:*",
+        whatsappProduct: "*المنتج:*",
+        whatsappQuantity: "*الكمية:*",
+        whatsappTotal: "*المجموع:*",
+        whatsappPayment: "(الدفع عند الاستلام)",
+        whatsappInstructions: "*تفاصيل وملاحظات التصميم:*",
+        whatsappPhotos: "*الصور:*",
+        whatsappPhotoNote: "(سأرفق صوري في الرسائل التالية)",
+        whatsappGreeting: "السلام عليكم، أرغب في تصميم كوب مخصص من متجر shrishop.online.",
+        modalSuccess: "شكراً",
+        modalThanks: "تم إرسال طلبك لشراء",
+        modalQty: "أكواب",
+        modalDelivery: "والتوصيل إلى",
+        modalSent: "إلى ورشتنا بنجاح. سنتواصل معك على الرقم",
+        modalConfirmation: "لتأكيد طلبك خلال ساعتين.",
+        orderProductName: "كوب سيراميك مخصص (330 مل، طباعة عالية الدقة)",
+        altWorkshopMugs: "أكواب مخصصة من تصميم ورشتنا",
+        altCoupleMug: "كوب تذكاري مخصص للثنائي",
+        altFamilyMug: "كوب مخصص بصور العائلة",
+        altQuoteMug: "كوب مخصص بعبارة جميلة",
+        altGiftMug: "كوب مخصص داخل علبة هدايا",
+        altMugExample: "مثال على كوب مخصص",
+        b2bWhatsappMessage: "السلام عليكم، أريد طلب عرض سعر لأكواب مخصصة للشركات من متجر shrishop.online.",
+        toastNameInitial: "خديجة من الدار البيضاء",
+        whatsappTitle: "تواصل مع فريقنا عبر الواتساب",
+        reviewer1Name: "سلمى برادة",
+        reviewer1Detail: "الدار البيضاء • كوب ذكريات الثنائي",
+        reviewer2Name: "عمر الإدريسي",
+        reviewer2Detail: "الرباط • كوب عبارات مخصص",
+        reviewer3Name: "هدى الشرايبي",
+        reviewer3Detail: "مراكش • عرض الكوبين للعائلة",
+        modalPayment: "الدفع عند الاستلام",
+        shippingCasablanca: "• الدار البيضاء والرباط: خلال 24 إلى 48 ساعة",
+        shippingOtherCities: "• مراكش، طنجة، فاس، وأقاليم أخرى: خلال 48 إلى 72 ساعة",
+        shippingPayment: "• الدفع نقداً عند الاستلام",
+        copyright: "© 2026 shrishop.online - جميع الحقوق محفوظة. صُمم للمغرب 🇲🇦",
+        customerService: "خدمة العملاء عبر الواتساب: +212 6 93 36 06 25"
       }
     };
 
-    let currentActiveLang = 'ar';
+    let currentActiveLang = 'fr';
 
     function detectUserLang() {
-      const userLang = (navigator.language || navigator.userLanguage || 'ar').toLowerCase();
-      if (userLang.startsWith('fr')) {
-        return 'fr';
-      }
-      return 'ar';
+      return new URLSearchParams(window.location.search).get('lang') === 'ar' ? 'ar' : 'fr';
     }
 
     function toggleLanguage() {
       const targetLang = currentActiveLang === 'fr' ? 'ar' : 'fr';
       applyLanguage(targetLang);
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', targetLang);
+      window.history.replaceState(null, '', url);
     }
 
     function applyLanguage(lang) {
@@ -1069,17 +1376,45 @@
       document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
       const label = document.getElementById('lang-switch-label');
-      if (label) label.textContent = lang === 'fr' ? 'العربية' : 'Français';
+      if (label) label.textContent = lang === 'fr' ? 'العربية' : 'الفرنسية';
 
       const dict = translations[lang] || translations.fr;
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) {
+        if (dict[key] !== undefined) {
           el.textContent = dict[key];
         }
       });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key] !== undefined) {
+          el.setAttribute('placeholder', dict[key]);
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+        const key = el.getAttribute('data-i18n-alt');
+        if (dict[key] !== undefined) {
+          el.setAttribute('alt', dict[key]);
+        }
+      });
+
+      document.title = dict.pageTitle;
+      document.querySelector('meta[name="description"]').setAttribute('content', dict.pageDescription);
+      recalculatePrice();
+      const b2bLink = document.querySelector('[data-i18n="b2bLink"]');
+      if (b2bLink) {
+        b2bLink.href = `https://wa.me/212693360625?text=${encodeURIComponent(dict.b2bWhatsappMessage)}`;
+      }
+      const greeting = encodeURIComponent(dict.whatsappGreeting);
+      document.getElementById('hero-whatsapp-link').href = `https://wa.me/212693360625?text=${greeting}`;
+      document.getElementById('floating-whatsapp-link').href = `https://wa.me/212693360625?text=${greeting}`;
+      document.getElementById('floating-whatsapp-link').title = dict.whatsappTitle;
     }
+
+    applyLanguage(detectUserLang());
 
     // Live Countdown Timer (14m 52s ticking down)
     function startCountdownTimer() {
@@ -1097,11 +1432,26 @@
 
     // Social Proof Sales Loop
     const mugSalesData = [
-      { name: 'Khadija de Casablanca', offer: 'A commandé Pack 2 Mugs (170 DH)', time: 'Il y a 2 minutes' },
-      { name: 'Youssef de Rabat', offer: 'A validé son visuel sur WhatsApp', time: 'Il y a 4 minutes' },
-      { name: 'Houda de Marrakech', offer: 'A commandé Pack 3 Mugs (225 DH)', time: 'Il y a 6 minutes' },
-      { name: 'Mehdi de Tanger', offer: 'A validé sa commande', time: 'Il y a 3 minutes' },
-      { name: 'Amine de Fès', offer: 'A commandé 1 Mug Souvenir (95 DH)', time: 'Il y a 1 minute' }
+      {
+        fr: { name: 'Khadija de Casablanca', offer: 'A commandé le pack de 2 mugs (170 DH)', time: 'Il y a 2 minutes' },
+        ar: { name: 'خديجة من الدار البيضاء', offer: 'طلبت باقة كوبين (170 درهماً)', time: 'قبل دقيقتين' }
+      },
+      {
+        fr: { name: 'Youssef de Rabat', offer: 'A validé son design sur WhatsApp', time: 'Il y a 4 minutes' },
+        ar: { name: 'يوسف من الرباط', offer: 'وافق على التصميم عبر الواتساب', time: 'قبل 4 دقائق' }
+      },
+      {
+        fr: { name: 'Houda de Marrakech', offer: 'A commandé le pack de 3 mugs (225 DH)', time: 'Il y a 6 minutes' },
+        ar: { name: 'هدى من مراكش', offer: 'طلبت باقة 3 أكواب (225 درهماً)', time: 'قبل 6 دقائق' }
+      },
+      {
+        fr: { name: 'Mehdi de Tanger', offer: 'A confirmé sa commande', time: 'Il y a 3 minutes' },
+        ar: { name: 'مهدي من طنجة', offer: 'أكد طلبه', time: 'قبل 3 دقائق' }
+      },
+      {
+        fr: { name: 'Amine de Fès', offer: 'A commandé un mug souvenir (95 DH)', time: 'Il y a 1 minute' },
+        ar: { name: 'أمين من فاس', offer: 'طلب كوباً تذكارياً (95 درهماً)', time: 'قبل دقيقة' }
+      }
     ];
 
     let toastIndex = 0;
@@ -1109,7 +1459,7 @@
       const toast = document.getElementById('salesToastMugs');
       if (!toast) return;
 
-      const sale = mugSalesData[toastIndex % mugSalesData.length];
+      const sale = mugSalesData[toastIndex % mugSalesData.length][currentActiveLang];
       toastIndex++;
 
       document.getElementById('toast-client-name').textContent = sale.name;
@@ -1181,13 +1531,16 @@
 
     function recalculatePrice() {
       const priceData = calculateTieredPrice(currentOrder.quantity);
-      document.getElementById('display-total-price').innerText = `${priceData.total} DH`;
+      const priceUnit = currentActiveLang === 'ar' ? ' درهماً' : ' DH';
+      document.getElementById('display-total-price').innerText = `${priceData.total}${priceUnit}`;
 
       const savingsEl = document.getElementById('display-savings');
       if (savingsEl) {
         if (priceData.savings > 0) {
           savingsEl.style.display = 'block';
-          savingsEl.innerText = `🎉 Offre spéciale : Économie de ${priceData.savings} DH !`;
+          savingsEl.innerText = currentActiveLang === 'ar'
+            ? `🎉 عرض خاص: وفّرت ${priceData.savings} درهماً!`
+            : `🎉 Offre spéciale : Économie de ${priceData.savings} DH !`;
         } else {
           savingsEl.style.display = 'none';
         }
@@ -1197,9 +1550,10 @@
     // -----------------------------------------------------------------
     // Fill idea from inspiration cards
     // -----------------------------------------------------------------
-    function fillIdeaSelection(ideaDescription) {
+    function fillIdeaSelection(ideaKey) {
       const field = document.getElementById('order-instructions');
-      field.value = `Modèle souhaité : ${ideaDescription}.`;
+      const dict = translations[currentActiveLang];
+      field.value = `${dict.galleryIdeaPrefix} ${dict[ideaKey]}.`;
       document.getElementById('formulaire-commande').scrollIntoView({ behavior: 'smooth' });
       field.focus();
     }
@@ -1223,7 +1577,7 @@
             item.className = 'relative w-16 h-16 rounded-xl overflow-hidden border-2 border-accent-cyan shadow-md';
             item.innerHTML = `
               <img src="${e.target.result}" class="w-full h-full object-cover">
-              <span class="absolute bottom-0 inset-x-0 bg-brand-950/80 text-[9px] text-center text-white font-bold py-0.5">Photo ${idx + 1}</span>
+              <span class="absolute bottom-0 inset-x-0 bg-brand-950/80 text-[9px] text-center text-white font-bold py-0.5">${translations[currentActiveLang].photoLabel} ${idx + 1}</span>
             `;
             previewBox.appendChild(item);
           };
@@ -1236,13 +1590,14 @@
     // Helper to extract form data
     // -----------------------------------------------------------------
     function getFormData() {
-      const name = document.getElementById('cust-name').value.trim() || 'Client';
-      const phone = document.getElementById('cust-phone').value.trim() || 'Non renseigné';
-      const city = document.getElementById('cust-city').value.trim() || 'Non renseignée';
-      const address = document.getElementById('cust-address').value.trim() || 'Non renseignée';
-      const instructions = document.getElementById('order-instructions').value.trim() || 'Sans détails spécifiques';
+      const dict = translations[currentActiveLang];
+      const name = document.getElementById('cust-name').value.trim() || dict.fallbackName;
+      const phone = document.getElementById('cust-phone').value.trim() || dict.fallbackPhone;
+      const city = document.getElementById('cust-city').value.trim() || dict.fallbackCity;
+      const address = document.getElementById('cust-address').value.trim() || dict.fallbackAddress;
+      const instructions = document.getElementById('order-instructions').value.trim() || dict.fallbackInstructions;
 
-      const selectedModelName = 'Mug Céramique Personnalisé (330ml HD)';
+      const selectedModelName = dict.orderProductName;
       const totalFormatted = document.getElementById('display-total-price').innerText;
 
       return {
@@ -1254,7 +1609,9 @@
         selectedModelName,
         quantity: currentOrder.quantity,
         total: totalFormatted,
-        photosInfo: currentOrder.photosCount > 0 ? `${currentOrder.photosCount} photo(s) sélectionnée(s)` : 'Photos envoyées ici sur WhatsApp'
+        photosInfo: currentOrder.photosCount > 0
+          ? `${currentOrder.photosCount} ${dict.photoCount}`
+          : dict.photosViaWhatsapp
       };
     }
 
@@ -1263,22 +1620,23 @@
     // -----------------------------------------------------------------
     function checkoutViaWhatsApp() {
       const data = getFormData();
+      const dict = translations[currentActiveLang];
       const textMessage =
-`*NOUVELLE COMMANDE - SHRISHOP.ONLINE* ☕✨
+`${dict.whatsappOrderTitle}
 -----------------------------------------
-👤 *Nom:* ${data.name}
-📱 *WhatsApp:* ${data.phone}
-📍 *Ville:* ${data.city}
-🏠 *Adresse:* ${data.address}
+👤 ${dict.whatsappName} ${data.name}
+📱 ${dict.whatsappPhone} ${data.phone}
+📍 ${dict.whatsappCity} ${data.city}
+🏠 ${dict.whatsappAddress} ${data.address}
 
-📦 *Produit:* ${data.selectedModelName}
-🔢 *Quantité:* ${data.quantity}
-💰 *Total:* ${data.total} (Paiement à la livraison)
+📦 ${dict.whatsappProduct} ${data.selectedModelName}
+🔢 ${dict.whatsappQuantity} ${data.quantity}
+💰 ${dict.whatsappTotal} ${data.total} ${dict.whatsappPayment}
 
-🎨 *Détails & Instructions de personnalisation:*
+🎨 ${dict.whatsappInstructions}
 "${data.instructions}"
 
-📷 *Photos:* ${data.photosInfo} (Je vous joins mes photos ci-dessous)`;
+📷 ${dict.whatsappPhotos} ${data.photosInfo} ${dict.whatsappPhotoNote}`;
 
       const encodedUrl = encodeURIComponent(textMessage);
       window.open(`https://wa.me/212693360625?text=${encodedUrl}`, '_blank');
@@ -1292,7 +1650,10 @@
       const data = getFormData();
 
       const modalFeedback = document.getElementById('modal-feedback-message');
-      modalFeedback.innerHTML = `Merci <strong>${data.name}</strong> ! Votre demande pour <strong>${data.quantity} mug(s) (${data.total})</strong> avec livraison à <strong>${data.city}</strong> a bien été transmise à notre atelier. Notre équipe vous contactera au <strong>${data.phone}</strong> pour confirmer votre commande sous 2h.`;
+      const dict = translations[currentActiveLang];
+      modalFeedback.innerHTML = currentActiveLang === 'ar'
+        ? `شكراً <strong>${data.name}</strong>! تم إرسال طلبك بنجاح إلى ورشتنا. طلبت <strong>${data.quantity} من الأكواب المخصصة (${data.total})</strong> مع التوصيل إلى <strong>${data.city}</strong>. سنتواصل معك على الرقم <strong>${data.phone}</strong> خلال ساعتين لتأكيد الطلب.`
+        : `${dict.modalSuccess} <strong>${data.name}</strong> ! ${dict.modalThanks} <strong>${data.quantity} ${dict.modalQty} (${data.total})</strong> ${dict.modalDelivery} <strong>${data.city}</strong> ${dict.modalSent} <strong>${data.phone}</strong> ${dict.modalConfirmation}`;
 
       const modal = document.getElementById('confirmation-modal');
       modal.classList.remove('hidden');
