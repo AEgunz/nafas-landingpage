@@ -88,7 +88,7 @@ if (databaseUrl) {
   }
 }
 
-if (!neonSql) {
+if (!neonSql && !isVercel) {
   function initSqlite() {
     const localDbPath = path.join(__dirname, 'database.db');
     const tmpDbPath = path.join('/tmp', 'database.db');
@@ -145,7 +145,7 @@ async function dbRun(sql, params = []) {
   if (neonSql) {
     let pgSql = formatPgSql(sql);
     if (pgSql.trim().toUpperCase().startsWith('INSERT') && !pgSql.toUpperCase().includes('RETURNING')) {
-      pgSql += ' RETURNING id';
+      pgSql += ' RETURNING *';
     }
     const rows = await neonSql.query(pgSql, params);
     const lastId = rows && rows[0] ? rows[0].id : null;
@@ -205,8 +205,15 @@ function verifyAuthToken(token) {
 
 // Initialize Database Tables
 async function initTables() {
-  try {
-    await dbExec(`
+  if (!neonSql && !sqliteDb) {
+    throw new Error('DATABASE_URL is required for database access on Vercel.');
+  }
+
+  if (neonSql) {
+    await dbGet('SELECT 1 AS database_ready');
+  }
+
+  await dbExec(`
       CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -220,16 +227,16 @@ async function initTables() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
-    `);
+  `);
 
-    await dbExec(`
+  await dbExec(`
       CREATE TABLE IF NOT EXISTS settings (
         key TEXT PRIMARY KEY,
         value TEXT NOT NULL
       );
-    `);
+  `);
 
-    await dbExec(`
+  await dbExec(`
       CREATE TABLE IF NOT EXISTS packs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -241,9 +248,9 @@ async function initTables() {
         active INTEGER DEFAULT 1,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
-    `);
+  `);
 
-    await dbExec(`
+  await dbExec(`
       CREATE TABLE IF NOT EXISTS stock (
         id INTEGER PRIMARY KEY,
         total_stock INTEGER NOT NULL DEFAULT 100,
@@ -252,49 +259,68 @@ async function initTables() {
         low_stock_threshold INTEGER DEFAULT 10,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
-    `);
+  `);
 
-    // Set default admin password if empty
-    const defaultPasswordRow = await dbGet('SELECT value FROM settings WHERE key = ?', ['admin_password']);
-    if (!defaultPasswordRow) {
-      const defaultHash = hashPassword('admin123');
-      await dbRun('INSERT INTO settings (key, value) VALUES (?, ?)', ['admin_password', defaultHash]);
-      console.log('Default admin password set to: admin123');
-    }
+  // Set default admin password if empty
+  const defaultPasswordRow = await dbGet('SELECT value FROM settings WHERE key = ?', ['admin_password']);
+  if (!defaultPasswordRow) {
+    const defaultHash = hashPassword('admin123');
+    await dbRun('INSERT INTO settings (key, value) VALUES (?, ?)', ['admin_password', defaultHash]);
+    console.log('Default admin password set to: admin123');
+  }
 
-    // Pre-populate default product packs/pricing if empty
-    const checkPacks = await dbGet('SELECT COUNT(*) as count FROM packs');
-    if (!checkPacks || parseInt(checkPacks.count, 10) === 0) {
-      await dbRun(`
+  // Pre-populate default product packs/pricing if empty
+  const checkPacks = await dbGet('SELECT COUNT(*) as count FROM packs');
+  if (!checkPacks || parseInt(checkPacks.count, 10) === 0) {
+    await dbRun(`
         INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
         VALUES (?, ?, ?, ?, ?, ?, 1)
       `, ['1 Starter Kit', 1, 199.0, 299.0, '', 1]);
 
-      await dbRun(`
+    await dbRun(`
         INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
         VALUES (?, ?, ?, ?, ?, ?, 1)
       `, ['2 Starter Kits', 2, 350.0, 499.0, '🔥 الأكثر طلباً', 2]);
 
-      await dbRun(`
+    await dbRun(`
         INSERT INTO packs (name, quantity, price, old_price, badge, sort_order, active)
         VALUES (?, ?, ?, ?, ?, ?, 1)
       `, ['3 Starter Kits', 3, 490.0, 699.0, '🎁 أفضل قيمة', 3]);
 
-      console.log('Default product packs initialized.');
-    }
+    console.log('Default product packs initialized.');
+  }
 
-    // Initialize Stock level if empty
-    const checkStock = await dbGet('SELECT COUNT(*) as count FROM stock');
-    if (!checkStock || parseInt(checkStock.count, 10) === 0) {
-      await dbRun('INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)');
-      console.log('Default stock initialized: 30 / 100.');
-    }
-  } catch (err) {
-    console.error('Error initializing tables:', err);
+  // Initialize Stock level if empty
+  const checkStock = await dbGet('SELECT COUNT(*) as count FROM stock');
+  if (!checkStock || parseInt(checkStock.count, 10) === 0) {
+    await dbRun('INSERT INTO stock (id, total_stock, remaining_stock, auto_decrement, low_stock_threshold) VALUES (1, 100, 30, 1, 10)');
+    console.log('Default stock initialized: 30 / 100.');
   }
 }
 
-initTables();
+const databaseReady = initTables();
+databaseReady.catch(error => {
+  console.error('Database initialization failed:', error.message);
+});
+
+app.use('/api', async (req, res, next) => {
+  try {
+    await databaseReady;
+    next();
+  } catch (error) {
+    res.status(503).json({ success: false, message: 'قاعدة البيانات غير متاحة حالياً. يرجى المحاولة لاحقاً.' });
+  }
+});
+
+app.get('/api/health', async (req, res) => {
+  try {
+    await dbGet('SELECT 1 AS database_ready');
+    res.json({ success: true, database: 'connected' });
+  } catch (error) {
+    console.error('Database health check failed:', error.message);
+    res.status(503).json({ success: false, database: 'unavailable' });
+  }
+});
 
 async function getStockInfo() {
   let stock = null;
