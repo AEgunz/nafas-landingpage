@@ -4,9 +4,6 @@ const path = require('path');
 const crypto = require('crypto');
 const http = require('http');
 const fs = require('fs');
-const { Readable } = require('node:stream');
-const multer = require('multer');
-const { put: putBlob, get: getBlob, del: deleteBlob } = require('@vercel/blob');
 const { WebSocketServer } = require('ws');
 const { Pool } = require('pg');
 
@@ -45,44 +42,6 @@ wss.on('connection', (ws) => {
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const mugPhotoUpload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 900 * 1024, files: 4, fields: 12, fieldSize: 4096 },
-  fileFilter: (req, file, callback) => {
-    if (file.mimetype !== 'image/jpeg') {
-      return callback(new Error('Photos must be uploaded as JPEG images.'));
-    }
-    callback(null, true);
-  }
-});
-
-function isJpegImage(buffer) {
-  return buffer.length >= 4
-    && buffer[0] === 0xff
-    && buffer[1] === 0xd8
-    && buffer[2] === 0xff
-    && buffer[buffer.length - 2] === 0xff
-    && buffer[buffer.length - 1] === 0xd9;
-}
-
-function isBlobStorageConfigured() {
-  return Boolean(
-    process.env.BLOB_READ_WRITE_TOKEN
-    || (process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN)
-  );
-}
-
-function getMugOrderDetails(notes) {
-  if (typeof notes !== 'string' || !notes.startsWith('[MUG_ORDER]\n')) return null;
-  try {
-    const details = JSON.parse(notes.slice('[MUG_ORDER]\n'.length));
-    if (typeof details.instructions !== 'string' || !Array.isArray(details.photoPaths)) return null;
-    return details;
-  } catch {
-    return null;
-  }
-}
 
 // Explicit SEO & AI Metadata Routes
 app.get('/robots.txt', (req, res) => {
@@ -426,16 +385,7 @@ app.get('/api/packs', async (req, res) => {
 });
 
 // Submit a new order
-app.post('/api/orders', (req, res, next) => {
-  if (!req.is('multipart/form-data')) return next();
-  mugPhotoUpload.array('photos', 4)(req, res, error => {
-    if (!error) return next();
-    const status = error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE' ? 413 : 400;
-    res.status(status).json({ success: false, message: error.message || 'تعذر استقبال الصور.' });
-  });
-}, async (req, res) => {
-  const uploadedPhotoBlobs = [];
-  let orderSaved = false;
+app.post('/api/orders', async (req, res) => {
   try {
     const { name, phone, city, qty, quantity, pack_id, address } = req.body;
 
@@ -455,25 +405,14 @@ app.post('/api/orders', (req, res, next) => {
     let price = 0;
     let orderNotes = '';
     if (req.body.productType === 'custom_mug') {
-      const photos = req.files || [];
       const requestedQuantity = Number(qty || quantity || 1);
       if (!Number.isInteger(requestedQuantity) || requestedQuantity < 1 || requestedQuantity > 50) {
         return res.status(400).json({ success: false, message: 'الكمية غير صالحة.' });
       }
 
       const instructions = typeof req.body.instructions === 'string' ? req.body.instructions.trim() : '';
-      if (!instructions || instructions.length > 2000 || photos.length > 4) {
-        return res.status(400).json({ success: false, message: 'يرجى التحقق من تفاصيل التصميم والصور.' });
-      }
-      if (photos.some(photo => !isJpegImage(photo.buffer))) {
-        return res.status(400).json({ success: false, message: 'إحدى الصور غير صالحة. المرجو اختيار صور JPG أو PNG أو WEBP.' });
-      }
-      if (photos.length > 0 && !isBlobStorageConfigured()) {
-        return res.status(503).json({
-          success: false,
-          code: 'PHOTO_STORAGE_NOT_CONFIGURED',
-          message: 'رفع الصور غير مفعّل حالياً. المرجو المحاولة لاحقاً.'
-        });
+      if (!instructions || instructions.length > 2000) {
+        return res.status(400).json({ success: false, message: 'يرجى التحقق من تفاصيل التصميم.' });
       }
 
       if (requestedQuantity === 1) price = 95;
@@ -481,19 +420,9 @@ app.post('/api/orders', (req, res, next) => {
       else if (requestedQuantity === 3) price = 225;
       else price = 225 + (requestedQuantity - 3) * 75;
 
-      for (let index = 0; index < photos.length; index++) {
-        const uploaded = await putBlob(
-          `mug-orders/${crypto.randomUUID()}.jpg`,
-          photos[index].buffer,
-          { access: 'private', contentType: 'image/jpeg' }
-        );
-        uploadedPhotoBlobs.push(uploaded);
-      }
-
       orderQty = requestedQuantity;
       orderNotes = `[MUG_ORDER]\n${JSON.stringify({
-        instructions,
-        photoPaths: uploadedPhotoBlobs.map(blob => blob.pathname)
+        instructions
       })}`;
     }
 
@@ -520,8 +449,6 @@ app.post('/api/orders', (req, res, next) => {
       INSERT INTO orders (name, phone, city, quantity, address, price, status, notes)
       VALUES (?, ?, ?, ?, ?, ?, 'جديد', ?)
     `, [clientName, clientPhone, clientCity, orderQty, clientAddress, price, orderNotes]);
-    orderSaved = true;
-
     // Auto decrement stock
     const stockRow = await dbGet('SELECT * FROM stock WHERE id = 1');
     if (req.body.productType !== 'custom_mug' && stockRow && stockRow.auto_decrement) {
@@ -540,7 +467,7 @@ app.post('/api/orders', (req, res, next) => {
       address: clientAddress,
       price: price,
       status: 'جديد',
-      notes: '',
+      notes: orderNotes,
       created_at: new Date().toISOString()
     };
 
@@ -553,45 +480,8 @@ app.post('/api/orders', (req, res, next) => {
       order: createdOrder
     });
   } catch (error) {
-    if (!orderSaved && uploadedPhotoBlobs.length > 0) {
-      try {
-        await deleteBlob(uploadedPhotoBlobs.map(blob => blob.pathname), { access: 'private' });
-      } catch (cleanupError) {
-        console.error('Error cleaning up uploaded mug photos:', cleanupError);
-      }
-    }
     console.error('Error creating order:', error);
     res.status(500).json({ success: false, message: 'حدث خطأ في الخادم أثناء إضافة الطلب.' });
-  }
-});
-
-app.get('/api/admin/orders/:id/photos/:photoIndex', authenticateAdmin, async (req, res) => {
-  try {
-    const orderId = Number(req.params.id);
-    const photoIndex = Number(req.params.photoIndex);
-    if (!Number.isInteger(orderId) || orderId < 1 || !Number.isInteger(photoIndex) || photoIndex < 0 || photoIndex > 3) {
-      return res.status(400).json({ success: false, message: 'معرّف الصورة غير صالح.' });
-    }
-
-    const order = await dbGet('SELECT notes FROM orders WHERE id = ?', [orderId]);
-    const details = getMugOrderDetails(order && order.notes);
-    const pathname = details && details.photoPaths[photoIndex];
-    if (typeof pathname !== 'string' || !pathname.startsWith('mug-orders/')) {
-      return res.status(404).json({ success: false, message: 'الصورة غير موجودة.' });
-    }
-
-    const blob = await getBlob(pathname, { access: 'private' });
-    if (!blob || blob.statusCode !== 200) {
-      return res.status(404).json({ success: false, message: 'الصورة غير موجودة.' });
-    }
-
-    res.setHeader('Content-Type', blob.blob.contentType);
-    res.setHeader('Cache-Control', 'private, no-store');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    Readable.fromWeb(blob.stream).pipe(res);
-  } catch (error) {
-    console.error('Error retrieving private mug photo:', error);
-    res.status(500).json({ success: false, message: 'تعذر فتح الصورة حالياً.' });
   }
 });
 
