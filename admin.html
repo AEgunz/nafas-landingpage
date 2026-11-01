@@ -1211,6 +1211,44 @@
       }
     }
 
+    function getMugOrderDetails(notes) {
+      if (typeof notes !== 'string' || !notes.startsWith('[MUG_ORDER]\n')) return null;
+      try {
+        const details = JSON.parse(notes.slice('[MUG_ORDER]\n'.length));
+        if (typeof details.instructions !== 'string' || !Array.isArray(details.photoPaths)) return null;
+        return details;
+      } catch {
+        return { instructions: notes.slice('[MUG_ORDER]'.length).replace(/^[\r\n]*/, ''), photoPaths: [] };
+      }
+    }
+
+    async function viewMugPhoto(orderId, photoIndex) {
+      const photoWindow = window.open('about:blank', '_blank');
+      if (!photoWindow) {
+        alert('يرجى السماح بفتح النوافذ المنبثقة لعرض الصور.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/admin/orders/${orderId}/photos/${photoIndex}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error(`Photo request failed with status ${response.status}`);
+        const photoUrl = URL.createObjectURL(await response.blob());
+        photoWindow.location.href = photoUrl;
+        const cleanup = setInterval(() => {
+          if (photoWindow.closed) {
+            URL.revokeObjectURL(photoUrl);
+            clearInterval(cleanup);
+          }
+        }, 1000);
+      } catch (error) {
+        console.error('Error opening mug order photo:', error);
+        photoWindow.close();
+        alert('تعذر فتح الصورة. حدّث الصفحة وحاول مرة أخرى.');
+      }
+    }
+
     function renderOrdersTable(orders, highlightId = null) {
       const tbody = document.getElementById('ordersTableBody');
       const emptyState = document.getElementById('emptyState');
@@ -1232,10 +1270,10 @@
         let waPhone = cleanPhone;
         if (cleanPhone.startsWith('0')) waPhone = '212' + cleanPhone.substring(1);
 
-        const isMugOrder = typeof o.notes === 'string' && o.notes.startsWith('[MUG_ORDER]');
-        const mugDetails = isMugOrder ? o.notes.replace(/^\[MUG_ORDER\]\n?/, '') : '';
+        const mugDetails = getMugOrderDetails(o.notes);
+        const isMugOrder = Boolean(mugDetails);
         const waMessage = isMugOrder
-          ? `السلام عليكم ${o.name}، معاك shrishop.online بخصوص طلبك ديال ${o.quantity} كوب مخصص بثمن ${o.price} درهم، لمدينة ${o.city}. ${mugDetails}. واش نأكدو معاك الطلب؟`
+          ? `السلام عليكم ${o.name}، معاك shrishop.online بخصوص طلبك ديال ${o.quantity} كوب مخصص بثمن ${o.price} درهم، لمدينة ${o.city}. تفاصيل التصميم: ${mugDetails.instructions}. واش نأكدو معاك الطلب؟`
           : `السلام عليكم ${o.name}، معاك متجر نَفَس بخصوص طلبك لموسع الأنف Starter Kit (الكمية: ${o.quantity} - الثمن: ${o.price} درهم) لمدينة ${o.city}. واش نقدرو نأكدو معاك الطلب دابا؟`;
         const waText = encodeURIComponent(waMessage);
         const waUrl = `https://wa.me/${waPhone}?text=${waText}`;
@@ -1270,8 +1308,7 @@
             <a href="tel:${cleanPhone}" class="btn btn-light btn-sm" title="اتصال هاتفي">📞</a>
           </td>
           <td>
-            ${isMugOrder ? '<span class="badge badge-delivered">☕ أكواب مخصصة</span><br>' : ''}
-            <small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(isMugOrder ? mugDetails : o.notes).replace(/\n/g, '<br>') : '—'}</small>
+            ${isMugOrder ? `<span class="badge badge-delivered">☕ أكواب مخصصة</span><br><small style="color: var(--navy); font-style: italic;">${escapeHtml(mugDetails.instructions)}</small>${mugDetails.photoPaths.slice(0, 4).map((_, index) => `<br><button class="btn btn-light btn-sm" onclick="viewMugPhoto(${o.id}, ${index})">📷 عرض الصورة ${index + 1}</button>`).join('')}` : `<small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(o.notes).replace(/\n/g, '<br>') : '—'}</small>`}
           </td>
           <td>
             <div style="display: flex; gap: 4px;">

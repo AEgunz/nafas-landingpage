@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Créez votre mug personnalisé avec un design graphique offert. Livraison partout au Maroc et paiement à la réception.">
   <title>shrishop.online | Mugs personnalisés et design offert</title>
+
   <!-- Meta Pixel Code -->
   <script>
     !function(f,b,e,v,n,t,s)
@@ -610,16 +611,17 @@
 
             <!-- Dropzone -->
             <div id="file-dropzone" class="border-2 border-dashed border-brand-700 hover:border-accent-cyan rounded-2xl p-6 text-center bg-brand-950/60 cursor-pointer transition-colors" onclick="document.getElementById('hidden-file-input').click()">
-              <input type="file" id="hidden-file-input" multiple accept="image/*" class="hidden" onchange="previewImages(event)">
+              <input type="file" id="hidden-file-input" multiple accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewImages(event)">
               <div class="w-12 h-12 rounded-full bg-brand-800 text-accent-cyan flex items-center justify-center mx-auto mb-2">
                 <i data-lucide="upload-cloud" class="w-6 h-6"></i>
               </div>
               <p class="text-xs sm:text-sm font-semibold text-white" data-i18n="dropzoneMain">Cliquez ici pour sélectionner vos photos</p>
-              <p class="text-[11px] text-slate-400 mt-1" data-i18n="dropzoneSub">Formats acceptés : JPG, PNG, WEBP (ou envoyez-les par WhatsApp lors de la validation)</p>
+              <p class="text-[11px] text-slate-400 mt-1" data-i18n="dropzoneSub">JPG, PNG, WEBP. Jusqu'à 4 photos; elles seront ajoutées en privé à votre commande.</p>
             </div>
 
             <!-- Preview thumbnails -->
             <div id="image-previews-container" class="flex flex-wrap gap-3 mt-3 hidden"></div>
+            <p id="photo-upload-error" class="hidden text-center text-sm font-bold text-rose-300" role="alert"></p>
           </div>
 
           <!-- Step 3: Instructions & Texts -->
@@ -1000,6 +1002,8 @@
       quantity: 1,
       photosCount: 0
     };
+    let selectedPhotoFiles = [];
+    let photoPreviewUrls = [];
 
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
@@ -1042,10 +1046,13 @@
         pack3Title: "Pack 3 Mugs",
         pack3Sub: "75 DH / pièce (Au lieu de 285 DH)",
         pack3Save: "Économisez 60 DH",
-        step2Label: "2. Téléchargez vos photos (ou envoyez-les directement sur WhatsApp)",
+        step2Label: "2. Ajoutez vos photos pour la personnalisation",
         step2Limit: "Jusqu'à 4 photos",
         dropzoneMain: "Cliquez ici pour sélectionner vos photos",
-        dropzoneSub: "Formats acceptés : JPG, PNG, WEBP (ou envoyez-les par WhatsApp lors de la validation)",
+        dropzoneSub: "JPG, PNG, WEBP. Jusqu'à 4 photos; elles seront ajoutées en privé à la commande du site.",
+        photoUploadError: "Impossible de préparer ces photos. Choisissez jusqu'à 4 images JPG, PNG ou WEBP.",
+        photoStorageUnavailable: "Le stockage privé des photos n'est pas encore configuré. Veuillez réessayer plus tard ou envoyer les photos par WhatsApp.",
+        orderSubmitting: "Envoi de la commande et des photos...",
         step3Label: "3. Vos souhaits de personnalisation (Textes, prénoms, citation, style)",
         step3Placeholder: "Exemple : Je souhaite intégrer 2 photos de couple avec la date 10 Mars 2026 en bas, dans une typographie fine et moderne...",
         qtyLabel: "Quantité souhaitée",
@@ -1164,7 +1171,7 @@
         whatsappPayment: "(Paiement à la livraison)",
         whatsappInstructions: "*Détails et instructions de personnalisation :*",
         whatsappPhotos: "*Photos :*",
-        whatsappPhotoNote: "(Je joins mes photos ci-dessous)",
+        whatsappPhotoNote: "(Merci de joindre les photos manuellement dans WhatsApp.)",
         whatsappGreeting: "Bonjour shrishop.online ! Je souhaite créer un mug personnalisé.",
         modalSuccess: "Merci",
         modalThanks: "Votre demande pour",
@@ -1223,10 +1230,13 @@
         pack3Title: "باقة 3 أكواب",
         pack3Sub: "75 درهم للكوب (بدل 285 درهم)",
         pack3Save: "وفر 60 درهم",
-        step2Label: "2. حمل صورك (أو أرسلها مباشرة عبر الواتساب)",
+        step2Label: "2. أضف صورك لتخصيص الكوب",
         step2Limit: "حتى 4 صور",
         dropzoneMain: "اضغط هنا لاختيار صورك من الهاتف",
-        dropzoneSub: "أرسل صورك هنا أو عبر الواتساب عند تأكيد الطلب",
+        dropzoneSub: "JPG أو PNG أو WEBP. حتى 4 صور؛ تُرفق بشكل خاص بطلب الموقع.",
+        photoUploadError: "تعذر تجهيز الصور. اختر حتى 4 صور بصيغة JPG أو PNG أو WEBP.",
+        photoStorageUnavailable: "تخزين الصور بشكل خاص لم يُفعّل بعد. حاول لاحقاً أو أرسل الصور عبر واتساب.",
+        orderSubmitting: "جارٍ إرسال الطلب والصور...",
         step3Label: "3. تفاصيل ورغبات التصميم (الأسماء، النصوص، العبارات)",
         step3Placeholder: "مثال: أريد دمج صورتين مع كتابة اسمين وتاريخ 10 مارس 2026 أسفل الكوب...",
         qtyLabel: "الكمية المطلوبة",
@@ -1344,7 +1354,7 @@
         whatsappPayment: "(الدفع عند الاستلام)",
         whatsappInstructions: "*تفاصيل وملاحظات التصميم:*",
         whatsappPhotos: "*الصور:*",
-        whatsappPhotoNote: "(سأرفق صوري في الرسائل التالية)",
+        whatsappPhotoNote: "(يرجى إرفاق الصور يدوياً في واتساب)",
         whatsappGreeting: "السلام عليكم، أرغب في تصميم كوب مخصص من متجر shrishop.online.",
         modalSuccess: "شكراً",
         modalThanks: "تم إرسال طلبك لشراء",
@@ -1582,28 +1592,81 @@
     // -----------------------------------------------------------------
     // Image Preview Handling
     // -----------------------------------------------------------------
-    function previewImages(event) {
-      const files = event.target.files;
+    async function preparePhoto(file) {
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+        throw new Error('Unsupported image type');
+      }
+
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close();
+
+      for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+        const compressed = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+        if (compressed && compressed.size <= 900 * 1024) {
+          const baseName = file.name.replace(/\.[^.]+$/, '') || 'photo';
+          return new File([compressed], `${baseName}.jpg`, { type: 'image/jpeg', lastModified: Date.now() });
+        }
+      }
+
+      throw new Error('Compressed image exceeds the upload limit');
+    }
+
+    function clearPhotoPreviews() {
+      photoPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+      photoPreviewUrls = [];
+      document.getElementById('image-previews-container').innerHTML = '';
+      document.getElementById('image-previews-container').classList.add('hidden');
+    }
+
+    async function previewImages(event) {
+      const input = event.target;
+      const files = Array.from(input.files || []);
       const previewBox = document.getElementById('image-previews-container');
+      const errorMessage = document.getElementById('photo-upload-error');
+      errorMessage.classList.add('hidden');
+      clearPhotoPreviews();
+      selectedPhotoFiles = [];
+      currentOrder.photosCount = 0;
 
-      if (files && files.length > 0) {
-        previewBox.classList.remove('hidden');
-        previewBox.innerHTML = '';
-        currentOrder.photosCount = files.length;
+      if (files.length > 4) {
+        errorMessage.textContent = translations[currentActiveLang].photoUploadError;
+        errorMessage.classList.remove('hidden');
+        input.value = '';
+        return;
+      }
 
-        Array.from(files).slice(0, 4).forEach((file, idx) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const item = document.createElement('div');
-            item.className = 'relative w-16 h-16 rounded-xl overflow-hidden border-2 border-accent-cyan shadow-md';
-            item.innerHTML = `
-              <img src="${e.target.result}" class="w-full h-full object-cover">
-              <span class="absolute bottom-0 inset-x-0 bg-brand-950/80 text-[9px] text-center text-white font-bold py-0.5">${translations[currentActiveLang].photoLabel} ${idx + 1}</span>
-            `;
-            previewBox.appendChild(item);
-          };
-          reader.readAsDataURL(file);
+      try {
+        for (const file of files) {
+          selectedPhotoFiles.push(await preparePhoto(file));
+        }
+        selectedPhotoFiles.forEach((file, idx) => {
+          const item = document.createElement('div');
+          item.className = 'relative w-16 h-16 rounded-xl overflow-hidden border-2 border-accent-cyan shadow-md';
+          const image = document.createElement('img');
+          image.src = URL.createObjectURL(file);
+          image.className = 'w-full h-full object-cover';
+          const label = document.createElement('span');
+          label.className = 'absolute bottom-0 inset-x-0 bg-brand-950/80 text-[9px] text-center text-white font-bold py-0.5';
+          label.textContent = `${translations[currentActiveLang].photoLabel} ${idx + 1}`;
+          photoPreviewUrls.push(image.src);
+          item.append(image, label);
+          previewBox.appendChild(item);
         });
+        currentOrder.photosCount = selectedPhotoFiles.length;
+        previewBox.classList.remove('hidden');
+      } catch (error) {
+        console.error('Error preparing mug photos:', error);
+        selectedPhotoFiles = [];
+        currentOrder.photosCount = 0;
+        clearPhotoPreviews();
+        input.value = '';
+        errorMessage.textContent = translations[currentActiveLang].photoUploadError;
+        errorMessage.classList.remove('hidden');
       }
     }
 
@@ -1659,6 +1722,10 @@
 
 📷 ${dict.whatsappPhotos} ${data.photosInfo} ${dict.whatsappPhotoNote}`;
 
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead', { content_name: 'WhatsApp Order Mug' });
+      }
+
       const encodedUrl = encodeURIComponent(textMessage);
       window.open(`https://wa.me/212693360625?text=${encodedUrl}`, '_blank');
     }
@@ -1674,26 +1741,38 @@
       const data = getFormData();
       const errorMessage = document.getElementById('order-form-error');
       const submitButton = document.querySelector('#order-form button[type="submit"]');
+      const submitLabel = submitButton.querySelector('[data-i18n="btnCodSubmit"]');
       errorMessage.classList.add('hidden');
       isSubmittingOrder = true;
       submitButton.disabled = true;
+      submitLabel.textContent = translations[currentActiveLang].orderSubmitting;
 
       try {
+        const orderForm = new FormData();
+        orderForm.append('productType', 'custom_mug');
+        orderForm.append('name', data.name);
+        orderForm.append('phone', data.phone);
+        orderForm.append('city', data.city);
+        orderForm.append('address', data.address);
+        orderForm.append('quantity', String(data.quantity));
+        orderForm.append('instructions', data.instructions);
+        selectedPhotoFiles.forEach(file => orderForm.append('photos', file, file.name));
+
         const response = await fetch('/api/orders', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            productType: 'custom_mug',
-            name: data.name,
-            phone: data.phone,
-            city: data.city,
-            address: data.address,
-            quantity: data.quantity,
-            instructions: data.instructions,
-            photosCount: currentOrder.photosCount
-          })
+          body: orderForm
         });
-        if (!response.ok) throw new Error(`Order submission failed with status ${response.status}`);
+        const result = await response.json();
+        if (!response.ok) {
+          const error = new Error(`Order submission failed with status ${response.status}`);
+          error.code = result.code;
+          throw error;
+        }
+
+        if (typeof fbq === 'function') {
+          fbq('track', 'Purchase', { content_name: 'Mugs Personnalisés', currency: 'MAD' });
+          fbq('track', 'Lead');
+        }
 
         const modalFeedback = document.getElementById('modal-feedback-message');
         const dict = translations[currentActiveLang];
@@ -1706,11 +1785,15 @@
         modal.classList.add('flex');
       } catch (error) {
         console.error('Error submitting custom mug order:', error);
-        errorMessage.textContent = translations[currentActiveLang].orderSubmitError;
+        const dict = translations[currentActiveLang];
+        errorMessage.textContent = error.code === 'PHOTO_STORAGE_NOT_CONFIGURED'
+          ? dict.photoStorageUnavailable
+          : dict.orderSubmitError;
         errorMessage.classList.remove('hidden');
       } finally {
         isSubmittingOrder = false;
         submitButton.disabled = false;
+        submitLabel.textContent = translations[currentActiveLang].btnCodSubmit;
       }
     }
 
@@ -1720,8 +1803,9 @@
       modal.classList.remove('flex');
 
       document.getElementById('order-form').reset();
-      document.getElementById('image-previews-container').classList.add('hidden');
-      document.getElementById('image-previews-container').innerHTML = '';
+      clearPhotoPreviews();
+      selectedPhotoFiles = [];
+      currentOrder.photosCount = 0;
       currentOrder.quantity = 1;
       currentOrder.model = 'blanc';
       currentOrder.unitPrice = FIXED_PRICE_PER_MUG;
