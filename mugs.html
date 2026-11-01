@@ -599,25 +599,7 @@
             </div>
           </div>
 
-          <!-- Step 2: Send photos through WhatsApp -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center justify-between">
-              <span class="flex items-center gap-2">
-                <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">2</span>
-                <span data-i18n="step2Label">Envoyez vos photos sur WhatsApp après avoir passé votre commande</span>
-              </span>
-              <span class="text-[11px] text-slate-400 font-normal" data-i18n="step2Limit">Après l'enregistrement de la commande</span>
-            </label>
-            <div class="border border-brand-700 rounded-2xl p-5 text-center bg-brand-950/60">
-              <div class="w-12 h-12 rounded-full bg-brand-800 text-emerald-400 flex items-center justify-center mx-auto mb-2">
-                <i data-lucide="message-circle" class="w-6 h-6"></i>
-              </div>
-              <p class="text-xs sm:text-sm font-semibold text-white" data-i18n="dropzoneMain">Après l'envoi de votre commande, envoyez vos photos sur WhatsApp pour préparer le design.</p>
-              <p class="text-[11px] text-slate-400 mt-1" data-i18n="dropzoneSub">Vos souhaits de personnalisation sont enregistrés avec votre commande dans le tableau de bord.</p>
-            </div>
-          </div>
-
-          <!-- Step 3: Quantité & Calculateur de Prix Dynamique -->
+          <!-- Quantité & Calculateur de Prix Dynamique -->
           <div class="bg-brand-950/90 p-5 rounded-2xl border border-brand-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-1" data-i18n="qtyLabel">Quantité souhaitée</span>
@@ -644,11 +626,11 @@
             </div>
           </div>
 
-          <!-- Step 4: Informations de Livraison au Maroc -->
+          <!-- Step 2: Informations de Livraison au Maroc -->
           <div class="space-y-4 pt-2">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">3</span>
-              <span data-i18n="step4Label">3. عنوان التوصيل ورقم الواتساب</span>
+              <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">2</span>
+              <span data-i18n="step2Label">2. عنوان التوصيل ورقم الواتساب</span>
             </label>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -676,21 +658,27 @@
             </div>
           </div>
 
-          <!-- Dual Submission Options -->
-          <div class="pt-6 border-t border-brand-800 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- WhatsApp photo note -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center justify-between">
+              <span data-i18n="photosNoteLabel">Note</span>
+              <span class="text-[11px] text-slate-400 font-normal" data-i18n="photosNoteTiming">Après l'enregistrement de la commande</span>
+            </label>
+            <div class="border border-brand-700 rounded-2xl p-5 text-center bg-brand-950/60">
+              <div class="w-12 h-12 rounded-full bg-brand-800 text-emerald-400 flex items-center justify-center mx-auto mb-2">
+                <i data-lucide="message-circle" class="w-6 h-6"></i>
+              </div>
+              <p class="text-xs sm:text-sm font-semibold text-white" data-i18n="dropzoneMain">Après l'envoi de votre commande, envoyez vos photos sur WhatsApp pour préparer le design.</p>
+              <p class="text-[11px] text-slate-400 mt-1" data-i18n="dropzoneSub">Vos souhaits de personnalisation sont enregistrés avec votre commande dans le tableau de bord.</p>
+            </div>
+          </div>
 
-            <!-- WhatsApp Action -->
-            <button type="button" onclick="checkoutViaWhatsApp()" class="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2.5 transition-all">
-              <i data-lucide="message-circle" class="w-5 h-5"></i>
-              <span data-i18n="btnWaCheckout">Envoyer ma demande via WhatsApp</span>
-            </button>
-
-            <!-- Standard Cash on Delivery Form submit -->
+          <!-- Cash on Delivery Form submit -->
+          <div class="pt-6 border-t border-brand-800">
             <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-brand-600 to-accent-cyan hover:from-brand-700 hover:to-brand-500 text-white font-bold text-sm shadow-xl shadow-brand-500/20 flex items-center justify-center gap-2.5 transition-all">
               <i data-lucide="check" class="w-5 h-5"></i>
               <span data-i18n="btnCodSubmit">تأكيد الطلب (الدفع عند الاستلام)</span>
             </button>
-
           </div>
 
           <p id="order-form-error" class="hidden text-center text-sm font-bold text-rose-300" role="alert"></p>
@@ -1034,15 +1022,15 @@
         pack3Title: "Pack 3 Mugs",
         pack3Sub: "75 DH / pièce (Au lieu de 285 DH)",
         pack3Save: "Économisez 60 DH",
-        step2Label: "2. Envoyez vos photos sur WhatsApp après avoir passé votre commande",
-        step2Limit: "Après l'enregistrement de la commande",
+        step2Label: "2. Adresse de livraison & Contact WhatsApp",
+        photosNoteLabel: "Note",
+        photosNoteTiming: "Après l'enregistrement de la commande",
         dropzoneMain: "Après l'envoi de votre commande, envoyez vos photos sur WhatsApp pour préparer le design.",
         dropzoneSub: "Envoyez les photos et toute précision directement sur WhatsApp après la commande.",
         orderSubmitting: "Enregistrement de la commande...",
         qtyLabel: "Quantité souhaitée",
         qtyTierSummary: "1 Mug = 95 DH | 2 Mugs = 170 DH | 3 Mugs = 225 DH",
         totalLabel: "Total à régler",
-        step4Label: "3. Adresse de livraison & Contact WhatsApp",
         nameLabel: "Nom Complet",
         namePlaceholder: "Ex: Karim Benjelloun",
         phoneLabel: "Numéro WhatsApp (Pour suivi & confirmation)",
@@ -1051,7 +1039,6 @@
         cityPlaceholder: "Casablanca, Rabat, Marrakech, Tanger...",
         addressLabel: "Adresse ou Quartier",
         addressPlaceholder: "N° Rue, Quartier, Résidence...",
-        btnWaCheckout: "Envoyer ma demande via WhatsApp",
         btnCodSubmit: "Valider la commande (Paiement à la livraison)",
         pageTitle: "shrishop.online | Mugs personnalisés et design offert",
         pageDescription: "Créez votre mug personnalisé avec un design graphique offert. Livraison partout au Maroc et paiement à la réception.",
@@ -1207,15 +1194,15 @@
         pack3Title: "باقة 3 أكواب",
         pack3Sub: "75 درهم للكوب (بدل 285 درهم)",
         pack3Save: "وفر 60 درهم",
-        step2Label: "2. أرسل صورك عبر واتساب بعد تسجيل الطلب",
-        step2Limit: "بعد تسجيل الطلب",
+        step2Label: "2. عنوان التوصيل ورقم الواتساب",
+        photosNoteLabel: "ملاحظة",
+        photosNoteTiming: "بعد تسجيل الطلب",
         dropzoneMain: "بعد إرسال الطلب، أرسل صورك عبر واتساب لتحضير التصميم.",
         dropzoneSub: "أرسل الصور وأي تفاصيل مباشرة عبر واتساب بعد تسجيل الطلب.",
         orderSubmitting: "جارٍ تسجيل الطلب...",
         qtyLabel: "الكمية المطلوبة",
         qtyTierSummary: "1 كوب = 95 درهم | 2 كؤوس = 170 درهم | 3 كؤوس = 225 درهم",
         totalLabel: "المجموع الكلي",
-        step4Label: "3. عنوان التوصيل ورقم الواتساب",
         nameLabel: "الاسم الكامل",
         namePlaceholder: "مثال: كريم بنجلون",
         phoneLabel: "رقم الواتساب (للمتابعة وتأكيد الطلب)",
@@ -1224,7 +1211,6 @@
         cityPlaceholder: "الدار البيضاء، الرباط، مراكش، طنجة...",
         addressLabel: "العنوان أو الحي",
         addressPlaceholder: "رقم الشارع، الحي، الإقامة...",
-        btnWaCheckout: "إرسال الطلب عبر الواتساب",
         btnCodSubmit: "تأكيد الطلب (الدفع عند الاستلام)",
         pageTitle: "shrishop.online | أكواب مخصصة وتصميم جرافيكي مجاني",
         pageDescription: "خصص كوبك بتصميم جرافيكي مجاني. توصيل لجميع أنحاء المغرب والدفع عند الاستلام.",
