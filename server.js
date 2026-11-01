@@ -411,8 +411,8 @@ app.post('/api/orders', async (req, res) => {
       }
 
       const instructions = typeof req.body.instructions === 'string' ? req.body.instructions.trim() : '';
-      if (!instructions || instructions.length > 2000) {
-        return res.status(400).json({ success: false, message: 'يرجى التحقق من تفاصيل التصميم.' });
+      if (instructions.length > 2000) {
+        return res.status(400).json({ success: false, message: 'تفاصيل التصميم أطول من الحد المسموح.' });
       }
 
       if (requestedQuantity === 1) price = 95;

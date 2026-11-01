@@ -1246,7 +1246,7 @@
         const mugDetails = getMugOrderDetails(o.notes);
         const isMugOrder = Boolean(mugDetails);
         const waMessage = isMugOrder
-          ? `السلام عليكم ${o.name}، معاك shrishop.online بخصوص طلبك ديال ${o.quantity} كوب مخصص بثمن ${o.price} درهم، لمدينة ${o.city}. تفاصيل التصميم: ${mugDetails.instructions}. واش نأكدو معاك الطلب؟`
+          ? `السلام عليكم ${o.name}، معاك shrishop.online بخصوص طلبك ديال ${o.quantity} كوب مخصص بثمن ${o.price} درهم، لمدينة ${o.city}.${mugDetails.instructions ? ` تفاصيل التصميم: ${mugDetails.instructions}.` : ''} واش نأكدو معاك الطلب؟`
           : `السلام عليكم ${o.name}، معاك متجر نَفَس بخصوص طلبك لموسع الأنف Starter Kit (الكمية: ${o.quantity} - الثمن: ${o.price} درهم) لمدينة ${o.city}. واش نقدرو نأكدو معاك الطلب دابا؟`;
         const waText = encodeURIComponent(waMessage);
         const waUrl = `https://wa.me/${waPhone}?text=${waText}`;
@@ -1281,7 +1281,7 @@
             <a href="tel:${cleanPhone}" class="btn btn-light btn-sm" title="اتصال هاتفي">📞</a>
           </td>
           <td>
-            ${isMugOrder ? `<span class="badge badge-delivered">☕ أكواب مخصصة</span><br><small style="color: var(--navy); font-style: italic;">${escapeHtml(mugDetails.instructions)}</small>` : `<small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(o.notes).replace(/\n/g, '<br>') : '—'}</small>`}
+            ${isMugOrder ? `<span class="badge badge-delivered">☕ أكواب مخصصة</span>${mugDetails.instructions ? `<br><small style="color: var(--navy); font-style: italic;">${escapeHtml(mugDetails.instructions)}</small>` : ''}` : `<small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(o.notes).replace(/\n/g, '<br>') : '—'}</small>`}
           </td>
           <td>
             <div style="display: flex; gap: 4px;">

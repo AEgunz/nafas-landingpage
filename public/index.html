@@ -441,7 +441,7 @@
               <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
               <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('ideaCouple')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="selectMugDesign()" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -466,7 +466,7 @@
               <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
               <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('ideaFamily')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="selectMugDesign()" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -491,7 +491,7 @@
               <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
               <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('ideaQuote')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="selectMugDesign()" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -516,7 +516,7 @@
               <span class="text-xs text-slate-400 block line-through" data-i18n="galleryOldPrice">120 DH</span>
               <span class="text-lg font-black text-brand-600" data-i18n="galleryPrice">95 DH</span>
             </div>
-            <button onclick="fillIdeaSelection('ideaGift')" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
+            <button onclick="selectMugDesign()" class="text-xs font-bold text-slate-800 hover:text-brand-600 flex items-center gap-1 bg-slate-100 hover:bg-brand-50 px-3 py-2 rounded-xl transition-colors">
               <span data-i18n="btnSelect">أريد هذا التصميم</span>
               <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </button>
@@ -617,16 +617,7 @@
             </div>
           </div>
 
-          <!-- Step 3: Instructions & Texts -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">3</span>
-              <span data-i18n="step3Label">Vos souhaits de personnalisation (Textes, prénoms, citation, style)</span>
-            </label>
-            <textarea id="order-instructions" rows="3" required data-i18n-placeholder="step3Placeholder" placeholder="Exemple : Je souhaite intégrer 2 photos de couple avec la date 10 Mars 2026 en bas, dans une typographie fine et moderne..." class="w-full bg-brand-950 border border-brand-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-accent-cyan text-xs sm:text-sm leading-relaxed"></textarea>
-          </div>
-
-          <!-- Step 4: Quantité & Calculateur de Prix Dynamique -->
+          <!-- Step 3: Quantité & Calculateur de Prix Dynamique -->
           <div class="bg-brand-950/90 p-5 rounded-2xl border border-brand-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <span class="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-1" data-i18n="qtyLabel">Quantité souhaitée</span>
@@ -653,11 +644,11 @@
             </div>
           </div>
 
-          <!-- Step 5: Informations de Livraison au Maroc -->
+          <!-- Step 4: Informations de Livraison au Maroc -->
           <div class="space-y-4 pt-2">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">4</span>
-              <span data-i18n="step4Label">4. عنوان التوصيل ورقم الواتساب</span>
+              <span class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center text-[10px] font-black">3</span>
+              <span data-i18n="step4Label">3. عنوان التوصيل ورقم الواتساب</span>
             </label>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1046,14 +1037,12 @@
         step2Label: "2. Envoyez vos photos sur WhatsApp après avoir passé votre commande",
         step2Limit: "Après l'enregistrement de la commande",
         dropzoneMain: "Après l'envoi de votre commande, envoyez vos photos sur WhatsApp pour préparer le design.",
-        dropzoneSub: "Vos souhaits de personnalisation sont enregistrés avec votre commande dans le tableau de bord.",
+        dropzoneSub: "Envoyez les photos et toute précision directement sur WhatsApp après la commande.",
         orderSubmitting: "Enregistrement de la commande...",
-        step3Label: "3. Vos souhaits de personnalisation (Textes, prénoms, citation, style)",
-        step3Placeholder: "Exemple : Je souhaite intégrer 2 photos de couple avec la date 10 Mars 2026 en bas, dans une typographie fine et moderne...",
         qtyLabel: "Quantité souhaitée",
         qtyTierSummary: "1 Mug = 95 DH | 2 Mugs = 170 DH | 3 Mugs = 225 DH",
         totalLabel: "Total à régler",
-        step4Label: "4. Adresse de livraison & Contact WhatsApp",
+        step4Label: "3. Adresse de livraison & Contact WhatsApp",
         nameLabel: "Nom Complet",
         namePlaceholder: "Ex: Karim Benjelloun",
         phoneLabel: "Numéro WhatsApp (Pour suivi & confirmation)",
@@ -1138,21 +1127,15 @@
         modalDesignLabel: "Validation du design :",
         modalDesignValue: "100 % offerte avant impression",
         modalClose: "Terminer",
-        modalWhatsAppHelp: "Envoyez ensuite vos photos et vos remarques sur WhatsApp pour préparer le design.",
+        modalWhatsAppHelp: "Envoyez ensuite vos photos et toute précision sur WhatsApp pour préparer le design.",
         modalWhatsAppButton: "Envoyer mes photos sur WhatsApp",
         modalHeading: "Commande enregistrée ! 🎉",
         toastOfferInitial: "A commandé le pack de 2 mugs (170 DH) ☕",
         toastTimeInitial: "Il y a 3 minutes",
-        galleryIdeaPrefix: "Modèle souhaité :",
-        ideaCouple: "Mug souvenir pour couple avec photo et date spéciale",
-        ideaFamily: "Mug avec collage de photos de famille et nom de famille",
-        ideaQuote: "Mug avec citation et calligraphie personnalisées",
-        ideaGift: "Coffret cadeau avec emballage élégant et carte",
         fallbackName: "Client",
         fallbackPhone: "Non renseigné",
         fallbackCity: "Non renseignée",
         fallbackAddress: "Non renseignée",
-        fallbackInstructions: "Sans détails spécifiques",
         orderSubmitError: "Impossible d'enregistrer votre commande pour le moment. Veuillez réessayer.",
         photosViaWhatsapp: "Je vais envoyer mes photos sur WhatsApp après la commande",
         whatsappOrderTitle: "*NOUVELLE COMMANDE - SHRISHOP.ONLINE* ☕✨",
@@ -1164,7 +1147,6 @@
         whatsappQuantity: "*Quantité :*",
         whatsappTotal: "*Total :*",
         whatsappPayment: "(Paiement à la livraison)",
-        whatsappInstructions: "*Détails et instructions de personnalisation :*",
         whatsappPhotos: "*Photos :*",
         whatsappPhotoNote: "(Merci de joindre les photos dans WhatsApp pour préparer le design.)",
         whatsappGreeting: "Bonjour shrishop.online ! Je souhaite créer un mug personnalisé.",
@@ -1228,14 +1210,12 @@
         step2Label: "2. أرسل صورك عبر واتساب بعد تسجيل الطلب",
         step2Limit: "بعد تسجيل الطلب",
         dropzoneMain: "بعد إرسال الطلب، أرسل صورك عبر واتساب لتحضير التصميم.",
-        dropzoneSub: "ملاحظات التصميم التي كتبتها تُحفظ مع الطلب في لوحة التحكم.",
+        dropzoneSub: "أرسل الصور وأي تفاصيل مباشرة عبر واتساب بعد تسجيل الطلب.",
         orderSubmitting: "جارٍ تسجيل الطلب...",
-        step3Label: "3. تفاصيل ورغبات التصميم (الأسماء، النصوص، العبارات)",
-        step3Placeholder: "مثال: أريد دمج صورتين مع كتابة اسمين وتاريخ 10 مارس 2026 أسفل الكوب...",
         qtyLabel: "الكمية المطلوبة",
         qtyTierSummary: "1 كوب = 95 درهم | 2 كؤوس = 170 درهم | 3 كؤوس = 225 درهم",
         totalLabel: "المجموع الكلي",
-        step4Label: "4. عنوان التوصيل ورقم الواتساب",
+        step4Label: "3. عنوان التوصيل ورقم الواتساب",
         nameLabel: "الاسم الكامل",
         namePlaceholder: "مثال: كريم بنجلون",
         phoneLabel: "رقم الواتساب (للمتابعة وتأكيد الطلب)",
@@ -1319,21 +1299,15 @@
         modalDesignLabel: "الموافقة على التصميم:",
         modalDesignValue: "مجاناً قبل الطباعة",
         modalClose: "إنهاء",
-        modalWhatsAppHelp: "أرسل بعد ذلك صورك وملاحظاتك عبر واتساب لتحضير التصميم.",
+        modalWhatsAppHelp: "أرسل بعد ذلك صورك وأي تفاصيل إضافية عبر واتساب لتحضير التصميم.",
         modalWhatsAppButton: "أرسل صوري عبر واتساب",
         modalHeading: "تم تسجيل الطلب! 🎉",
         toastOfferInitial: "طلب باقة كوبين (170 درهماً) ☕",
         toastTimeInitial: "قبل 3 دقائق",
-        galleryIdeaPrefix: "التصميم المطلوب:",
-        ideaCouple: "كوب تذكاري للثنائي مع صورة وتاريخ مميز",
-        ideaFamily: "كوب بتجميعة صور العائلة واسمها",
-        ideaQuote: "كوب بعبارة وخط مخصصين",
-        ideaGift: "علبة هدايا أنيقة مع بطاقة تهنئة",
         fallbackName: "الزبون",
         fallbackPhone: "غير محدد",
         fallbackCity: "غير محددة",
         fallbackAddress: "غير محدد",
-        fallbackInstructions: "لا توجد تفاصيل إضافية",
         orderSubmitError: "تعذر تسجيل طلبك حالياً. المرجو المحاولة مرة أخرى.",
         photosViaWhatsapp: "سأرسل صوري عبر الواتساب بعد تسجيل الطلب",
         whatsappOrderTitle: "*طلب جديد من متجر shrishop.online* ☕✨",
@@ -1345,7 +1319,6 @@
         whatsappQuantity: "*الكمية:*",
         whatsappTotal: "*المجموع:*",
         whatsappPayment: "(الدفع عند الاستلام)",
-        whatsappInstructions: "*تفاصيل وملاحظات التصميم:*",
         whatsappPhotos: "*الصور:*",
         whatsappPhotoNote: "(يرجى إرفاق الصور في واتساب لتحضير التصميم)",
         whatsappGreeting: "السلام عليكم، أرغب في تصميم كوب مخصص من متجر shrishop.online.",
@@ -1572,14 +1545,10 @@
     }
 
     // -----------------------------------------------------------------
-    // Fill idea from inspiration cards
+    // Continue from an inspiration card to the order form.
     // -----------------------------------------------------------------
-    function fillIdeaSelection(ideaKey) {
-      const field = document.getElementById('order-instructions');
-      const dict = translations[currentActiveLang];
-      field.value = `${dict.galleryIdeaPrefix} ${dict[ideaKey]}.`;
+    function selectMugDesign() {
       document.getElementById('formulaire-commande').scrollIntoView({ behavior: 'smooth' });
-      field.focus();
     }
 
     // -----------------------------------------------------------------
@@ -1591,8 +1560,6 @@
       const phone = document.getElementById('cust-phone').value.trim() || dict.fallbackPhone;
       const city = document.getElementById('cust-city').value.trim() || dict.fallbackCity;
       const address = document.getElementById('cust-address').value.trim() || dict.fallbackAddress;
-      const instructions = document.getElementById('order-instructions').value.trim() || dict.fallbackInstructions;
-
       const selectedModelName = dict.orderProductName;
       const totalFormatted = document.getElementById('display-total-price').innerText;
 
@@ -1601,7 +1568,6 @@
         phone,
         city,
         address,
-        instructions,
         selectedModelName,
         quantity: currentOrder.quantity,
         total: totalFormatted
@@ -1625,9 +1591,6 @@
 📦 ${dict.whatsappProduct} ${data.selectedModelName}
 🔢 ${dict.whatsappQuantity} ${data.quantity}
 💰 ${dict.whatsappTotal} ${data.total} ${dict.whatsappPayment}
-
-🎨 ${dict.whatsappInstructions}
-"${data.instructions}"
 
 📷 ${dict.whatsappPhotos} ${dict.photosViaWhatsapp} ${dict.whatsappPhotoNote}`;
 
@@ -1666,8 +1629,7 @@
             phone: data.phone,
             city: data.city,
             address: data.address,
-            quantity: data.quantity,
-            instructions: data.instructions
+            quantity: data.quantity
           })
         });
         const result = await response.json();
