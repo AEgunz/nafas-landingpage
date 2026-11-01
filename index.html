@@ -707,6 +707,8 @@
 
           </div>
 
+          <p id="order-form-error" class="hidden text-center text-sm font-bold text-rose-300" role="alert"></p>
+
           <!-- Security reassurance -->
           <div class="flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 pt-2 text-center sm:text-left gap-2">
             <span class="flex items-center gap-1.5 justify-center">
@@ -1148,6 +1150,7 @@
         fallbackCity: "Non renseignée",
         fallbackAddress: "Non renseignée",
         fallbackInstructions: "Sans détails spécifiques",
+        orderSubmitError: "Impossible d'enregistrer votre commande pour le moment. Veuillez réessayer.",
         photoCount: "photo(s) sélectionnée(s)",
         photosViaWhatsapp: "Photos envoyées ici sur WhatsApp",
         whatsappOrderTitle: "*NOUVELLE COMMANDE - SHRISHOP.ONLINE* ☕✨",
@@ -1327,6 +1330,7 @@
         fallbackCity: "غير محددة",
         fallbackAddress: "غير محدد",
         fallbackInstructions: "لا توجد تفاصيل إضافية",
+        orderSubmitError: "تعذر تسجيل طلبك حالياً. المرجو المحاولة مرة أخرى.",
         photoCount: "صور مختارة",
         photosViaWhatsapp: "سأرسل الصور هنا عبر الواتساب",
         whatsappOrderTitle: "*طلب جديد من متجر shrishop.online* ☕✨",
@@ -1541,7 +1545,7 @@
     }
 
     function modifyQty(change) {
-      currentOrder.quantity = Math.max(1, currentOrder.quantity + change);
+      currentOrder.quantity = Math.min(50, Math.max(1, currentOrder.quantity + change));
       document.getElementById('display-quantity').innerText = currentOrder.quantity;
       selectPackQty(currentOrder.quantity);
     }
@@ -1662,19 +1666,52 @@
     // -----------------------------------------------------------------
     // Standard COD Form Submission Modal
     // -----------------------------------------------------------------
-    function handleFormSubmit(e) {
+    let isSubmittingOrder = false;
+
+    async function handleFormSubmit(e) {
       e.preventDefault();
+      if (isSubmittingOrder) return;
       const data = getFormData();
+      const errorMessage = document.getElementById('order-form-error');
+      const submitButton = document.querySelector('#order-form button[type="submit"]');
+      errorMessage.classList.add('hidden');
+      isSubmittingOrder = true;
+      submitButton.disabled = true;
 
-      const modalFeedback = document.getElementById('modal-feedback-message');
-      const dict = translations[currentActiveLang];
-      modalFeedback.innerHTML = currentActiveLang === 'ar'
-        ? `شكراً <strong>${data.name}</strong>! تم إرسال طلبك بنجاح إلى ورشتنا. طلبت <strong>${data.quantity} من الأكواب المخصصة (${data.total})</strong> مع التوصيل إلى <strong>${data.city}</strong>. سنتواصل معك على الرقم <strong>${data.phone}</strong> خلال ساعتين لتأكيد الطلب.`
-        : `${dict.modalSuccess} <strong>${data.name}</strong> ! ${dict.modalThanks} <strong>${data.quantity} ${dict.modalQty} (${data.total})</strong> ${dict.modalDelivery} <strong>${data.city}</strong> ${dict.modalSent} <strong>${data.phone}</strong> ${dict.modalConfirmation}`;
+      try {
+        const response = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productType: 'custom_mug',
+            name: data.name,
+            phone: data.phone,
+            city: data.city,
+            address: data.address,
+            quantity: data.quantity,
+            instructions: data.instructions,
+            photosCount: currentOrder.photosCount
+          })
+        });
+        if (!response.ok) throw new Error(`Order submission failed with status ${response.status}`);
 
-      const modal = document.getElementById('confirmation-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+        const modalFeedback = document.getElementById('modal-feedback-message');
+        const dict = translations[currentActiveLang];
+        modalFeedback.innerHTML = currentActiveLang === 'ar'
+          ? `شكراً <strong>${data.name}</strong>! تم تسجيل طلبك بنجاح. طلبت <strong>${data.quantity} من الأكواب المخصصة (${data.total})</strong> مع التوصيل إلى <strong>${data.city}</strong>. سنتواصل معك على الرقم <strong>${data.phone}</strong> خلال ساعتين لتأكيد الطلب.`
+          : `${dict.modalSuccess} <strong>${data.name}</strong> ! ${dict.modalThanks} <strong>${data.quantity} ${dict.modalQty} (${data.total})</strong> ${dict.modalDelivery} <strong>${data.city}</strong> ${dict.modalSent} <strong>${data.phone}</strong> ${dict.modalConfirmation}`;
+
+        const modal = document.getElementById('confirmation-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } catch (error) {
+        console.error('Error submitting custom mug order:', error);
+        errorMessage.textContent = translations[currentActiveLang].orderSubmitError;
+        errorMessage.classList.remove('hidden');
+      } finally {
+        isSubmittingOrder = false;
+        submitButton.disabled = false;
+      }
     }
 
     function closeConfirmationModal() {

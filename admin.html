@@ -1232,7 +1232,12 @@
         let waPhone = cleanPhone;
         if (cleanPhone.startsWith('0')) waPhone = '212' + cleanPhone.substring(1);
 
-        const waText = encodeURIComponent(`السلام عليكم ${o.name}، معاك متجر نَفَس بخصوص طلبك لموسع الأنف Starter Kit (الكمية: ${o.quantity} - الثمن: ${o.price} درهم) لمدينة ${o.city}. واش نقدرو نأكدو معاك الطلب دابا؟`);
+        const isMugOrder = typeof o.notes === 'string' && o.notes.startsWith('[MUG_ORDER]');
+        const mugDetails = isMugOrder ? o.notes.replace(/^\[MUG_ORDER\]\n?/, '') : '';
+        const waMessage = isMugOrder
+          ? `السلام عليكم ${o.name}، معاك shrishop.online بخصوص طلبك ديال ${o.quantity} كوب مخصص بثمن ${o.price} درهم، لمدينة ${o.city}. ${mugDetails}. واش نأكدو معاك الطلب؟`
+          : `السلام عليكم ${o.name}، معاك متجر نَفَس بخصوص طلبك لموسع الأنف Starter Kit (الكمية: ${o.quantity} - الثمن: ${o.price} درهم) لمدينة ${o.city}. واش نقدرو نأكدو معاك الطلب دابا؟`;
+        const waText = encodeURIComponent(waMessage);
         const waUrl = `https://wa.me/${waPhone}?text=${waText}`;
 
         const dateObj = new Date(o.created_at);
@@ -1265,7 +1270,8 @@
             <a href="tel:${cleanPhone}" class="btn btn-light btn-sm" title="اتصال هاتفي">📞</a>
           </td>
           <td>
-            <small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(o.notes) : '—'}</small>
+            ${isMugOrder ? '<span class="badge badge-delivered">☕ أكواب مخصصة</span><br>' : ''}
+            <small style="color: var(--navy); font-style: italic;">${o.notes ? escapeHtml(isMugOrder ? mugDetails : o.notes).replace(/\n/g, '<br>') : '—'}</small>
           </td>
           <td>
             <div style="display: flex; gap: 4px;">

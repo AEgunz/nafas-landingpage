@@ -359,7 +359,7 @@ app.post('/api/orders', async (req, res) => {
   try {
     const { name, phone, city, qty, quantity, pack_id, address } = req.body;
 
-    const orderQty = parseInt(qty || quantity || 1, 10);
+    let orderQty = parseInt(qty || quantity || 1, 10);
     const clientName = (name || '').trim();
     const clientPhone = (phone || '').trim();
     const clientCity = (city || '').trim();
@@ -373,14 +373,36 @@ app.post('/api/orders', async (req, res) => {
     }
 
     let price = 0;
-    if (pack_id) {
+    let orderNotes = '';
+    if (req.body.productType === 'custom_mug') {
+      const requestedQuantity = Number(qty || quantity || 1);
+      if (!Number.isInteger(requestedQuantity) || requestedQuantity < 1 || requestedQuantity > 50) {
+        return res.status(400).json({ success: false, message: 'الكمية غير صالحة.' });
+      }
+
+      const instructions = typeof req.body.instructions === 'string' ? req.body.instructions.trim() : '';
+      const photosCount = Number(req.body.photosCount);
+      if (!instructions || instructions.length > 2000 || !Number.isInteger(photosCount) || photosCount < 0 || photosCount > 4) {
+        return res.status(400).json({ success: false, message: 'يرجى التحقق من تفاصيل التصميم والصور.' });
+      }
+
+      if (requestedQuantity === 1) price = 95;
+      else if (requestedQuantity === 2) price = 170;
+      else if (requestedQuantity === 3) price = 225;
+      else price = 225 + (requestedQuantity - 3) * 75;
+
+      orderQty = requestedQuantity;
+      orderNotes = `[MUG_ORDER]\nتعليمات التصميم: ${instructions}\nالصور المختارة: ${photosCount} (يتم إرسال الصور عبر واتساب)`;
+    }
+
+    if (req.body.productType !== 'custom_mug' && pack_id) {
       const selectedPack = await dbGet('SELECT * FROM packs WHERE id = ?', [pack_id]);
       if (selectedPack) {
         price = selectedPack.price;
       }
     }
 
-    if (!price) {
+    if (req.body.productType !== 'custom_mug' && !price) {
       const matchingPack = await dbGet('SELECT * FROM packs WHERE quantity = ? AND active = 1 LIMIT 1', [orderQty]);
       if (matchingPack) {
         price = matchingPack.price;
@@ -394,12 +416,12 @@ app.post('/api/orders', async (req, res) => {
 
     const result = await dbRun(`
       INSERT INTO orders (name, phone, city, quantity, address, price, status, notes)
-      VALUES (?, ?, ?, ?, ?, ?, 'جديد', '')
-    `, [clientName, clientPhone, clientCity, orderQty, clientAddress, price]);
+      VALUES (?, ?, ?, ?, ?, ?, 'جديد', ?)
+    `, [clientName, clientPhone, clientCity, orderQty, clientAddress, price, orderNotes]);
 
     // Auto decrement stock
     const stockRow = await dbGet('SELECT * FROM stock WHERE id = 1');
-    if (stockRow && stockRow.auto_decrement) {
+    if (req.body.productType !== 'custom_mug' && stockRow && stockRow.auto_decrement) {
       const newRemaining = Math.max(0, stockRow.remaining_stock - orderQty);
       await dbRun('UPDATE stock SET remaining_stock = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1', [newRemaining]);
       const updatedStock = await getStockInfo();
